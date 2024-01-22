@@ -28,3 +28,9 @@ make clean-meliso
 ```
 
 Run through the tutorial in `MelisoDriver.py`
+
+## Docker build
+1. After git clone run `cd  meliso && docker build -t pramanan3/meliso:v0.0.3 . `
+2. Run the built container using `docker run -v /path/to/meliso:/meliso_edit/ --name meliso -d pramanan3/meliso:v0.0.3 /bin/sh -c "tail -f /dev/null"`
+
+Run through the tutorial in `MelisoDriver.py`

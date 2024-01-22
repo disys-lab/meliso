@@ -13,10 +13,16 @@ RUN yes | apt-get install nano \
 
 RUN apt-get -y install python3 python3-pip python3-numpy
 
-RUN git clone https://github.com/neurosim/MLP_NeuroSim_V3.0.git
-
-RUN cd /MLP_NeuroSim_V3.0 && make && unzip MNIST_data.zip
-
 RUN pip install Cython
+
+ADD . /meliso
+
+WORKDIR "/meliso"
+
+RUN PYTHONPATH=$PYTHONPATH:./build LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/ make all
+
+ENV PYTHONPATH=$PYTHONPATH:./build
+
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
 
 CMD tail -f /dev/null
