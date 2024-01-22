@@ -33,4 +33,9 @@ Run through the tutorial in `MelisoDriver.py`
 1. After git clone run `cd  meliso && docker build -t pramanan3/meliso:v0.0.3 . `
 2. Run the built container using `docker run -v /path/to/meliso:/meliso_edit/ --name meliso -d pramanan3/meliso:v0.0.3 /bin/sh -c "tail -f /dev/null"`
 
-Run through the tutorial in `MelisoDriver.py`
+Pull from dockerhub using
+`docker pull pramanan3/meliso:v0.0.3`
+
+## Tutorial 
+Run through the tutorial in `MelisoDriver.py`. The tutorial presents a simple example of using Meliso to perform MatVecs.
+
