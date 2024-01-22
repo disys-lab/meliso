@@ -14,9 +14,10 @@ git clone https://github.com/paritoshpr/meliso.git
 
 2. Run the following from the home directory i.e
 ```
+cd meliso
 export PYTHONPATH=$PYTHONPATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
-cd meliso && make all
+make all
 ```
 
 3. Clean using
@@ -25,3 +26,5 @@ make clean
 make clean-neurosim
 make clean-meliso
 ```
+
+Run through the tutorial in `MelisoDriver.py`

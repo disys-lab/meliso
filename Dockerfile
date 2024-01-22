@@ -17,4 +17,6 @@ RUN git clone https://github.com/neurosim/MLP_NeuroSim_V3.0.git
 
 RUN cd /MLP_NeuroSim_V3.0 && make && unzip MNIST_data.zip
 
+RUN pip install Cython
+
 CMD tail -f /dev/null

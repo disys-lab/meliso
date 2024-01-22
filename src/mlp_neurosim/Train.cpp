@@ -192,7 +192,7 @@ void WriteWeights(){
                             if (AnalogNVM *temp = dynamic_cast<AnalogNVM*>(arrayIH->cell[jj][k])) {	// Analog eNVM
                                 arrayIH->WriteCell(jj, k, deltaWeight1[jj][k], weight1[jj][k], param->maxWeight, param->minWeight, true);
                                 weight1[jj][k] = arrayIH->ConductanceToWeight(jj, k, param->maxWeight, param->minWeight);
-                                printf("jj:%d,k:%d,weight1:%e\n",jj,k,weight1[jj][k]);
+                                //printf("jj:%d,k:%d,weight1:%e\n",jj,k,weight1[jj][k]);
                                 weightChangeBatch = weightChangeBatch || static_cast<AnalogNVM*>(arrayIH->cell[jj][k])->numPulse;
                                 if(fabs(static_cast<AnalogNVM*>(arrayIH->cell[jj][k])->numPulse) > maxPulseNum)
                                 {

@@ -31,12 +31,12 @@
             "gomp",
             "mlp"
         ],
-        "name": "meliso",
+        "name": "build.meliso",
         "sources": [
             "src/cython/mel.pyx"
         ]
     },
-    "module_name": "meliso"
+    "module_name": "build.meliso"
 }
 END: Cython Metadata */
 
@@ -1233,8 +1233,8 @@ static CYTHON_INLINE float __PYX_NAN() {
     #define __PYX_EXTERN_C extern "C++"
 #endif
 
-#define __PYX_HAVE__meliso
-#define __PYX_HAVE_API__meliso
+#define __PYX_HAVE__build__meliso
+#define __PYX_HAVE_API__build__meliso
 /* Early includes */
 #include "ios"
 #include "new"
@@ -1676,7 +1676,7 @@ typedef struct {
 /* #### Code section: type_declarations ### */
 
 /*--- Type declarations ---*/
-struct __pyx_obj_6meliso_MelisoPy;
+struct __pyx_obj_5build_6meliso_MelisoPy;
 struct __pyx_array_obj;
 struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
@@ -1689,7 +1689,7 @@ struct __pyx_memoryviewslice_obj;
  *     cdef Meliso melisoObj  # Hold a C++ instance which we're wrapping
  * 
  */
-struct __pyx_obj_6meliso_MelisoPy {
+struct __pyx_obj_5build_6meliso_MelisoPy {
   PyObject_HEAD
   meliso::Meliso melisoObj;
   int m;
@@ -2833,7 +2833,7 @@ static PyObject *__pyx_memoryviewslice__get_base(struct __pyx_memoryviewslice_ob
 
 /* Module declarations from "cpython.pycapsule" */
 
-/* Module declarations from "meliso" */
+/* Module declarations from "build.meliso" */
 static PyObject *__pyx_collections_abc_Sequence = 0;
 static PyObject *generic = 0;
 static PyObject *strided = 0;
@@ -2878,11 +2878,11 @@ static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize
 static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, PyObject *); /*proto*/
 /* #### Code section: typeinfo ### */
 /* #### Code section: before_global_var ### */
-#define __Pyx_MODULE_NAME "meliso"
-extern int __pyx_module_is_main_meliso;
-int __pyx_module_is_main_meliso = 0;
+#define __Pyx_MODULE_NAME "build.meliso"
+extern int __pyx_module_is_main_build__meliso;
+int __pyx_module_is_main_build__meliso = 0;
 
-/* Implementation of "meliso" */
+/* Implementation of "build.meliso" */
 /* #### Code section: global_var ### */
 static PyObject *__pyx_builtin_xrange;
 static PyObject *__pyx_builtin_print;
@@ -2951,7 +2951,6 @@ static const char __pyx_k_encode[] = "encode";
 static const char __pyx_k_format[] = "format";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_matVec[] = "matVec";
-static const char __pyx_k_meliso[] = "meliso";
 static const char __pyx_k_name_2[] = "__name__";
 static const char __pyx_k_pickle[] = "pickle";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -2989,6 +2988,7 @@ static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_collections[] = "collections";
 static const char __pyx_k_device_type[] = "device_type";
 static const char __pyx_k_np_A_matrix[] = "np_A_matrix";
+static const char __pyx_k_build_meliso[] = "build.meliso";
 static const char __pyx_k_initializing[] = "_initializing";
 static const char __pyx_k_is_coroutine[] = "_is_coroutine";
 static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
@@ -3086,15 +3086,15 @@ static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewsl
 static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static int __pyx_pf_6meliso_8MelisoPy___cinit__(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns); /* proto */
-static PyObject *__pyx_pf_6meliso_8MelisoPy_2initializeWeights(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_A_matrix); /* proto */
-static PyObject *__pyx_pf_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_x); /* proto */
-static PyObject *__pyx_pf_6meliso_8MelisoPy_8matVec(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6meliso_8MelisoPy_10getResults(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6meliso_8MelisoPy_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6meliso_8MelisoPy_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
-static PyObject *__pyx_tp_new_6meliso_MelisoPy(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns); /* proto */
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_A_matrix); /* proto */
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_x); /* proto */
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_8matVec(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_tp_new_5build_6meliso_MelisoPy(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -3149,13 +3149,13 @@ typedef struct {
   #if CYTHON_USE_MODULE_STATE
   #endif
   #if CYTHON_USE_MODULE_STATE
-  PyObject *__pyx_type_6meliso_MelisoPy;
+  PyObject *__pyx_type_5build_6meliso_MelisoPy;
   PyObject *__pyx_type___pyx_array;
   PyObject *__pyx_type___pyx_MemviewEnum;
   PyObject *__pyx_type___pyx_memoryview;
   PyObject *__pyx_type___pyx_memoryviewslice;
   #endif
-  PyTypeObject *__pyx_ptype_6meliso_MelisoPy;
+  PyTypeObject *__pyx_ptype_5build_6meliso_MelisoPy;
   PyTypeObject *__pyx_array_type;
   PyTypeObject *__pyx_MemviewEnum_type;
   PyTypeObject *__pyx_memoryview_type;
@@ -3209,6 +3209,7 @@ typedef struct {
   PyObject *__pyx_kp_u_and;
   PyObject *__pyx_n_s_asyncio_coroutines;
   PyObject *__pyx_n_s_base;
+  PyObject *__pyx_n_s_build_meliso;
   PyObject *__pyx_n_s_c;
   PyObject *__pyx_n_u_c;
   PyObject *__pyx_n_s_class;
@@ -3253,7 +3254,6 @@ typedef struct {
   PyObject *__pyx_n_s_loadInput;
   PyObject *__pyx_n_s_main;
   PyObject *__pyx_n_s_matVec;
-  PyObject *__pyx_n_s_meliso;
   PyObject *__pyx_n_s_memview;
   PyObject *__pyx_n_s_mode;
   PyObject *__pyx_n_s_name;
@@ -3384,8 +3384,8 @@ static int __pyx_m_clear(PyObject *m) {
   #ifdef __Pyx_FusedFunction_USED
   Py_CLEAR(clear_module_state->__pyx_FusedFunctionType);
   #endif
-  Py_CLEAR(clear_module_state->__pyx_ptype_6meliso_MelisoPy);
-  Py_CLEAR(clear_module_state->__pyx_type_6meliso_MelisoPy);
+  Py_CLEAR(clear_module_state->__pyx_ptype_5build_6meliso_MelisoPy);
+  Py_CLEAR(clear_module_state->__pyx_type_5build_6meliso_MelisoPy);
   Py_CLEAR(clear_module_state->__pyx_array_type);
   Py_CLEAR(clear_module_state->__pyx_type___pyx_array);
   Py_CLEAR(clear_module_state->__pyx_MemviewEnum_type);
@@ -3443,6 +3443,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_kp_u_and);
   Py_CLEAR(clear_module_state->__pyx_n_s_asyncio_coroutines);
   Py_CLEAR(clear_module_state->__pyx_n_s_base);
+  Py_CLEAR(clear_module_state->__pyx_n_s_build_meliso);
   Py_CLEAR(clear_module_state->__pyx_n_s_c);
   Py_CLEAR(clear_module_state->__pyx_n_u_c);
   Py_CLEAR(clear_module_state->__pyx_n_s_class);
@@ -3487,7 +3488,6 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_loadInput);
   Py_CLEAR(clear_module_state->__pyx_n_s_main);
   Py_CLEAR(clear_module_state->__pyx_n_s_matVec);
-  Py_CLEAR(clear_module_state->__pyx_n_s_meliso);
   Py_CLEAR(clear_module_state->__pyx_n_s_memview);
   Py_CLEAR(clear_module_state->__pyx_n_s_mode);
   Py_CLEAR(clear_module_state->__pyx_n_s_name);
@@ -3596,8 +3596,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   #ifdef __Pyx_FusedFunction_USED
   Py_VISIT(traverse_module_state->__pyx_FusedFunctionType);
   #endif
-  Py_VISIT(traverse_module_state->__pyx_ptype_6meliso_MelisoPy);
-  Py_VISIT(traverse_module_state->__pyx_type_6meliso_MelisoPy);
+  Py_VISIT(traverse_module_state->__pyx_ptype_5build_6meliso_MelisoPy);
+  Py_VISIT(traverse_module_state->__pyx_type_5build_6meliso_MelisoPy);
   Py_VISIT(traverse_module_state->__pyx_array_type);
   Py_VISIT(traverse_module_state->__pyx_type___pyx_array);
   Py_VISIT(traverse_module_state->__pyx_MemviewEnum_type);
@@ -3655,6 +3655,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_kp_u_and);
   Py_VISIT(traverse_module_state->__pyx_n_s_asyncio_coroutines);
   Py_VISIT(traverse_module_state->__pyx_n_s_base);
+  Py_VISIT(traverse_module_state->__pyx_n_s_build_meliso);
   Py_VISIT(traverse_module_state->__pyx_n_s_c);
   Py_VISIT(traverse_module_state->__pyx_n_u_c);
   Py_VISIT(traverse_module_state->__pyx_n_s_class);
@@ -3699,7 +3700,6 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_loadInput);
   Py_VISIT(traverse_module_state->__pyx_n_s_main);
   Py_VISIT(traverse_module_state->__pyx_n_s_matVec);
-  Py_VISIT(traverse_module_state->__pyx_n_s_meliso);
   Py_VISIT(traverse_module_state->__pyx_n_s_memview);
   Py_VISIT(traverse_module_state->__pyx_n_s_mode);
   Py_VISIT(traverse_module_state->__pyx_n_s_name);
@@ -3839,13 +3839,13 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #if CYTHON_USE_MODULE_STATE
 #endif
 #if CYTHON_USE_MODULE_STATE
-#define __pyx_type_6meliso_MelisoPy __pyx_mstate_global->__pyx_type_6meliso_MelisoPy
+#define __pyx_type_5build_6meliso_MelisoPy __pyx_mstate_global->__pyx_type_5build_6meliso_MelisoPy
 #define __pyx_type___pyx_array __pyx_mstate_global->__pyx_type___pyx_array
 #define __pyx_type___pyx_MemviewEnum __pyx_mstate_global->__pyx_type___pyx_MemviewEnum
 #define __pyx_type___pyx_memoryview __pyx_mstate_global->__pyx_type___pyx_memoryview
 #define __pyx_type___pyx_memoryviewslice __pyx_mstate_global->__pyx_type___pyx_memoryviewslice
 #endif
-#define __pyx_ptype_6meliso_MelisoPy __pyx_mstate_global->__pyx_ptype_6meliso_MelisoPy
+#define __pyx_ptype_5build_6meliso_MelisoPy __pyx_mstate_global->__pyx_ptype_5build_6meliso_MelisoPy
 #define __pyx_array_type __pyx_mstate_global->__pyx_array_type
 #define __pyx_MemviewEnum_type __pyx_mstate_global->__pyx_MemviewEnum_type
 #define __pyx_memoryview_type __pyx_mstate_global->__pyx_memoryview_type
@@ -3899,6 +3899,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_kp_u_and __pyx_mstate_global->__pyx_kp_u_and
 #define __pyx_n_s_asyncio_coroutines __pyx_mstate_global->__pyx_n_s_asyncio_coroutines
 #define __pyx_n_s_base __pyx_mstate_global->__pyx_n_s_base
+#define __pyx_n_s_build_meliso __pyx_mstate_global->__pyx_n_s_build_meliso
 #define __pyx_n_s_c __pyx_mstate_global->__pyx_n_s_c
 #define __pyx_n_u_c __pyx_mstate_global->__pyx_n_u_c
 #define __pyx_n_s_class __pyx_mstate_global->__pyx_n_s_class
@@ -3943,7 +3944,6 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_loadInput __pyx_mstate_global->__pyx_n_s_loadInput
 #define __pyx_n_s_main __pyx_mstate_global->__pyx_n_s_main
 #define __pyx_n_s_matVec __pyx_mstate_global->__pyx_n_s_matVec
-#define __pyx_n_s_meliso __pyx_mstate_global->__pyx_n_s_meliso
 #define __pyx_n_s_memview __pyx_mstate_global->__pyx_n_s_memview
 #define __pyx_n_s_mode __pyx_mstate_global->__pyx_n_s_mode
 #define __pyx_n_s_name __pyx_mstate_global->__pyx_n_s_name
@@ -17669,8 +17669,8 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
  */
 
 /* Python wrapper */
-static int __pyx_pw_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_device_type = 0;
   PyObject *__pyx_v_rows = 0;
   PyObject *__pyx_v_columns = 0;
@@ -17760,11 +17760,11 @@ static int __pyx_pw_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, PyObjec
       __Pyx_Arg_XDECREF_VARARGS(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("meliso.MelisoPy.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_6meliso_8MelisoPy___cinit__(((struct __pyx_obj_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_device_type, __pyx_v_rows, __pyx_v_columns);
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy___cinit__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_device_type, __pyx_v_rows, __pyx_v_columns);
 
   /* function exit code */
   {
@@ -17777,7 +17777,7 @@ static int __pyx_pw_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, PyObjec
   return __pyx_r;
 }
 
-static int __pyx_pf_6meliso_8MelisoPy___cinit__(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns) {
+static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns) {
   int __pyx_r;
   int __pyx_t_1;
   meliso::Meliso __pyx_t_2;
@@ -17869,7 +17869,7 @@ static int __pyx_pf_6meliso_8MelisoPy___cinit__(struct __pyx_obj_6meliso_MelisoP
   __pyx_r = 0;
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("meliso.MelisoPy.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   return __pyx_r;
@@ -17884,15 +17884,15 @@ static int __pyx_pf_6meliso_8MelisoPy___cinit__(struct __pyx_obj_6meliso_MelisoP
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6meliso_8MelisoPy_3initializeWeights(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_3initializeWeights(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_6meliso_8MelisoPy_3initializeWeights = {"initializeWeights", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_3initializeWeights, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_6meliso_8MelisoPy_3initializeWeights(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_5build_6meliso_8MelisoPy_3initializeWeights = {"initializeWeights", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_3initializeWeights, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_3initializeWeights(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -17917,14 +17917,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   if (unlikely(__pyx_nargs > 0)) {
     __Pyx_RaiseArgtupleInvalid("initializeWeights", 1, 0, 0, __pyx_nargs); return NULL;}
   if (unlikely(__pyx_kwds) && __Pyx_NumKwargs_FASTCALL(__pyx_kwds) && unlikely(!__Pyx_CheckKeywordStrings(__pyx_kwds, "initializeWeights", 0))) return NULL;
-  __pyx_r = __pyx_pf_6meliso_8MelisoPy_2initializeWeights(((struct __pyx_obj_6meliso_MelisoPy *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6meliso_8MelisoPy_2initializeWeights(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self) {
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("initializeWeights", 1);
@@ -17962,15 +17962,15 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_2initializeWeights(struct __pyx_obj_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6meliso_8MelisoPy_5setWeights(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_5setWeights(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_6meliso_8MelisoPy_5setWeights = {"setWeights", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_5setWeights, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_6meliso_8MelisoPy_5setWeights(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_5build_6meliso_8MelisoPy_5setWeights = {"setWeights", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_5setWeights, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_5setWeights(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18040,11 +18040,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("meliso.MelisoPy.setWeights", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.setWeights", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_6meliso_8MelisoPy_4setWeights(((struct __pyx_obj_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_np_A_matrix);
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy_4setWeights(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_np_A_matrix);
 
   /* function exit code */
   {
@@ -18057,7 +18057,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_A_matrix) {
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_A_matrix) {
   PyObject *__pyx_v_ctr = NULL;
   int __pyx_v_i;
   int __pyx_v_j;
@@ -18166,7 +18166,7 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_6meliso
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_AddTraceback("meliso.MelisoPy.setWeights", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.setWeights", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_ctr);
@@ -18184,15 +18184,15 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_6meliso
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6meliso_8MelisoPy_7loadInput(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_7loadInput(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_6meliso_8MelisoPy_7loadInput = {"loadInput", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_7loadInput, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_6meliso_8MelisoPy_7loadInput(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_5build_6meliso_8MelisoPy_7loadInput = {"loadInput", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_7loadInput, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_7loadInput(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18262,11 +18262,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("meliso.MelisoPy.loadInput", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.loadInput", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_6meliso_8MelisoPy_6loadInput(((struct __pyx_obj_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_np_x);
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy_6loadInput(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_np_x);
 
   /* function exit code */
   {
@@ -18279,7 +18279,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_x) {
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_x) {
   int __pyx_v_j;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -18341,7 +18341,7 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_6meliso_
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("meliso.MelisoPy.loadInput", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.loadInput", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -18358,15 +18358,15 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_6meliso_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6meliso_8MelisoPy_9matVec(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_9matVec(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_6meliso_8MelisoPy_9matVec = {"matVec", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_9matVec, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_6meliso_8MelisoPy_9matVec(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_5build_6meliso_8MelisoPy_9matVec = {"matVec", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_9matVec, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_9matVec(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18391,14 +18391,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   if (unlikely(__pyx_nargs > 0)) {
     __Pyx_RaiseArgtupleInvalid("matVec", 1, 0, 0, __pyx_nargs); return NULL;}
   if (unlikely(__pyx_kwds) && __Pyx_NumKwargs_FASTCALL(__pyx_kwds) && unlikely(!__Pyx_CheckKeywordStrings(__pyx_kwds, "matVec", 0))) return NULL;
-  __pyx_r = __pyx_pf_6meliso_8MelisoPy_8matVec(((struct __pyx_obj_6meliso_MelisoPy *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy_8matVec(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6meliso_8MelisoPy_8matVec(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self) {
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_8matVec(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("matVec", 1);
@@ -18436,15 +18436,15 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_8matVec(struct __pyx_obj_6meliso_Mel
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6meliso_8MelisoPy_11getResults(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_11getResults(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_6meliso_8MelisoPy_11getResults = {"getResults", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_11getResults, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_6meliso_8MelisoPy_11getResults(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_5build_6meliso_8MelisoPy_11getResults = {"getResults", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_11getResults, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_11getResults(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18469,14 +18469,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   if (unlikely(__pyx_nargs > 0)) {
     __Pyx_RaiseArgtupleInvalid("getResults", 1, 0, 0, __pyx_nargs); return NULL;}
   if (unlikely(__pyx_kwds) && __Pyx_NumKwargs_FASTCALL(__pyx_kwds) && unlikely(!__Pyx_CheckKeywordStrings(__pyx_kwds, "getResults", 0))) return NULL;
-  __pyx_r = __pyx_pf_6meliso_8MelisoPy_10getResults(((struct __pyx_obj_6meliso_MelisoPy *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy_10getResults(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6meliso_8MelisoPy_10getResults(struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self) {
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self) {
   PyObject *__pyx_v_y = NULL;
   int __pyx_v_i;
   PyObject *__pyx_r = NULL;
@@ -18635,7 +18635,7 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_10getResults(struct __pyx_obj_6melis
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("meliso.MelisoPy.getResults", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.getResults", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_y);
@@ -18651,15 +18651,15 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_10getResults(struct __pyx_obj_6melis
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6meliso_8MelisoPy_13__reduce_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_13__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_6meliso_8MelisoPy_13__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_13__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_6meliso_8MelisoPy_13__reduce_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_5build_6meliso_8MelisoPy_13__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_13__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_13__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18684,14 +18684,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   if (unlikely(__pyx_nargs > 0)) {
     __Pyx_RaiseArgtupleInvalid("__reduce_cython__", 1, 0, 0, __pyx_nargs); return NULL;}
   if (unlikely(__pyx_kwds) && __Pyx_NumKwargs_FASTCALL(__pyx_kwds) && unlikely(!__Pyx_CheckKeywordStrings(__pyx_kwds, "__reduce_cython__", 0))) return NULL;
-  __pyx_r = __pyx_pf_6meliso_8MelisoPy_12__reduce_cython__(((struct __pyx_obj_6meliso_MelisoPy *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy_12__reduce_cython__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6meliso_8MelisoPy_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self) {
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -18716,7 +18716,7 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_12__reduce_cython__(CYTHON_UNUSED st
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("meliso.MelisoPy.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -18731,15 +18731,15 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_12__reduce_cython__(CYTHON_UNUSED st
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6meliso_8MelisoPy_15__setstate_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_15__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_6meliso_8MelisoPy_15__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_15__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_6meliso_8MelisoPy_15__setstate_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_5build_6meliso_8MelisoPy_15__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_15__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5build_6meliso_8MelisoPy_15__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18809,11 +18809,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("meliso.MelisoPy.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_6meliso_8MelisoPy_14__setstate_cython__(((struct __pyx_obj_6meliso_MelisoPy *)__pyx_v_self), __pyx_v___pyx_state);
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy_14__setstate_cython__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v___pyx_state);
 
   /* function exit code */
   {
@@ -18826,7 +18826,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6meliso_8MelisoPy_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_6meliso_MelisoPy *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -18851,15 +18851,15 @@ static PyObject *__pyx_pf_6meliso_8MelisoPy_14__setstate_cython__(CYTHON_UNUSED 
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("meliso.MelisoPy.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("build.meliso.MelisoPy.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_tp_new_6meliso_MelisoPy(PyTypeObject *t, PyObject *a, PyObject *k) {
-  struct __pyx_obj_6meliso_MelisoPy *p;
+static PyObject *__pyx_tp_new_5build_6meliso_MelisoPy(PyTypeObject *t, PyObject *a, PyObject *k) {
+  struct __pyx_obj_5build_6meliso_MelisoPy *p;
   PyObject *o;
   #if CYTHON_COMPILING_IN_LIMITED_API
   allocfunc alloc_func = (allocfunc)PyType_GetSlot(t, Py_tp_alloc);
@@ -18872,20 +18872,20 @@ static PyObject *__pyx_tp_new_6meliso_MelisoPy(PyTypeObject *t, PyObject *a, PyO
   }
   if (unlikely(!o)) return 0;
   #endif
-  p = ((struct __pyx_obj_6meliso_MelisoPy *)o);
+  p = ((struct __pyx_obj_5build_6meliso_MelisoPy *)o);
   new((void*)&(p->melisoObj)) meliso::Meliso();
-  if (unlikely(__pyx_pw_6meliso_8MelisoPy_1__cinit__(o, a, k) < 0)) goto bad;
+  if (unlikely(__pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(o, a, k) < 0)) goto bad;
   return o;
   bad:
   Py_DECREF(o); o = 0;
   return NULL;
 }
 
-static void __pyx_tp_dealloc_6meliso_MelisoPy(PyObject *o) {
-  struct __pyx_obj_6meliso_MelisoPy *p = (struct __pyx_obj_6meliso_MelisoPy *)o;
+static void __pyx_tp_dealloc_5build_6meliso_MelisoPy(PyObject *o) {
+  struct __pyx_obj_5build_6meliso_MelisoPy *p = (struct __pyx_obj_5build_6meliso_MelisoPy *)o;
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely((PY_VERSION_HEX >= 0x03080000 || __Pyx_PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE)) && __Pyx_PyObject_GetSlot(o, tp_finalize, destructor)) && (!PyType_IS_GC(Py_TYPE(o)) || !__Pyx_PyObject_GC_IsFinalized(o))) {
-    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_6meliso_MelisoPy) {
+    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_5build_6meliso_MelisoPy) {
       if (PyObject_CallFinalizerFromDealloc(o)) return;
     }
   }
@@ -18901,38 +18901,38 @@ static void __pyx_tp_dealloc_6meliso_MelisoPy(PyObject *o) {
   #endif
 }
 
-static PyMethodDef __pyx_methods_6meliso_MelisoPy[] = {
-  {"initializeWeights", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_3initializeWeights, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"setWeights", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_5setWeights, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"loadInput", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_7loadInput, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"matVec", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_9matVec, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"getResults", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_11getResults, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_13__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"__setstate_cython__", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6meliso_8MelisoPy_15__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+static PyMethodDef __pyx_methods_5build_6meliso_MelisoPy[] = {
+  {"initializeWeights", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_3initializeWeights, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"setWeights", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_5setWeights, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"loadInput", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_7loadInput, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"matVec", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_9matVec, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"getResults", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_11getResults, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_13__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"__setstate_cython__", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5build_6meliso_8MelisoPy_15__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
   {0, 0, 0, 0}
 };
 #if CYTHON_USE_TYPE_SPECS
-static PyType_Slot __pyx_type_6meliso_MelisoPy_slots[] = {
-  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_6meliso_MelisoPy},
-  {Py_tp_methods, (void *)__pyx_methods_6meliso_MelisoPy},
-  {Py_tp_new, (void *)__pyx_tp_new_6meliso_MelisoPy},
+static PyType_Slot __pyx_type_5build_6meliso_MelisoPy_slots[] = {
+  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_5build_6meliso_MelisoPy},
+  {Py_tp_methods, (void *)__pyx_methods_5build_6meliso_MelisoPy},
+  {Py_tp_new, (void *)__pyx_tp_new_5build_6meliso_MelisoPy},
   {0, 0},
 };
-static PyType_Spec __pyx_type_6meliso_MelisoPy_spec = {
-  "meliso.MelisoPy",
-  sizeof(struct __pyx_obj_6meliso_MelisoPy),
+static PyType_Spec __pyx_type_5build_6meliso_MelisoPy_spec = {
+  "build.meliso.MelisoPy",
+  sizeof(struct __pyx_obj_5build_6meliso_MelisoPy),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE,
-  __pyx_type_6meliso_MelisoPy_slots,
+  __pyx_type_5build_6meliso_MelisoPy_slots,
 };
 #else
 
-static PyTypeObject __pyx_type_6meliso_MelisoPy = {
+static PyTypeObject __pyx_type_5build_6meliso_MelisoPy = {
   PyVarObject_HEAD_INIT(0, 0)
-  "meliso.""MelisoPy", /*tp_name*/
-  sizeof(struct __pyx_obj_6meliso_MelisoPy), /*tp_basicsize*/
+  "build.meliso.""MelisoPy", /*tp_name*/
+  sizeof(struct __pyx_obj_5build_6meliso_MelisoPy), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_6meliso_MelisoPy, /*tp_dealloc*/
+  __pyx_tp_dealloc_5build_6meliso_MelisoPy, /*tp_dealloc*/
   #if PY_VERSION_HEX < 0x030800b4
   0, /*tp_print*/
   #endif
@@ -18965,7 +18965,7 @@ static PyTypeObject __pyx_type_6meliso_MelisoPy = {
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_6meliso_MelisoPy, /*tp_methods*/
+  __pyx_methods_5build_6meliso_MelisoPy, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -18977,7 +18977,7 @@ static PyTypeObject __pyx_type_6meliso_MelisoPy = {
   #endif
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_6meliso_MelisoPy, /*tp_new*/
+  __pyx_tp_new_5build_6meliso_MelisoPy, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -19146,7 +19146,7 @@ static PyType_Slot __pyx_type___pyx_array_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_array_spec = {
-  "meliso.array",
+  "build.meliso.array",
   sizeof(struct __pyx_array_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_SEQUENCE,
@@ -19192,7 +19192,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "meliso.""array", /*tp_name*/
+  "build.meliso.""array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -19352,7 +19352,7 @@ static PyType_Slot __pyx_type___pyx_MemviewEnum_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_MemviewEnum_spec = {
-  "meliso.Enum",
+  "build.meliso.Enum",
   sizeof(struct __pyx_MemviewEnum_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
@@ -19362,7 +19362,7 @@ static PyType_Spec __pyx_type___pyx_MemviewEnum_spec = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "meliso.""Enum", /*tp_name*/
+  "build.meliso.""Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -19659,7 +19659,7 @@ static PyType_Slot __pyx_type___pyx_memoryview_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_memoryview_spec = {
-  "meliso.memoryview",
+  "build.meliso.memoryview",
   sizeof(struct __pyx_memoryview_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
@@ -19705,7 +19705,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "meliso.""memoryview", /*tp_name*/
+  "build.meliso.""memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -19859,7 +19859,7 @@ static PyType_Slot __pyx_type___pyx_memoryviewslice_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_memoryviewslice_spec = {
-  "meliso._memoryviewslice",
+  "build.meliso._memoryviewslice",
   sizeof(struct __pyx_memoryviewslice_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC|Py_TPFLAGS_SEQUENCE,
@@ -19869,7 +19869,7 @@ static PyType_Spec __pyx_type___pyx_memoryviewslice_spec = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "meliso.""_memoryviewslice", /*tp_name*/
+  "build.meliso.""_memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -20022,6 +20022,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_kp_u_and, __pyx_k_and, sizeof(__pyx_k_and), 0, 1, 0, 0},
     {&__pyx_n_s_asyncio_coroutines, __pyx_k_asyncio_coroutines, sizeof(__pyx_k_asyncio_coroutines), 0, 0, 1, 1},
     {&__pyx_n_s_base, __pyx_k_base, sizeof(__pyx_k_base), 0, 0, 1, 1},
+    {&__pyx_n_s_build_meliso, __pyx_k_build_meliso, sizeof(__pyx_k_build_meliso), 0, 0, 1, 1},
     {&__pyx_n_s_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 0, 1, 1},
     {&__pyx_n_u_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 1, 0, 1},
     {&__pyx_n_s_class, __pyx_k_class, sizeof(__pyx_k_class), 0, 0, 1, 1},
@@ -20066,7 +20067,6 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_loadInput, __pyx_k_loadInput, sizeof(__pyx_k_loadInput), 0, 0, 1, 1},
     {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
     {&__pyx_n_s_matVec, __pyx_k_matVec, sizeof(__pyx_k_matVec), 0, 0, 1, 1},
-    {&__pyx_n_s_meliso, __pyx_k_meliso, sizeof(__pyx_k_meliso), 0, 0, 1, 1},
     {&__pyx_n_s_memview, __pyx_k_memview, sizeof(__pyx_k_memview), 0, 0, 1, 1},
     {&__pyx_n_s_mode, __pyx_k_mode, sizeof(__pyx_k_mode), 0, 0, 1, 1},
     {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
@@ -20447,27 +20447,27 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   #if CYTHON_USE_TYPE_SPECS
-  __pyx_ptype_6meliso_MelisoPy = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_6meliso_MelisoPy_spec, NULL); if (unlikely(!__pyx_ptype_6meliso_MelisoPy)) __PYX_ERR(0, 19, __pyx_L1_error)
-  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_6meliso_MelisoPy_spec, __pyx_ptype_6meliso_MelisoPy) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_ptype_5build_6meliso_MelisoPy = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_5build_6meliso_MelisoPy_spec, NULL); if (unlikely(!__pyx_ptype_5build_6meliso_MelisoPy)) __PYX_ERR(0, 19, __pyx_L1_error)
+  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_5build_6meliso_MelisoPy_spec, __pyx_ptype_5build_6meliso_MelisoPy) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
   #else
-  __pyx_ptype_6meliso_MelisoPy = &__pyx_type_6meliso_MelisoPy;
+  __pyx_ptype_5build_6meliso_MelisoPy = &__pyx_type_5build_6meliso_MelisoPy;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
   #endif
   #if !CYTHON_USE_TYPE_SPECS
-  if (__Pyx_PyType_Ready(__pyx_ptype_6meliso_MelisoPy) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  if (__Pyx_PyType_Ready(__pyx_ptype_5build_6meliso_MelisoPy) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
   #endif
   #if PY_MAJOR_VERSION < 3
-  __pyx_ptype_6meliso_MelisoPy->tp_print = 0;
+  __pyx_ptype_5build_6meliso_MelisoPy->tp_print = 0;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_ptype_6meliso_MelisoPy->tp_dictoffset && __pyx_ptype_6meliso_MelisoPy->tp_getattro == PyObject_GenericGetAttr)) {
-    __pyx_ptype_6meliso_MelisoPy->tp_getattro = __Pyx_PyObject_GenericGetAttr;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_ptype_5build_6meliso_MelisoPy->tp_dictoffset && __pyx_ptype_5build_6meliso_MelisoPy->tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_ptype_5build_6meliso_MelisoPy->tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
   #endif
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_MelisoPy, (PyObject *) __pyx_ptype_6meliso_MelisoPy) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_MelisoPy, (PyObject *) __pyx_ptype_5build_6meliso_MelisoPy) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  if (__Pyx_setup_reduce((PyObject *) __pyx_ptype_6meliso_MelisoPy) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject *) __pyx_ptype_5build_6meliso_MelisoPy) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
   #endif
   __pyx_vtabptr_array = &__pyx_vtable_array;
   __pyx_vtable_array.get_memview = (PyObject *(*)(struct __pyx_array_obj *))__pyx_array_get_memview;
@@ -20897,14 +20897,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_meliso) {
+  if (__pyx_module_is_main_build__meliso) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name_2, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "meliso")) {
-      if (unlikely((PyDict_SetItemString(modules, "meliso", __pyx_m) < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "build.meliso")) {
+      if (unlikely((PyDict_SetItemString(modules, "build.meliso", __pyx_m) < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -21457,11 +21457,11 @@ if (!__Pyx_RefNanny) {
  *         self.melisoObj.initializeWeights()
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_6meliso_8MelisoPy_3initializeWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_initializeWeights, NULL, __pyx_n_s_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_3initializeWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_initializeWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 42, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_6meliso_MelisoPy, __pyx_n_s_initializeWeights, __pyx_t_7) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_initializeWeights, __pyx_t_7) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  PyType_Modified(__pyx_ptype_6meliso_MelisoPy);
+  PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
   /* "src/cython/mel.pyx":45
  *         self.melisoObj.initializeWeights()
@@ -21470,11 +21470,11 @@ if (!__Pyx_RefNanny) {
  *         ctr = 0
  *         for i in xrange(self.m):
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_6meliso_8MelisoPy_5setWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setWeights, NULL, __pyx_n_s_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_5setWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_6meliso_MelisoPy, __pyx_n_s_setWeights, __pyx_t_7) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setWeights, __pyx_t_7) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  PyType_Modified(__pyx_ptype_6meliso_MelisoPy);
+  PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
   /* "src/cython/mel.pyx":54
  *         self.melisoObj.setWeights(self.A_matrix)
@@ -21483,11 +21483,11 @@ if (!__Pyx_RefNanny) {
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_6meliso_8MelisoPy_7loadInput, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_loadInput, NULL, __pyx_n_s_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_7loadInput, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_loadInput, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_6meliso_MelisoPy, __pyx_n_s_loadInput, __pyx_t_7) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_loadInput, __pyx_t_7) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  PyType_Modified(__pyx_ptype_6meliso_MelisoPy);
+  PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
   /* "src/cython/mel.pyx":59
  *         self.melisoObj.loadInput(self.x)
@@ -21496,11 +21496,11 @@ if (!__Pyx_RefNanny) {
  *         self.melisoObj.matVec()
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_6meliso_8MelisoPy_9matVec, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_matVec, NULL, __pyx_n_s_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_9matVec, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_matVec, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_6meliso_MelisoPy, __pyx_n_s_matVec, __pyx_t_7) < 0) __PYX_ERR(0, 59, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_matVec, __pyx_t_7) < 0) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  PyType_Modified(__pyx_ptype_6meliso_MelisoPy);
+  PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
   /* "src/cython/mel.pyx":62
  *         self.melisoObj.matVec()
@@ -21509,18 +21509,18 @@ if (!__Pyx_RefNanny) {
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_6meliso_8MelisoPy_11getResults, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getResults, NULL, __pyx_n_s_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__28)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_11getResults, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getResults, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__28)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_6meliso_MelisoPy, __pyx_n_s_getResults, __pyx_t_7) < 0) __PYX_ERR(0, 62, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getResults, __pyx_t_7) < 0) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  PyType_Modified(__pyx_ptype_6meliso_MelisoPy);
+  PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
  * def __setstate_cython__(self, __pyx_state):
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_6meliso_8MelisoPy_13__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy___reduce_cython, NULL, __pyx_n_s_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_13__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy___reduce_cython, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_reduce_cython, __pyx_t_7) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -21531,7 +21531,7 @@ if (!__Pyx_RefNanny) {
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_6meliso_8MelisoPy_15__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy___setstate_cython, NULL, __pyx_n_s_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__31)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_15__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy___setstate_cython, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__31)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_setstate_cython, __pyx_t_7) < 0) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -21555,7 +21555,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_7);
   if (__pyx_m) {
     if (__pyx_d && stringtab_initialized) {
-      __Pyx_AddTraceback("init meliso", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init build.meliso", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     #if !CYTHON_USE_MODULE_STATE
     Py_CLEAR(__pyx_m);
@@ -21569,7 +21569,7 @@ if (!__Pyx_RefNanny) {
     }
     #endif
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init meliso");
+    PyErr_SetString(PyExc_ImportError, "init build.meliso");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
