@@ -38,17 +38,31 @@ class Meliso {
 public:
     double totalSubArrayArea, totalNeuronAreaIH,heightNeuronIH, widthNeuronIH, leakageNeuronIH;
     int rows, columns;
-//    double *A_matrix;
-//    double *x;
+
     double *y;
+    double *delta; //rhs of Ax=b
+    double *y_adj_min; //residual b-Ax
+
+    double *real_delta; //rhs of Ax=b
+    double *real_y_adj_min; //residual b-Ax
+
+    int *sign; //sign
+
+    double TOL;
+
+    bool scalingAdjusted;
+
     Meliso();
-    Meliso(int,int,int);
+    Meliso(int,int,int,double);
 
     void loadInput(double *);
     void initializeWeights();
     void setWeights(double *);
     void matVec();
     void getResults();
+
+    void adjustScalingLimits();
+    void getScalingLimits(double*, double*, double);
 
     //~Meliso();
 

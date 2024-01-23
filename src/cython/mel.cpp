@@ -1694,6 +1694,7 @@ struct __pyx_obj_5build_6meliso_MelisoPy {
   meliso::Meliso melisoObj;
   int m;
   int n;
+  double TOL;
   int device_type;
   double *A_matrix;
   double *x;
@@ -2910,6 +2911,7 @@ static const char __pyx_k__7[] = ")";
 static const char __pyx_k_gc[] = "gc";
 static const char __pyx_k_id[] = "id";
 static const char __pyx_k_np[] = "np";
+static const char __pyx_k_TOL[] = "TOL";
 static const char __pyx_k__32[] = "?";
 static const char __pyx_k_abc[] = "abc";
 static const char __pyx_k_and[] = " and ";
@@ -3086,7 +3088,7 @@ static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewsl
 static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns); /* proto */
+static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_TOL); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_A_matrix); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_x); /* proto */
@@ -3195,6 +3197,7 @@ typedef struct {
   PyObject *__pyx_n_s_PickleError;
   PyObject *__pyx_n_s_Sequence;
   PyObject *__pyx_kp_s_Step_may_not_be_zero_axis_d;
+  PyObject *__pyx_n_s_TOL;
   PyObject *__pyx_n_s_TypeError;
   PyObject *__pyx_kp_s_Unable_to_convert_item_to_object;
   PyObject *__pyx_n_s_ValueError;
@@ -3429,6 +3432,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_PickleError);
   Py_CLEAR(clear_module_state->__pyx_n_s_Sequence);
   Py_CLEAR(clear_module_state->__pyx_kp_s_Step_may_not_be_zero_axis_d);
+  Py_CLEAR(clear_module_state->__pyx_n_s_TOL);
   Py_CLEAR(clear_module_state->__pyx_n_s_TypeError);
   Py_CLEAR(clear_module_state->__pyx_kp_s_Unable_to_convert_item_to_object);
   Py_CLEAR(clear_module_state->__pyx_n_s_ValueError);
@@ -3641,6 +3645,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_PickleError);
   Py_VISIT(traverse_module_state->__pyx_n_s_Sequence);
   Py_VISIT(traverse_module_state->__pyx_kp_s_Step_may_not_be_zero_axis_d);
+  Py_VISIT(traverse_module_state->__pyx_n_s_TOL);
   Py_VISIT(traverse_module_state->__pyx_n_s_TypeError);
   Py_VISIT(traverse_module_state->__pyx_kp_s_Unable_to_convert_item_to_object);
   Py_VISIT(traverse_module_state->__pyx_n_s_ValueError);
@@ -3885,6 +3890,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_PickleError __pyx_mstate_global->__pyx_n_s_PickleError
 #define __pyx_n_s_Sequence __pyx_mstate_global->__pyx_n_s_Sequence
 #define __pyx_kp_s_Step_may_not_be_zero_axis_d __pyx_mstate_global->__pyx_kp_s_Step_may_not_be_zero_axis_d
+#define __pyx_n_s_TOL __pyx_mstate_global->__pyx_n_s_TOL
 #define __pyx_n_s_TypeError __pyx_mstate_global->__pyx_n_s_TypeError
 #define __pyx_kp_s_Unable_to_convert_item_to_object __pyx_mstate_global->__pyx_kp_s_Unable_to_convert_item_to_object
 #define __pyx_n_s_ValueError __pyx_mstate_global->__pyx_n_s_ValueError
@@ -17660,10 +17666,10 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":31
+/* "src/cython/mel.pyx":32
  *     cdef double *y
  * 
- *     def __cinit__(self,device_type,rows,columns):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self,device_type,rows,columns,TOL):             # <<<<<<<<<<<<<<
  *         self.m = rows
  *         self.n = columns
  */
@@ -17674,9 +17680,10 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   PyObject *__pyx_v_device_type = 0;
   PyObject *__pyx_v_rows = 0;
   PyObject *__pyx_v_columns = 0;
+  PyObject *__pyx_v_TOL = 0;
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
-  PyObject* values[3] = {0,0,0};
+  PyObject* values[4] = {0,0,0,0};
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -17690,10 +17697,12 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   #endif
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
   {
-    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_type,&__pyx_n_s_rows,&__pyx_n_s_columns,0};
+    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_type,&__pyx_n_s_rows,&__pyx_n_s_columns,&__pyx_n_s_TOL,0};
     if (__pyx_kwds) {
       Py_ssize_t kw_args;
       switch (__pyx_nargs) {
+        case  4: values[3] = __Pyx_Arg_VARARGS(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
         case  3: values[2] = __Pyx_Arg_VARARGS(__pyx_args, 2);
         CYTHON_FALLTHROUGH;
         case  2: values[1] = __Pyx_Arg_VARARGS(__pyx_args, 1);
@@ -17710,7 +17719,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
           (void)__Pyx_Arg_NewRef_VARARGS(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -17718,9 +17727,9 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
           (void)__Pyx_Arg_NewRef_VARARGS(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, 1); __PYX_ERR(0, 31, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 1); __PYX_ERR(0, 32, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -17728,29 +17737,41 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
           (void)__Pyx_Arg_NewRef_VARARGS(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, 2); __PYX_ERR(0, 31, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 2); __PYX_ERR(0, 32, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (likely((values[3] = __Pyx_GetKwValue_VARARGS(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_TOL)) != 0)) {
+          (void)__Pyx_Arg_NewRef_VARARGS(values[3]);
+          kw_args--;
+        }
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
+        else {
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 3); __PYX_ERR(0, 32, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "__cinit__") < 0)) __PYX_ERR(0, 31, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "__cinit__") < 0)) __PYX_ERR(0, 32, __pyx_L3_error)
       }
-    } else if (unlikely(__pyx_nargs != 3)) {
+    } else if (unlikely(__pyx_nargs != 4)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_Arg_VARARGS(__pyx_args, 0);
       values[1] = __Pyx_Arg_VARARGS(__pyx_args, 1);
       values[2] = __Pyx_Arg_VARARGS(__pyx_args, 2);
+      values[3] = __Pyx_Arg_VARARGS(__pyx_args, 3);
     }
     __pyx_v_device_type = values[0];
     __pyx_v_rows = values[1];
     __pyx_v_columns = values[2];
+    __pyx_v_TOL = values[3];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 31, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, __pyx_nargs); __PYX_ERR(0, 32, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17764,7 +17785,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy___cinit__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_device_type, __pyx_v_rows, __pyx_v_columns);
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy___cinit__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_device_type, __pyx_v_rows, __pyx_v_columns, __pyx_v_TOL);
 
   /* function exit code */
   {
@@ -17777,36 +17798,47 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   return __pyx_r;
 }
 
-static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns) {
+static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_TOL) {
   int __pyx_r;
   int __pyx_t_1;
-  meliso::Meliso __pyx_t_2;
+  double __pyx_t_2;
+  meliso::Meliso __pyx_t_3;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-  /* "src/cython/mel.pyx":32
+  /* "src/cython/mel.pyx":33
  * 
- *     def __cinit__(self,device_type,rows,columns):
+ *     def __cinit__(self,device_type,rows,columns,TOL):
  *         self.m = rows             # <<<<<<<<<<<<<<
  *         self.n = columns
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_rows); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_rows); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
   __pyx_v_self->m = __pyx_t_1;
 
-  /* "src/cython/mel.pyx":33
- *     def __cinit__(self,device_type,rows,columns):
+  /* "src/cython/mel.pyx":34
+ *     def __cinit__(self,device_type,rows,columns,TOL):
  *         self.m = rows
  *         self.n = columns             # <<<<<<<<<<<<<<
  * 
- *         self.A_matrix = <double *>malloc(self.m*self.n*cython.sizeof(double))
+ *         self.TOL = TOL
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_columns); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_columns); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L1_error)
   __pyx_v_self->n = __pyx_t_1;
 
-  /* "src/cython/mel.pyx":35
+  /* "src/cython/mel.pyx":36
  *         self.n = columns
+ * 
+ *         self.TOL = TOL             # <<<<<<<<<<<<<<
+ * 
+ *         self.A_matrix = <double *>malloc(self.m*self.n*cython.sizeof(double))
+ */
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_TOL); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_v_self->TOL = __pyx_t_2;
+
+  /* "src/cython/mel.pyx":38
+ *         self.TOL = TOL
  * 
  *         self.A_matrix = <double *>malloc(self.m*self.n*cython.sizeof(double))             # <<<<<<<<<<<<<<
  *         self.x = <double*>malloc(self.n*cython.sizeof(double))
@@ -17814,7 +17846,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
  */
   __pyx_v_self->A_matrix = ((double *)malloc(((__pyx_v_self->m * __pyx_v_self->n) * (sizeof(double)))));
 
-  /* "src/cython/mel.pyx":36
+  /* "src/cython/mel.pyx":39
  * 
  *         self.A_matrix = <double *>malloc(self.m*self.n*cython.sizeof(double))
  *         self.x = <double*>malloc(self.n*cython.sizeof(double))             # <<<<<<<<<<<<<<
@@ -17823,7 +17855,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
  */
   __pyx_v_self->x = ((double *)malloc((__pyx_v_self->n * (sizeof(double)))));
 
-  /* "src/cython/mel.pyx":37
+  /* "src/cython/mel.pyx":40
  *         self.A_matrix = <double *>malloc(self.m*self.n*cython.sizeof(double))
  *         self.x = <double*>malloc(self.n*cython.sizeof(double))
  *         self.y = <double*>malloc(self.m*cython.sizeof(double))             # <<<<<<<<<<<<<<
@@ -17832,35 +17864,36 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
  */
   __pyx_v_self->y = ((double *)malloc((__pyx_v_self->m * (sizeof(double)))));
 
-  /* "src/cython/mel.pyx":38
+  /* "src/cython/mel.pyx":41
  *         self.x = <double*>malloc(self.n*cython.sizeof(double))
  *         self.y = <double*>malloc(self.m*cython.sizeof(double))
  *         self.device_type = device_type             # <<<<<<<<<<<<<<
  * 
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n)
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_device_type); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_device_type); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L1_error)
   __pyx_v_self->device_type = __pyx_t_1;
 
-  /* "src/cython/mel.pyx":40
+  /* "src/cython/mel.pyx":43
  *         self.device_type = device_type
  * 
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n)             # <<<<<<<<<<<<<<
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)             # <<<<<<<<<<<<<<
  * 
  *     def initializeWeights(self):
  */
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_TOL); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 43, __pyx_L1_error)
   try {
-    __pyx_t_2 = meliso::Meliso(__pyx_v_self->device_type, __pyx_v_self->m, __pyx_v_self->n);
+    __pyx_t_3 = meliso::Meliso(__pyx_v_self->device_type, __pyx_v_self->m, __pyx_v_self->n, __pyx_t_2);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 40, __pyx_L1_error)
+    __PYX_ERR(0, 43, __pyx_L1_error)
   }
-  __pyx_v_self->melisoObj = __PYX_STD_MOVE_IF_SUPPORTED(__pyx_t_2);
+  __pyx_v_self->melisoObj = __PYX_STD_MOVE_IF_SUPPORTED(__pyx_t_3);
 
-  /* "src/cython/mel.pyx":31
+  /* "src/cython/mel.pyx":32
  *     cdef double *y
  * 
- *     def __cinit__(self,device_type,rows,columns):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self,device_type,rows,columns,TOL):             # <<<<<<<<<<<<<<
  *         self.m = rows
  *         self.n = columns
  */
@@ -17875,8 +17908,8 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":42
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n)
+/* "src/cython/mel.pyx":45
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
@@ -17929,7 +17962,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __p
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("initializeWeights", 1);
 
-  /* "src/cython/mel.pyx":43
+  /* "src/cython/mel.pyx":46
  * 
  *     def initializeWeights(self):
  *         self.melisoObj.initializeWeights()             # <<<<<<<<<<<<<<
@@ -17938,8 +17971,8 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __p
  */
   __pyx_v_self->melisoObj.initializeWeights();
 
-  /* "src/cython/mel.pyx":42
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n)
+  /* "src/cython/mel.pyx":45
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
@@ -17953,7 +17986,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __p
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":45
+/* "src/cython/mel.pyx":48
  *         self.melisoObj.initializeWeights()
  * 
  *     def setWeights(self,np_A_matrix):             # <<<<<<<<<<<<<<
@@ -18014,12 +18047,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 45, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setWeights") < 0)) __PYX_ERR(0, 45, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setWeights") < 0)) __PYX_ERR(0, 48, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
@@ -18030,7 +18063,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("setWeights", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 45, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("setWeights", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 48, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18078,7 +18111,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("setWeights", 1);
 
-  /* "src/cython/mel.pyx":46
+  /* "src/cython/mel.pyx":49
  * 
  *     def setWeights(self,np_A_matrix):
  *         ctr = 0             # <<<<<<<<<<<<<<
@@ -18088,7 +18121,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_ctr = __pyx_int_0;
 
-  /* "src/cython/mel.pyx":47
+  /* "src/cython/mel.pyx":50
  *     def setWeights(self,np_A_matrix):
  *         ctr = 0
  *         for i in xrange(self.m):             # <<<<<<<<<<<<<<
@@ -18100,7 +18133,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "src/cython/mel.pyx":48
+    /* "src/cython/mel.pyx":51
  *         ctr = 0
  *         for i in xrange(self.m):
  *             for j in xrange(self.n):             # <<<<<<<<<<<<<<
@@ -18112,38 +18145,38 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_j = __pyx_t_6;
 
-      /* "src/cython/mel.pyx":49
+      /* "src/cython/mel.pyx":52
  *         for i in xrange(self.m):
  *             for j in xrange(self.n):
  *                 self.A_matrix[ctr] = np_A_matrix[i][j]             # <<<<<<<<<<<<<<
  *                 ctr = ctr +1
  * 
  */
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_np_A_matrix, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_np_A_matrix, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 52, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 52, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_8); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_8); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_v_ctr); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_v_ctr); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L1_error)
       (__pyx_v_self->A_matrix[__pyx_t_10]) = __pyx_t_9;
 
-      /* "src/cython/mel.pyx":50
+      /* "src/cython/mel.pyx":53
  *             for j in xrange(self.n):
  *                 self.A_matrix[ctr] = np_A_matrix[i][j]
  *                 ctr = ctr +1             # <<<<<<<<<<<<<<
  * 
  *         self.melisoObj.setWeights(self.A_matrix)
  */
-      __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_ctr, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 50, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_ctr, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 53, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF_SET(__pyx_v_ctr, __pyx_t_8);
       __pyx_t_8 = 0;
     }
   }
 
-  /* "src/cython/mel.pyx":52
+  /* "src/cython/mel.pyx":55
  *                 ctr = ctr +1
  * 
  *         self.melisoObj.setWeights(self.A_matrix)             # <<<<<<<<<<<<<<
@@ -18152,7 +18185,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
  */
   __pyx_v_self->melisoObj.setWeights(__pyx_v_self->A_matrix);
 
-  /* "src/cython/mel.pyx":45
+  /* "src/cython/mel.pyx":48
  *         self.melisoObj.initializeWeights()
  * 
  *     def setWeights(self,np_A_matrix):             # <<<<<<<<<<<<<<
@@ -18175,7 +18208,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":54
+/* "src/cython/mel.pyx":57
  *         self.melisoObj.setWeights(self.A_matrix)
  * 
  *     def loadInput(self,np_x):             # <<<<<<<<<<<<<<
@@ -18236,12 +18269,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 54, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 57, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "loadInput") < 0)) __PYX_ERR(0, 54, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "loadInput") < 0)) __PYX_ERR(0, 57, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
@@ -18252,7 +18285,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("loadInput", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 54, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("loadInput", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 57, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18293,7 +18326,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("loadInput", 1);
 
-  /* "src/cython/mel.pyx":55
+  /* "src/cython/mel.pyx":58
  * 
  *     def loadInput(self,np_x):
  *         for j in xrange(self.n):             # <<<<<<<<<<<<<<
@@ -18305,21 +18338,21 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_j = __pyx_t_3;
 
-    /* "src/cython/mel.pyx":56
+    /* "src/cython/mel.pyx":59
  *     def loadInput(self,np_x):
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]             # <<<<<<<<<<<<<<
  *         self.melisoObj.loadInput(self.x)
  * 
  */
-    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_np_x, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_np_x, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 59, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 59, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     (__pyx_v_self->x[__pyx_v_j]) = __pyx_t_5;
   }
 
-  /* "src/cython/mel.pyx":57
+  /* "src/cython/mel.pyx":60
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]
  *         self.melisoObj.loadInput(self.x)             # <<<<<<<<<<<<<<
@@ -18328,7 +18361,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5
  */
   __pyx_v_self->melisoObj.loadInput(__pyx_v_self->x);
 
-  /* "src/cython/mel.pyx":54
+  /* "src/cython/mel.pyx":57
  *         self.melisoObj.setWeights(self.A_matrix)
  * 
  *     def loadInput(self,np_x):             # <<<<<<<<<<<<<<
@@ -18349,7 +18382,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":59
+/* "src/cython/mel.pyx":62
  *         self.melisoObj.loadInput(self.x)
  * 
  *     def matVec(self):             # <<<<<<<<<<<<<<
@@ -18403,7 +18436,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_8matVec(struct __pyx_obj_5bui
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("matVec", 1);
 
-  /* "src/cython/mel.pyx":60
+  /* "src/cython/mel.pyx":63
  * 
  *     def matVec(self):
  *         self.melisoObj.matVec()             # <<<<<<<<<<<<<<
@@ -18412,7 +18445,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_8matVec(struct __pyx_obj_5bui
  */
   __pyx_v_self->melisoObj.matVec();
 
-  /* "src/cython/mel.pyx":59
+  /* "src/cython/mel.pyx":62
  *         self.melisoObj.loadInput(self.x)
  * 
  *     def matVec(self):             # <<<<<<<<<<<<<<
@@ -18427,7 +18460,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_8matVec(struct __pyx_obj_5bui
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":62
+/* "src/cython/mel.pyx":65
  *         self.melisoObj.matVec()
  * 
  *     def getResults(self):             # <<<<<<<<<<<<<<
@@ -18494,7 +18527,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("getResults", 1);
 
-  /* "src/cython/mel.pyx":63
+  /* "src/cython/mel.pyx":66
  * 
  *     def getResults(self):
  *         self.melisoObj.getResults()             # <<<<<<<<<<<<<<
@@ -18503,45 +18536,45 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
  */
   __pyx_v_self->melisoObj.getResults();
 
-  /* "src/cython/mel.pyx":64
+  /* "src/cython/mel.pyx":67
  *     def getResults(self):
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))             # <<<<<<<<<<<<<<
  *         print(y.shape)
  *         for i in xrange(self.m):
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->m); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->m); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error);
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 64, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_reshape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_reshape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->m); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->m); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5)) __PYX_ERR(0, 64, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5)) __PYX_ERR(0, 67, __pyx_L1_error);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1)) __PYX_ERR(0, 64, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1)) __PYX_ERR(0, 67, __pyx_L1_error);
   __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
   __pyx_t_6 = 0;
@@ -18562,28 +18595,28 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
   __pyx_v_y = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/cython/mel.pyx":65
+  /* "src/cython/mel.pyx":68
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  *         print(y.shape)             # <<<<<<<<<<<<<<
  *         for i in xrange(self.m):
  *             y[i][0] = self.melisoObj.y[i]
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_y, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_y, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 68, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 68, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "src/cython/mel.pyx":66
+  /* "src/cython/mel.pyx":69
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  *         print(y.shape)
  *         for i in xrange(self.m):             # <<<<<<<<<<<<<<
@@ -18595,22 +18628,22 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "src/cython/mel.pyx":67
+    /* "src/cython/mel.pyx":70
  *         print(y.shape)
  *         for i in xrange(self.m):
  *             y[i][0] = self.melisoObj.y[i]             # <<<<<<<<<<<<<<
  *         return y
  */
-    __pyx_t_2 = PyFloat_FromDouble((__pyx_v_self->melisoObj.y[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble((__pyx_v_self->melisoObj.y[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_y, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_y, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (unlikely((__Pyx_SetItemInt(__pyx_t_1, 0, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 67, __pyx_L1_error)
+    if (unlikely((__Pyx_SetItemInt(__pyx_t_1, 0, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
 
-  /* "src/cython/mel.pyx":68
+  /* "src/cython/mel.pyx":71
  *         for i in xrange(self.m):
  *             y[i][0] = self.melisoObj.y[i]
  *         return y             # <<<<<<<<<<<<<<
@@ -18620,7 +18653,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
   __pyx_r = __pyx_v_y;
   goto __pyx_L0;
 
-  /* "src/cython/mel.pyx":62
+  /* "src/cython/mel.pyx":65
  *         self.melisoObj.matVec()
  * 
  *     def getResults(self):             # <<<<<<<<<<<<<<
@@ -20008,6 +20041,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_PickleError, __pyx_k_PickleError, sizeof(__pyx_k_PickleError), 0, 0, 1, 1},
     {&__pyx_n_s_Sequence, __pyx_k_Sequence, sizeof(__pyx_k_Sequence), 0, 0, 1, 1},
     {&__pyx_kp_s_Step_may_not_be_zero_axis_d, __pyx_k_Step_may_not_be_zero_axis_d, sizeof(__pyx_k_Step_may_not_be_zero_axis_d), 0, 0, 1, 0},
+    {&__pyx_n_s_TOL, __pyx_k_TOL, sizeof(__pyx_k_TOL), 0, 0, 1, 1},
     {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
     {&__pyx_kp_s_Unable_to_convert_item_to_object, __pyx_k_Unable_to_convert_item_to_object, sizeof(__pyx_k_Unable_to_convert_item_to_object), 0, 0, 1, 0},
     {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
@@ -20129,11 +20163,11 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
   #if PY_MAJOR_VERSION >= 3
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) __PYX_ERR(0, 50, __pyx_L1_error)
   #else
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) __PYX_ERR(0, 50, __pyx_L1_error)
   #endif
-  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 68, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 141, __pyx_L1_error)
@@ -20291,62 +20325,62 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__18);
   __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":42
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n)
+  /* "src/cython/mel.pyx":45
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
  * 
  */
-  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__20);
   __Pyx_GIVEREF(__pyx_tuple__20);
-  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_initializeWeights, 42, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_initializeWeights, 45, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 45, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":45
+  /* "src/cython/mel.pyx":48
  *         self.melisoObj.initializeWeights()
  * 
  *     def setWeights(self,np_A_matrix):             # <<<<<<<<<<<<<<
  *         ctr = 0
  *         for i in xrange(self.m):
  */
-  __pyx_tuple__22 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_np_A_matrix, __pyx_n_s_ctr, __pyx_n_s_i, __pyx_n_s_j); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_tuple__22 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_np_A_matrix, __pyx_n_s_ctr, __pyx_n_s_i, __pyx_n_s_j); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__22);
   __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setWeights, 45, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setWeights, 48, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 48, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":54
+  /* "src/cython/mel.pyx":57
  *         self.melisoObj.setWeights(self.A_matrix)
  * 
  *     def loadInput(self,np_x):             # <<<<<<<<<<<<<<
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]
  */
-  __pyx_tuple__24 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_np_x, __pyx_n_s_j); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_np_x, __pyx_n_s_j); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_loadInput, 54, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_loadInput, 57, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 57, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":59
+  /* "src/cython/mel.pyx":62
  *         self.melisoObj.loadInput(self.x)
  * 
  *     def matVec(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.matVec()
  * 
  */
-  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_matVec, 59, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_matVec, 62, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 62, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":62
+  /* "src/cython/mel.pyx":65
  *         self.melisoObj.matVec()
  * 
  *     def getResults(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  */
-  __pyx_tuple__27 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_y, __pyx_n_s_i); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_tuple__27 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_y, __pyx_n_s_i); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__27);
   __Pyx_GIVEREF(__pyx_tuple__27);
-  __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getResults, 62, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getResults, 65, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 65, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
@@ -21450,68 +21484,68 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_7) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "src/cython/mel.pyx":42
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n)
+  /* "src/cython/mel.pyx":45
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_3initializeWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_initializeWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_3initializeWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_initializeWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_initializeWeights, __pyx_t_7) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_initializeWeights, __pyx_t_7) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":45
+  /* "src/cython/mel.pyx":48
  *         self.melisoObj.initializeWeights()
  * 
  *     def setWeights(self,np_A_matrix):             # <<<<<<<<<<<<<<
  *         ctr = 0
  *         for i in xrange(self.m):
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_5setWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_5setWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setWeights, __pyx_t_7) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setWeights, __pyx_t_7) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":54
+  /* "src/cython/mel.pyx":57
  *         self.melisoObj.setWeights(self.A_matrix)
  * 
  *     def loadInput(self,np_x):             # <<<<<<<<<<<<<<
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_7loadInput, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_loadInput, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_7loadInput, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_loadInput, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_loadInput, __pyx_t_7) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_loadInput, __pyx_t_7) < 0) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":59
+  /* "src/cython/mel.pyx":62
  *         self.melisoObj.loadInput(self.x)
  * 
  *     def matVec(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.matVec()
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_9matVec, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_matVec, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_9matVec, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_matVec, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_matVec, __pyx_t_7) < 0) __PYX_ERR(0, 59, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_matVec, __pyx_t_7) < 0) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":62
+  /* "src/cython/mel.pyx":65
  *         self.melisoObj.matVec()
  * 
  *     def getResults(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_11getResults, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getResults, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__28)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_11getResults, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getResults, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__28)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getResults, __pyx_t_7) < 0) __PYX_ERR(0, 62, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getResults, __pyx_t_7) < 0) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 

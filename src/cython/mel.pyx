@@ -22,22 +22,25 @@ cdef class MelisoPy:
     cdef int m
     cdef int n
 
+    cdef double TOL
     cdef int device_type
 
     cdef double *A_matrix
     cdef double *x
     cdef double *y
 
-    def __cinit__(self,device_type,rows,columns):
+    def __cinit__(self,device_type,rows,columns,TOL):
         self.m = rows
         self.n = columns
+
+        self.TOL = TOL
 
         self.A_matrix = <double *>malloc(self.m*self.n*cython.sizeof(double))
         self.x = <double*>malloc(self.n*cython.sizeof(double))
         self.y = <double*>malloc(self.m*cython.sizeof(double))
         self.device_type = device_type
 
-        self.melisoObj = Meliso(self.device_type,self.m,self.n)
+        self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
 
     def initializeWeights(self):
         self.melisoObj.initializeWeights()
