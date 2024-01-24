@@ -15,7 +15,8 @@ For more information read src/cython/Meliso.cpp
 Second and third arguments are rows and columns of weight matrix
 '''
 
-meliso_obj = meliso.MelisoPy(1,32,32,1e-6)
+
+meliso_obj = meliso.MelisoPy(0,32,32,0)
 
 #obtain an A matrix with values between 0,1
 #I have observed that having matrix between 0,1 gives the best results

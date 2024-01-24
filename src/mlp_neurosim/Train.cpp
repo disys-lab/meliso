@@ -82,7 +82,7 @@ extern double totalNumPulse=0;// track the total number of pulse for the weight 
 /*Optimization functions*/
 double gradt;
 double GAMA=0.3;
-double BETA1= 0.9, BETA2=0.9; 
+double BETA1= 0.9, BETA2=0.9;
 double SGD(double gradient, double learning_rate);
 double Momentum(double gradient, double learning_rate, double momentumPrev, double GAMA=0.3);
 double Adagrad(double gradient, double learning_rate, double gradSquare, double EPSILON=1E-2);

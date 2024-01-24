@@ -52,9 +52,9 @@ void WeightTransfer_2T1F(void);
 /* Availiable optimization type includes
 "SGD": the stochastic gradient descent
 "Momentum": the momentum optimization
-"Adagrad": 
-"RMSprop": 
-"Adam": 
+"Adagrad":
+"RMSprop":
+"Adam":
  */
 #endif
 
