@@ -21,7 +21,7 @@ def parallelMatVec(x):
 
     return sum_y
 
-def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start):
+def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start,MAX_ALPHA,ALPHA_MULT,alpha=-1):
     weighted_projection_sum = np.zeros((n,1))
     weighted_res_sum = 0 #np.zeros((row_size,1))
     for i in range(row_size):
@@ -37,13 +37,16 @@ def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start):
     alpha_num = weighted_res_sum
     alpha_denom = np.power(np.linalg.norm(weighted_projection_sum),2)
 
-    alpha = 0.1*alpha_num/alpha_denom #0.1 works really well
+    if alpha == -1:
+        alpha = ALPHA_MULT*alpha_num/alpha_denom #0.1 works really well
+        if alpha>MAX_ALPHA:
+            alpha=MAX_ALPHA
 
     x_update = alpha*weighted_projection_sum
     x_s = x_s - x_update.reshape(x_s.shape)
 
     print(alpha)
-    return x_s
+    return x_s,alpha
 
 
 
@@ -70,16 +73,16 @@ Second and third arguments are rows and columns of weight matrix
 col_parts = 4
 row_parts = 4
 
-m=64
-n=64
+m=128
+n=128
 
 row_p_size = int(m/row_parts)
 col_p_size = int(n/col_parts)
 
-MAX_ITR = 100
+MAX_ITR = 200
 
 ROOT_PROCESS_RANK=size-1
-turnOnHardware = True
+turnOnHardware = False
 
 if rank == ROOT_PROCESS_RANK:
 
@@ -132,6 +135,12 @@ if rank == ROOT_PROCESS_RANK:
 
     x = np.zeros(n)
 
+    x_list = []
+    alpha_list = []
+
+    MAX_ALPHA = 1
+    ALPHA_MULT = 0.005
+    alpha_val = -1
     while k < MAX_ITR:
 
         #choose random row of processors
@@ -152,8 +161,11 @@ if rank == ROOT_PROCESS_RANK:
 
         scaled_A_s = scaled_A[start:end, :]
 
-        x_s = globalRandomizedKaczmarz(sum_y,x,b_s,w_bars_s,scaled_A_s,row_p_size,start)
+        x_s,alpha = globalRandomizedKaczmarz(sum_y,x,b_s,w_bars_s,scaled_A_s,row_p_size,start,MAX_ALPHA,ALPHA_MULT,alpha_val)
         x = x_s.reshape((n,1))
+
+        x_list.append(x)
+        alpha_list.append(alpha)
 
         err = x-x_true
         # print(x_true.shape)
@@ -162,9 +174,25 @@ if rank == ROOT_PROCESS_RANK:
 
         #print("Itr:{}, norm:{}".format(k,np.linalg.norm(x-x_true)))
         norm_val.append(np.linalg.norm(x-x_true))
+        if k>1:
+            curr_norm_val =np.linalg.norm(x-x_true)
+            prev_norm_val = norm_val[k-1]
+            if curr_norm_val>prev_norm_val:
+                x_prev = x_list[-2]
+                x_curr = x
+                for i in range(n):
+                    print(k,x_prev[i],x_curr[i])
+                #exit(1)
+                x = x_prev
+                alpha_val = ALPHA_MULT/alpha
         k = k + 1
 
+    for i in range(n):
+        print(k, x_true[i], x[i])
+
     print(norm_val)
+    print(alpha_list)
+
 
 else:
     k=0
@@ -173,7 +201,7 @@ else:
 
     print("Process:",rank,scaled_A)
 
-    meliso_obj = meliso.MelisoPy(3,row_p_size,col_p_size,0,turnOnHardware)
+    meliso_obj = meliso.MelisoPy(1,row_p_size,col_p_size,0,turnOnHardware)
 
     #initialize weights to 0 on the memristor device
     meliso_obj.initializeWeights()
