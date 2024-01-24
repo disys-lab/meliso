@@ -37,7 +37,7 @@ def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start):
     alpha_num = weighted_res_sum
     alpha_denom = np.power(np.linalg.norm(weighted_projection_sum),2)
 
-    alpha = 1 #alpha_num/alpha_denom #0.1 works really well
+    alpha = 0.1*alpha_num/alpha_denom #0.1 works really well
 
     x_update = alpha*weighted_projection_sum
     x_s = x_s - x_update.reshape(x_s.shape)
@@ -70,8 +70,8 @@ Second and third arguments are rows and columns of weight matrix
 col_parts = 4
 row_parts = 4
 
-m=32
-n=32
+m=64
+n=64
 
 row_p_size = int(m/row_parts)
 col_p_size = int(n/col_parts)
@@ -79,7 +79,7 @@ col_p_size = int(n/col_parts)
 MAX_ITR = 100
 
 ROOT_PROCESS_RANK=size-1
-turnOnHardware = False
+turnOnHardware = True
 
 if rank == ROOT_PROCESS_RANK:
 
@@ -91,8 +91,10 @@ if rank == ROOT_PROCESS_RANK:
     w_bars = np.zeros((m,1))
     for i in range(m):
         scaled_A_row_norm[i] = np.linalg.norm(scaled_A[i][:])
-        scaled_A[i][:] = scaled_A[i][:]/scaled_A_row_norm[i][0]
-        w_bars[i] = 1/(row_p_size * np.power(scaled_A_row_norm[i], 2))
+        scaled_A[i,:] = scaled_A[i,:]/scaled_A_row_norm[i]
+        w_bars[i] = float(1) / (row_p_size*np.power(scaled_A_row_norm[i], 2))
+
+        #w_bars[i] = float(row_p_size)/(m * np.power(scaled_A_row_norm[i], 2))
 
     #print(scaled_A_row_norm)
 
@@ -151,7 +153,12 @@ if rank == ROOT_PROCESS_RANK:
         scaled_A_s = scaled_A[start:end, :]
 
         x_s = globalRandomizedKaczmarz(sum_y,x,b_s,w_bars_s,scaled_A_s,row_p_size,start)
-        x = x_s.reshape((n,))
+        x = x_s.reshape((n,1))
+
+        err = x-x_true
+        # print(x_true.shape)
+        # print(x.shape)
+        # print(err.shape)
 
         #print("Itr:{}, norm:{}".format(k,np.linalg.norm(x-x_true)))
         norm_val.append(np.linalg.norm(x-x_true))
