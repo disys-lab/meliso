@@ -11,9 +11,9 @@ RUN yes | apt-get install nano \
                     git=1:2.34.1-1ubuntu1.9 \
 		    unzip
 
-RUN apt-get -y install python3 python3-pip python3-numpy
+RUN apt-get -y install python3 python3-pip python3-numpy openmpi
 
-RUN pip install Cython
+RUN pip install Cython mpi4py
 
 ADD . /meliso
 

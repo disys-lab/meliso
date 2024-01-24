@@ -29,7 +29,7 @@ cdef class MelisoPy:
     cdef double *x
     cdef double *y
 
-    def __cinit__(self,device_type,rows,columns,TOL):
+    def __cinit__(self,device_type,rows,columns,TOL,turnOnHardware):
         self.m = rows
         self.n = columns
 
@@ -40,7 +40,7 @@ cdef class MelisoPy:
         self.y = <double*>malloc(self.m*cython.sizeof(double))
         self.device_type = device_type
 
-        self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
+        self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL,turnOnHardware)
 
     def initializeWeights(self):
         self.melisoObj.initializeWeights()

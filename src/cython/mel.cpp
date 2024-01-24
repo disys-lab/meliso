@@ -2999,6 +2999,7 @@ static const char __pyx_k_version_info[] = "version_info";
 static const char __pyx_k_class_getitem[] = "__class_getitem__";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_AssertionError[] = "AssertionError";
+static const char __pyx_k_turnOnHardware[] = "turnOnHardware";
 static const char __pyx_k_MelisoPy_matVec[] = "MelisoPy.matVec";
 static const char __pyx_k_View_MemoryView[] = "View.MemoryView";
 static const char __pyx_k_allocate_buffer[] = "allocate_buffer";
@@ -3088,7 +3089,7 @@ static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewsl
 static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_TOL); /* proto */
+static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_TOL, PyObject *__pyx_v_turnOnHardware); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_A_matrix); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_x); /* proto */
@@ -3304,6 +3305,7 @@ typedef struct {
   PyObject *__pyx_n_s_struct;
   PyObject *__pyx_n_s_sys;
   PyObject *__pyx_n_s_test;
+  PyObject *__pyx_n_s_turnOnHardware;
   PyObject *__pyx_kp_s_unable_to_allocate_array_data;
   PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
   PyObject *__pyx_n_s_unpack;
@@ -3539,6 +3541,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_struct);
   Py_CLEAR(clear_module_state->__pyx_n_s_sys);
   Py_CLEAR(clear_module_state->__pyx_n_s_test);
+  Py_CLEAR(clear_module_state->__pyx_n_s_turnOnHardware);
   Py_CLEAR(clear_module_state->__pyx_kp_s_unable_to_allocate_array_data);
   Py_CLEAR(clear_module_state->__pyx_kp_s_unable_to_allocate_shape_and_str);
   Py_CLEAR(clear_module_state->__pyx_n_s_unpack);
@@ -3752,6 +3755,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_struct);
   Py_VISIT(traverse_module_state->__pyx_n_s_sys);
   Py_VISIT(traverse_module_state->__pyx_n_s_test);
+  Py_VISIT(traverse_module_state->__pyx_n_s_turnOnHardware);
   Py_VISIT(traverse_module_state->__pyx_kp_s_unable_to_allocate_array_data);
   Py_VISIT(traverse_module_state->__pyx_kp_s_unable_to_allocate_shape_and_str);
   Py_VISIT(traverse_module_state->__pyx_n_s_unpack);
@@ -3997,6 +4001,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_struct __pyx_mstate_global->__pyx_n_s_struct
 #define __pyx_n_s_sys __pyx_mstate_global->__pyx_n_s_sys
 #define __pyx_n_s_test __pyx_mstate_global->__pyx_n_s_test
+#define __pyx_n_s_turnOnHardware __pyx_mstate_global->__pyx_n_s_turnOnHardware
 #define __pyx_kp_s_unable_to_allocate_array_data __pyx_mstate_global->__pyx_kp_s_unable_to_allocate_array_data
 #define __pyx_kp_s_unable_to_allocate_shape_and_str __pyx_mstate_global->__pyx_kp_s_unable_to_allocate_shape_and_str
 #define __pyx_n_s_unpack __pyx_mstate_global->__pyx_n_s_unpack
@@ -17669,7 +17674,7 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
 /* "src/cython/mel.pyx":32
  *     cdef double *y
  * 
- *     def __cinit__(self,device_type,rows,columns,TOL):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self,device_type,rows,columns,TOL,turnOnHardware):             # <<<<<<<<<<<<<<
  *         self.m = rows
  *         self.n = columns
  */
@@ -17681,9 +17686,10 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   PyObject *__pyx_v_rows = 0;
   PyObject *__pyx_v_columns = 0;
   PyObject *__pyx_v_TOL = 0;
+  PyObject *__pyx_v_turnOnHardware = 0;
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
-  PyObject* values[4] = {0,0,0,0};
+  PyObject* values[5] = {0,0,0,0,0};
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -17697,10 +17703,12 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   #endif
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
   {
-    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_type,&__pyx_n_s_rows,&__pyx_n_s_columns,&__pyx_n_s_TOL,0};
+    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_type,&__pyx_n_s_rows,&__pyx_n_s_columns,&__pyx_n_s_TOL,&__pyx_n_s_turnOnHardware,0};
     if (__pyx_kwds) {
       Py_ssize_t kw_args;
       switch (__pyx_nargs) {
+        case  5: values[4] = __Pyx_Arg_VARARGS(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
         case  4: values[3] = __Pyx_Arg_VARARGS(__pyx_args, 3);
         CYTHON_FALLTHROUGH;
         case  3: values[2] = __Pyx_Arg_VARARGS(__pyx_args, 2);
@@ -17729,7 +17737,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 1); __PYX_ERR(0, 32, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 1); __PYX_ERR(0, 32, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -17739,7 +17747,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 2); __PYX_ERR(0, 32, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 2); __PYX_ERR(0, 32, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -17749,29 +17757,41 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 3); __PYX_ERR(0, 32, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 3); __PYX_ERR(0, 32, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (likely((values[4] = __Pyx_GetKwValue_VARARGS(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_turnOnHardware)) != 0)) {
+          (void)__Pyx_Arg_NewRef_VARARGS(values[4]);
+          kw_args--;
+        }
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
+        else {
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 4); __PYX_ERR(0, 32, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "__cinit__") < 0)) __PYX_ERR(0, 32, __pyx_L3_error)
       }
-    } else if (unlikely(__pyx_nargs != 4)) {
+    } else if (unlikely(__pyx_nargs != 5)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_Arg_VARARGS(__pyx_args, 0);
       values[1] = __Pyx_Arg_VARARGS(__pyx_args, 1);
       values[2] = __Pyx_Arg_VARARGS(__pyx_args, 2);
       values[3] = __Pyx_Arg_VARARGS(__pyx_args, 3);
+      values[4] = __Pyx_Arg_VARARGS(__pyx_args, 4);
     }
     __pyx_v_device_type = values[0];
     __pyx_v_rows = values[1];
     __pyx_v_columns = values[2];
     __pyx_v_TOL = values[3];
+    __pyx_v_turnOnHardware = values[4];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, __pyx_nargs); __PYX_ERR(0, 32, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, __pyx_nargs); __PYX_ERR(0, 32, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17785,7 +17805,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy___cinit__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_device_type, __pyx_v_rows, __pyx_v_columns, __pyx_v_TOL);
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy___cinit__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_device_type, __pyx_v_rows, __pyx_v_columns, __pyx_v_TOL, __pyx_v_turnOnHardware);
 
   /* function exit code */
   {
@@ -17798,7 +17818,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   return __pyx_r;
 }
 
-static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_TOL) {
+static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_TOL, PyObject *__pyx_v_turnOnHardware) {
   int __pyx_r;
   int __pyx_t_1;
   double __pyx_t_2;
@@ -17809,7 +17829,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
 
   /* "src/cython/mel.pyx":33
  * 
- *     def __cinit__(self,device_type,rows,columns,TOL):
+ *     def __cinit__(self,device_type,rows,columns,TOL,turnOnHardware):
  *         self.m = rows             # <<<<<<<<<<<<<<
  *         self.n = columns
  * 
@@ -17818,7 +17838,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
   __pyx_v_self->m = __pyx_t_1;
 
   /* "src/cython/mel.pyx":34
- *     def __cinit__(self,device_type,rows,columns,TOL):
+ *     def __cinit__(self,device_type,rows,columns,TOL,turnOnHardware):
  *         self.m = rows
  *         self.n = columns             # <<<<<<<<<<<<<<
  * 
@@ -17869,7 +17889,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
  *         self.y = <double*>malloc(self.m*cython.sizeof(double))
  *         self.device_type = device_type             # <<<<<<<<<<<<<<
  * 
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL,turnOnHardware)
  */
   __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_device_type); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L1_error)
   __pyx_v_self->device_type = __pyx_t_1;
@@ -17877,13 +17897,13 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
   /* "src/cython/mel.pyx":43
  *         self.device_type = device_type
  * 
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)             # <<<<<<<<<<<<<<
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL,turnOnHardware)             # <<<<<<<<<<<<<<
  * 
  *     def initializeWeights(self):
  */
   __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_TOL); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 43, __pyx_L1_error)
   try {
-    __pyx_t_3 = meliso::Meliso(__pyx_v_self->device_type, __pyx_v_self->m, __pyx_v_self->n, __pyx_t_2);
+    __pyx_t_3 = meliso::Meliso(__pyx_v_self->device_type, __pyx_v_self->m, __pyx_v_self->n, __pyx_t_2, __pyx_v_turnOnHardware);
   } catch(...) {
     __Pyx_CppExn2PyErr();
     __PYX_ERR(0, 43, __pyx_L1_error)
@@ -17893,7 +17913,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
   /* "src/cython/mel.pyx":32
  *     cdef double *y
  * 
- *     def __cinit__(self,device_type,rows,columns,TOL):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self,device_type,rows,columns,TOL,turnOnHardware):             # <<<<<<<<<<<<<<
  *         self.m = rows
  *         self.n = columns
  */
@@ -17909,7 +17929,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
 }
 
 /* "src/cython/mel.pyx":45
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL,turnOnHardware)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
@@ -17972,7 +17992,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __p
   __pyx_v_self->melisoObj.initializeWeights();
 
   /* "src/cython/mel.pyx":45
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL,turnOnHardware)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
@@ -20148,6 +20168,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_struct, __pyx_k_struct, sizeof(__pyx_k_struct), 0, 0, 1, 1},
     {&__pyx_n_s_sys, __pyx_k_sys, sizeof(__pyx_k_sys), 0, 0, 1, 1},
     {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
+    {&__pyx_n_s_turnOnHardware, __pyx_k_turnOnHardware, sizeof(__pyx_k_turnOnHardware), 0, 0, 1, 1},
     {&__pyx_kp_s_unable_to_allocate_array_data, __pyx_k_unable_to_allocate_array_data, sizeof(__pyx_k_unable_to_allocate_array_data), 0, 0, 1, 0},
     {&__pyx_kp_s_unable_to_allocate_shape_and_str, __pyx_k_unable_to_allocate_shape_and_str, sizeof(__pyx_k_unable_to_allocate_shape_and_str), 0, 0, 1, 0},
     {&__pyx_n_s_unpack, __pyx_k_unpack, sizeof(__pyx_k_unpack), 0, 0, 1, 1},
@@ -20326,7 +20347,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(1, 1, __pyx_L1_error)
 
   /* "src/cython/mel.pyx":45
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL,turnOnHardware)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
@@ -21485,7 +21506,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "src/cython/mel.pyx":45
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL)
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,TOL,turnOnHardware)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()

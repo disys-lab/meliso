@@ -116,12 +116,19 @@ void Meliso::adjustScalingLimits(){
     scalingAdjusted = true;
 }
 
-Meliso::Meliso(int device_type,int m,int n, double TOL=1e-6) {
+Meliso::Meliso(int device_type,int m,int n, double tolerance,bool turnOnHardware=true) {
     rows = m;
     columns = n;
+
+    TOL = tolerance;
+
+    param->nInput = n;
+    param->nHide = m;
+
 	gen.seed(0);
 
-    TOL = 1e-6;
+    param->useHardwareInTrainingFF = turnOnHardware;
+    param->useHardwareInTrainingWU = turnOnHardware;
 
 	scalingAdjusted = false;
 

@@ -53,7 +53,7 @@ public:
     bool scalingAdjusted;
 
     Meliso();
-    Meliso(int,int,int,double);
+    Meliso(int,int,int,double,bool);
 
     void loadInput(double *);
     void initializeWeights();

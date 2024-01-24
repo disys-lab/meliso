@@ -39,3 +39,5 @@ Pull from dockerhub using
 ## Tutorial 
 Run through the tutorial in `MelisoDriver.py`. The tutorial presents a simple example of using Meliso to perform MatVecs.
 
+
+`mpiexec --allow-run-as-root --oversubscribe -n 4 python3 -m mpi4py.bench helloworld`
