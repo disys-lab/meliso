@@ -21,7 +21,59 @@ def parallelMatVec(x):
 
     return sum_y
 
-def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start,MAX_ALPHA,ALPHA_MULT,alpha=-1):
+def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,i):
+    '''
+    This is the classical Randomized Kaczmarz. The problem here is in the scaling of x_updated
+    Notes 1/24/24: I think this is primarily the reason why the other two were not converging.
+    We need to ensure that 0<= x <=1. This is the critical bottleneck for any Memristor based solver to succeed
+    '''
+
+    a_i = scaled_A[i].reshape((n,1))
+    res = y[i] - b_s[i]
+    norm_ai = np.power(np.linalg.norm(a_i),2)
+    weighted_projection_sum = (res[0]/norm_ai)*a_i
+
+    alpha = 1
+    x_update = alpha*weighted_projection_sum
+    print(x_s)
+    print(x_update)
+
+    x_s = x_s - x_update.reshape(x_s.shape)
+
+    x_s_max = max(x_s)
+    x_s_min = min(x_s)
+    x_s = (x_s-x_s_min)/(x_s_max - x_s_min)
+
+    print(x_s)
+
+    return x_s,alpha
+
+def globalBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start,MAX_ALPHA,ALPHA_MULT,alpha=-1):
+
+    '''
+    This is a coarser and possibly incorrect implementation of Theorem 4.1 of paper https://arxiv.org/pdf/1902.09946.pdf
+    '''
+
+    weighted_projection_sum = np.zeros((n, 1))
+
+    for i in range(row_size):
+        w_bars_i = w_bars[i][0]
+        a_i = scaled_A[i].reshape((n,1))
+        res = y[i] - b_s[i]
+
+        weighted_projection_sum = weighted_projection_sum + w_bars_i * (res[0])*a_i
+    alpha = float(1)/row_size
+    x_update = alpha*weighted_projection_sum
+    x_s = x_s - x_update.reshape(x_s.shape)
+    return x_s,alpha
+
+def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start,MAX_ALPHA,ALPHA_MULT,alpha=-1.0):
+
+    '''
+    implementation attempt of Theorem 4.2 from paper https://arxiv.org/pdf/1902.09946.pdf
+    some minor changes have been made such that alpha value is capped at MAX_ALPHA,
+    Alpha values are also scaled with ALPHA_MULT
+    '''
     weighted_projection_sum = np.zeros((n,1))
     weighted_res_sum = 0 #np.zeros((row_size,1))
     for i in range(row_size):
@@ -38,7 +90,7 @@ def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start,MAX_ALPHA,
     alpha_denom = np.power(np.linalg.norm(weighted_projection_sum),2)
 
     if alpha == -1:
-        alpha = ALPHA_MULT*alpha_num/alpha_denom #0.1 works really well
+        alpha = ALPHA_MULT*alpha_num/alpha_denom
         if alpha>MAX_ALPHA:
             alpha=MAX_ALPHA
 
@@ -79,7 +131,7 @@ n=128
 row_p_size = int(m/row_parts)
 col_p_size = int(n/col_parts)
 
-MAX_ITR = 200
+MAX_ITR = 100
 
 ROOT_PROCESS_RANK=size-1
 turnOnHardware = False
@@ -92,19 +144,13 @@ if rank == ROOT_PROCESS_RANK:
     scaled_A = np.random.randint(0,1000,size=(m,n))/1000.0
     scaled_A_row_norm = np.zeros((m,1))
     w_bars = np.zeros((m,1))
+    scaled_A_frobenius_rows = np.zeros((m, 1))
     for i in range(m):
         scaled_A_row_norm[i] = np.linalg.norm(scaled_A[i][:])
         scaled_A[i,:] = scaled_A[i,:]/scaled_A_row_norm[i]
         w_bars[i] = float(1) / (row_p_size*np.power(scaled_A_row_norm[i], 2))
+        scaled_A_frobenius_rows[i][0] = np.linalg.norm(scaled_A[i,:])
 
-        #w_bars[i] = float(row_p_size)/(m * np.power(scaled_A_row_norm[i], 2))
-
-    #print(scaled_A_row_norm)
-
-
-
-    #print(w_bars)
-    # w_bars = float(1.0/(row_p_size*np.power(scaled_A_row_norm,2)))
 
     x_true = np.random.rand(n,1)
 
@@ -116,18 +162,24 @@ if rank == ROOT_PROCESS_RANK:
 
     scatter_A_matrix = []
 
+    scaled_A_frobenius = np.linalg.norm(scaled_A,ord='fro')
+    scaled_A_frobenius_parts = np.zeros((row_parts, 1))
+
+
     for r in range(row_parts):
+        row_start = row_p_size * r
+        row_end = row_p_size * r + row_p_size
         for c in range(col_parts):
-
-            row_start = row_p_size*r
-            row_end = row_p_size*r+row_p_size
-
             col_start = col_p_size*c
             col_end = col_p_size*c+col_p_size
 
             #print(row_start,row_end,col_start,col_end,scaled_A[row_start:row_end,col_start:col_end] )
             scatter_A_matrix.append(scaled_A[row_start:row_end,col_start:col_end])
 
+        scaled_A_frobenius_parts[r][0] = np.linalg.norm(scaled_A[row_start:row_end,:])
+
+    probabilities_parts = [np.power(scaled_A_frobenius_parts[i][0]/scaled_A_frobenius, 2) for i in range(row_parts)]
+    probabilities_rows = [np.power(scaled_A_frobenius_rows[i][0] / scaled_A_frobenius, 2) for i in range(m)]
     scatter_A_matrix.append(None)
 
     scaled_A_recv = comm.scatter(scatter_A_matrix,root=ROOT_PROCESS_RANK)
@@ -138,13 +190,21 @@ if rank == ROOT_PROCESS_RANK:
     x_list = []
     alpha_list = []
 
-    MAX_ALPHA = 1
+    MAX_ALPHA = 0.1
     ALPHA_MULT = 0.005
-    alpha_val = -1
+
+    #if alpha_val is set to -1, it means that alpha will be computed
+    alpha_val = -1 #float(1)/row_p_size
     while k < MAX_ITR:
 
         #choose random row of processors
+
         row_id =  np.random.randint(0,row_parts)
+        #row_id = np.random.choice(np.arange(0, row_parts), p=probabilities_parts)
+
+        #uncomment this for classical Kaczmarz
+        # row = np.random.choice(np.arange(0, m), p=probabilities_rows)
+        # row_id = int(row/row_p_size)
         data = np.array([row_id], dtype='i')
         comm.Bcast(data, root=ROOT_PROCESS_RANK)
 
@@ -161,18 +221,17 @@ if rank == ROOT_PROCESS_RANK:
 
         scaled_A_s = scaled_A[start:end, :]
 
-        x_s,alpha = globalRandomizedKaczmarz(sum_y,x,b_s,w_bars_s,scaled_A_s,row_p_size,start,MAX_ALPHA,ALPHA_MULT,alpha_val)
+        #x_s, alpha = globalRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size,row-start)
+        #x_s,alpha = globalBlockRandomizedKaczmarz(sum_y,x,b_s,w_bars_s,scaled_A_s,row_p_size,start,MAX_ALPHA,ALPHA_MULT,alpha_val)
+        x_s, alpha = globalFastBlockRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size, start, MAX_ALPHA,ALPHA_MULT, alpha_val)
+
         x = x_s.reshape((n,1))
 
         x_list.append(x)
         alpha_list.append(alpha)
 
         err = x-x_true
-        # print(x_true.shape)
-        # print(x.shape)
-        # print(err.shape)
 
-        #print("Itr:{}, norm:{}".format(k,np.linalg.norm(x-x_true)))
         norm_val.append(np.linalg.norm(x-x_true))
         if k>1:
             curr_norm_val =np.linalg.norm(x-x_true)
@@ -180,11 +239,7 @@ if rank == ROOT_PROCESS_RANK:
             if curr_norm_val>prev_norm_val:
                 x_prev = x_list[-2]
                 x_curr = x
-                for i in range(n):
-                    print(k,x_prev[i],x_curr[i])
-                #exit(1)
                 x = x_prev
-                alpha_val = ALPHA_MULT/alpha
         k = k + 1
 
     for i in range(n):
@@ -201,7 +256,7 @@ else:
 
     print("Process:",rank,scaled_A)
 
-    meliso_obj = meliso.MelisoPy(1,row_p_size,col_p_size,0,turnOnHardware)
+    meliso_obj = meliso.MelisoPy(0,row_p_size,col_p_size,0,turnOnHardware)
 
     #initialize weights to 0 on the memristor device
     meliso_obj.initializeWeights()
@@ -230,44 +285,3 @@ else:
             comm.Send(y, dest=ROOT_PROCESS_RANK)
 
         k = k + 1
-
-
-
-#
-#     #choose a partition at random
-#     part_k = np.random.randint(0,parts)
-#
-#     start = p_size*(part_k)
-#     end = start + p_size
-#
-#     x_s = x
-#     b_s = b[start:end][:]
-#     #consider the actual input vector and get hardware matvec results
-#
-#     meliso_obj_list[part_k].loadInput(x_s)
-#     meliso_obj_list[part_k].matVec()
-#     y = meliso_obj_list[part_k].getResults()
-#
-#     weighted_projection_sum = np.zeros((n,1))
-#     weighted_res_sum = np.zeros((p_size,1))
-#     for i in range(p_size):
-#         w_bars_i = w_bars[start + i].reshape((1,1))
-#         a_i = scaled_A[i].reshape((n,1))
-#         weighted_projection_sum = weighted_projection_sum + w_bars_i * (y[i] - b_s[i])*a_i
-#         weighted_res_sum[i] = w_bars_i * (y[i] - b_s[i])
-#
-#     alpha_num = np.sum(weighted_res_sum)
-#     alpha_denom = np.power(np.linalg.norm(weighted_projection_sum),2)
-#
-#     alpha = alpha_num/alpha_denom
-#     x_s = x_s +alpha*weighted_projection_sum
-#
-#     #real_Ax = np.dot(scaled_A,x)
-#
-#
-#     #print("y_rescaled:",y_rescaled_mem_result.reshape((1,32)))
-#     #print("real_Ax:",real_Ax.reshape((1,32)))
-#     #print(y_rescaled_mem_result.reshape((1,32))-real_Ax.reshape((1,32)))
-#     k = k+1
-#
-
