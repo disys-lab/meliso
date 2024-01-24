@@ -4,6 +4,7 @@ import numpy as np
 
 
 '''
+WARNING: This code does not work! It needs MPI to simulate.
 initialize memristor: the first argument is the device type
 0: IdealDevice
 1: RealDevice
