@@ -15,8 +15,11 @@ For more information read src/cython/Meliso.cpp
 Second and third arguments are rows and columns of weight matrix
 '''
 
+MAX_TOL = 1.0
+MIN_TOL = 0.0
 
-meliso_obj = meliso.MelisoPy(0,32,32,0,True)
+turnOnHardware = 0
+meliso_obj = meliso.MelisoPy(1,32,32,MAX_TOL,MIN_TOL,turnOnHardware)
 
 #obtain an A matrix with values between 0,1
 #I have observed that having matrix between 0,1 gives the best results
@@ -33,6 +36,7 @@ j=0
 while j<1:
 
     #consider the actual input vector and get hardware matvec results
+    #x = -2*np.ones((32,1))
     x = np.random.rand(32,1)
     meliso_obj.loadInput(x)
     meliso_obj.matVec()

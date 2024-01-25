@@ -17,6 +17,7 @@ void Meliso::setWeights(double *A_matrix){
     for (int k = 0; k < param->nInput; k++) {
                 for (int j = 0; j < param->nHide; j++){
                     deltaWeight1[k][j] = A_matrix[k*param->nHide + j];
+                    real_A_matrix[k*param->nHide + j] = A_matrix[k*param->nHide + j];
                 }
             }
     WriteWeights();
@@ -64,6 +65,7 @@ void Meliso::matVec(){
 
 void Meliso::getResults(){
       for (int k = 0; k < param->nHide; k++) {
+            //y[k] = (sign[k]*Output[0][k] -y_adj_min[k])/(MAX_TOL-TOL);
             y[k] = (sign[k]*Output[0][k] -2.0*y_adj_min[k])/delta[k];
             y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
         }
@@ -85,21 +87,17 @@ void Meliso::getScalingLimits(double *y_scaled_result,double *real_y_result, dou
         y_scaled_result[i] = Output[0][i];
     }
 
-    bool current_param_useHardwareInTrainingFF = param->useHardwareInTrainingFF;
+    for (int k = 0; k < param->nInput; k++) {
+                for (int j = 0; j < param->nHide; j++){
+                    real_y_result[k] = real_y_result[k] + real_A_matrix[k*param->nHide + j]*x[j];
+                }
+            }
 
-    param->useHardwareInTrainingFF = false;
-
-    Train(1, 1, param->optimization_type);
-
-    for (int i=0;i<rows;i++){
-        real_y_result[i] = Output[0][i];
-    }
-    param->useHardwareInTrainingFF = current_param_useHardwareInTrainingFF;
 }
 
 void Meliso::adjustScalingLimits(){
 
-    getScalingLimits(delta,real_delta,1.0);
+    getScalingLimits(delta,real_delta,MAX_TOL);
     getScalingLimits(y_adj_min,real_y_adj_min,TOL);
 
     for (int i=0; i< rows;i++){
@@ -116,21 +114,30 @@ void Meliso::adjustScalingLimits(){
     scalingAdjusted = true;
 }
 
-Meliso::Meliso(int device_type,int m,int n, double tolerance,bool turnOnHardware=true) {
+Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int turnOnHardware) {
     rows = m;
     columns = n;
 
-    TOL = tolerance;
+    TOL = min_tol;
+    MAX_TOL = max_tol;
 
     param->nInput = n;
     param->nHide = m;
 
 	gen.seed(0);
 
-    param->useHardwareInTrainingFF = turnOnHardware;
-    param->useHardwareInTrainingWU = turnOnHardware;
-
+    if(turnOnHardware){
+        param->useHardwareInTrainingFF = true;
+        param->useHardwareInTrainingWU = true;
+    }
+    else{
+        param->useHardwareInTrainingFF = false;
+        param->useHardwareInTrainingWU = false;
+    }
 	scalingAdjusted = false;
+
+    real_A_matrix = (double*)malloc(m*n*sizeof(double));
+    memset(real_A_matrix,0,m*n*sizeof(double));
 
 	y = (double*)malloc(m*sizeof(double));
     memset(y,0,m*sizeof(double));

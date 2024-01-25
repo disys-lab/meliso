@@ -32,20 +32,16 @@ def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,i):
     res = y[i] - b_s[i]
     norm_ai = np.power(np.linalg.norm(a_i),2)
     weighted_projection_sum = (res[0]/norm_ai)*a_i
-
+    print(x_s)
     alpha = 1
     x_update = alpha*weighted_projection_sum
-    print(x_s)
     print(x_update)
-
     x_s = x_s - x_update.reshape(x_s.shape)
 
     x_s_max = max(x_s)
     x_s_min = min(x_s)
     x_s = (x_s-x_s_min)/(x_s_max - x_s_min)
-
     print(x_s)
-
     return x_s,alpha
 
 def globalBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start,MAX_ALPHA,ALPHA_MULT,alpha=-1):
@@ -91,8 +87,8 @@ def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,start,M
 
     if alpha == -1:
         alpha = ALPHA_MULT*alpha_num/alpha_denom
-        if alpha>MAX_ALPHA:
-            alpha=MAX_ALPHA
+        # if alpha>MAX_ALPHA:
+        #     alpha=MAX_ALPHA
 
     x_update = alpha*weighted_projection_sum
     x_s = x_s - x_update.reshape(x_s.shape)
@@ -122,19 +118,21 @@ For more information read src/cython/Meliso.cpp
 Second and third arguments are rows and columns of weight matrix
 '''
 
-col_parts = 4
-row_parts = 4
+col_parts = 2
+row_parts = 2
 
-m=128
-n=128
+m=4
+n=4
 
 row_p_size = int(m/row_parts)
 col_p_size = int(n/col_parts)
 
-MAX_ITR = 100
+MAX_ITR = 2
 
 ROOT_PROCESS_RANK=size-1
-turnOnHardware = False
+turnOnHardware = 0
+MAX_TOL = 1.0
+MIN_TOL = 0.0
 
 if rank == ROOT_PROCESS_RANK:
 
@@ -190,8 +188,8 @@ if rank == ROOT_PROCESS_RANK:
     x_list = []
     alpha_list = []
 
-    MAX_ALPHA = 0.1
-    ALPHA_MULT = 0.005
+    MAX_ALPHA = 1
+    ALPHA_MULT = 0.5
 
     #if alpha_val is set to -1, it means that alpha will be computed
     alpha_val = -1 #float(1)/row_p_size
@@ -199,12 +197,12 @@ if rank == ROOT_PROCESS_RANK:
 
         #choose random row of processors
 
-        row_id =  np.random.randint(0,row_parts)
+        #row_id =  np.random.randint(0,row_parts)
         #row_id = np.random.choice(np.arange(0, row_parts), p=probabilities_parts)
 
         #uncomment this for classical Kaczmarz
-        # row = np.random.choice(np.arange(0, m), p=probabilities_rows)
-        # row_id = int(row/row_p_size)
+        row = np.random.choice(np.arange(0, m), p=probabilities_rows)
+        row_id = int(row/row_p_size)
         data = np.array([row_id], dtype='i')
         comm.Bcast(data, root=ROOT_PROCESS_RANK)
 
@@ -221,11 +219,16 @@ if rank == ROOT_PROCESS_RANK:
 
         scaled_A_s = scaled_A[start:end, :]
 
-        #x_s, alpha = globalRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size,row-start)
+        x_s, alpha = globalRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size,row-start)
         #x_s,alpha = globalBlockRandomizedKaczmarz(sum_y,x,b_s,w_bars_s,scaled_A_s,row_p_size,start,MAX_ALPHA,ALPHA_MULT,alpha_val)
-        x_s, alpha = globalFastBlockRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size, start, MAX_ALPHA,ALPHA_MULT, alpha_val)
+        #x_s, alpha = globalFastBlockRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size, start, MAX_ALPHA,ALPHA_MULT, alpha_val)
 
         x = x_s.reshape((n,1))
+        for i in range(m):
+            if x[i] > 1:
+                x[i] = 1
+            if x[i] < 0:
+                x[i] = 0
 
         x_list.append(x)
         alpha_list.append(alpha)
@@ -233,13 +236,14 @@ if rank == ROOT_PROCESS_RANK:
         err = x-x_true
 
         norm_val.append(np.linalg.norm(x-x_true))
-        if k>1:
-            curr_norm_val =np.linalg.norm(x-x_true)
-            prev_norm_val = norm_val[k-1]
-            if curr_norm_val>prev_norm_val:
-                x_prev = x_list[-2]
-                x_curr = x
-                x = x_prev
+        # if k>1:
+        #     curr_norm_val =np.linalg.norm(x-x_true)
+        #     prev_norm_val = norm_val[k-1]
+        #     if curr_norm_val>prev_norm_val:
+        #
+        #         # x_prev = x_list[-2]
+        #         # x_curr = x
+        #         # x = x_prev
         k = k + 1
 
     for i in range(n):
@@ -256,7 +260,7 @@ else:
 
     print("Process:",rank,scaled_A)
 
-    meliso_obj = meliso.MelisoPy(0,row_p_size,col_p_size,0,turnOnHardware)
+    meliso_obj = meliso.MelisoPy(1,row_p_size,col_p_size,MAX_TOL,MIN_TOL,turnOnHardware)
 
     #initialize weights to 0 on the memristor device
     meliso_obj.initializeWeights()

@@ -39,6 +39,7 @@ public:
     double totalSubArrayArea, totalNeuronAreaIH,heightNeuronIH, widthNeuronIH, leakageNeuronIH;
     int rows, columns;
 
+    double *real_A_matrix;
     double *y;
     double *delta; //rhs of Ax=b
     double *y_adj_min; //residual b-Ax
@@ -49,11 +50,12 @@ public:
     int *sign; //sign
 
     double TOL;
+    double MAX_TOL;
 
     bool scalingAdjusted;
 
     Meliso();
-    Meliso(int,int,int,double,bool);
+    Meliso(int,int,int,double,double,int);
 
     void loadInput(double *);
     void initializeWeights();

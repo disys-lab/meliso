@@ -420,7 +420,8 @@ void WriteWeights(){
 				subArrayIH->writeDynamicEnergy += sumNeuroSimWriteEnergy;
 				numWriteOperation = numWriteOperation / param->nInput;
 				subArrayIH->writeLatency += NeuroSimSubArrayWriteLatency(subArrayIH, numWriteOperation, sumWriteLatencyAnalogNVM);
-			} else {
+			}
+			else {
 				#pragma omp parallel for
 				for (int j = 0; j < param->nHide; j++) {
 					for (int k = 0; k < param->nInput; k++) {

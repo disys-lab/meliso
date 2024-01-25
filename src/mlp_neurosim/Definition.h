@@ -52,6 +52,11 @@ inline Output(param->numMnistTrainImages, std::vector<double>(param->nHide));
 /* Weights from input to hidden layer */
 std::vector< std::vector<double> >
 inline weight1(param->nHide, std::vector<double>(param->nInput));
+
+/* Weights from input to hidden layer */
+std::vector< std::vector<double> >
+inline real_weight1(param->nHide, std::vector<double>(param->nInput));
+
 /* Weights from hidden layer to output layer */
 std::vector< std::vector<double> >
 inline weight2(param->nOutput, std::vector<double>(param->nHide));
