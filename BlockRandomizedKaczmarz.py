@@ -104,24 +104,26 @@ def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,prob
     minval, key = min((v, i) for i, v in enumerate(norm_val))
     sigma = np.std(norm_val)
     mu = np.mean(norm_val)
-    lim = 5 * sigma
+    lim = 3 * sigma
     if curr_norm_val > mu + lim or curr_norm_val < mu - lim:
         x = x_list[key]
         curr_norm_val = norm_val[key]
-        failures[row] += 1
+        failures[row] = failures[row] + 1
     else:
         for i in range(m):
-            if x[i] > 1 or x[i] < 0:
+            if x[i] > 1.0 or x[i] < 0:
                 x = x_list[key]
                 curr_norm_val = norm_val[key]
-                failures[row] += 1
+                failures[row] = failures[row] + 1
                 break
 
-    trials[row] += 1
-    probabilities[row] *= (1.0 - float(failures[row]) / trials[row])
+    trials[row] = trials[row] + 1
+    probabilities[row] *= ( 1.0 - float(failures[row]) / trials[row])
+
+    print(trials,failures,probabilities)
 
     sum_p = sum(probabilities)
-    probabilities = [p / sum_p for p in probabilities]
+    probabilities = [p/sum_p for p in probabilities]
 
     return x,curr_norm_val,probabilities
 
@@ -155,10 +157,13 @@ row_p_size = int(m/row_parts)
 col_p_size = int(n/col_parts)
 
 MAX_ITR = 500
+blockRK = True
+MAX_PRECISION = 1.0
 
 ROOT_PROCESS_RANK=size-1
 turnOnHardware = 1
-blockRK = False
+
+
 MAX_TOL = 1.0
 MIN_TOL = 0.0
 
@@ -180,7 +185,11 @@ if rank == ROOT_PROCESS_RANK:
 
     x_true = np.random.rand(n,1)
 
-    b = np.dot(scaled_A,x_true)
+
+    real_x_true = MAX_PRECISION*x_true
+
+    b = MAX_PRECISION*np.dot(scaled_A,x_true)
+    #b_norm = 1.0
     b_norm = np.linalg.norm(b)
     # b=b/b_norm
 
@@ -243,6 +252,7 @@ if rank == ROOT_PROCESS_RANK:
         comm.Bcast(data, root=ROOT_PROCESS_RANK)
 
         sum_y = parallelMatVec(x)
+        sum_y = MAX_PRECISION*sum_y
 
         start = row_id * row_p_size
         end = (row_id + 1) * row_p_size
@@ -252,17 +262,18 @@ if rank == ROOT_PROCESS_RANK:
         w_bars_s = w_bars[start:end]
 
         scaled_A_s = scaled_A[start:end, :]
-
+        real_x = MAX_PRECISION*x
         #x_s, alpha = globalRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size,row-start,b_norm)
         #x_s,alpha = globalBlockRandomizedKaczmarz(sum_y,x,b_s,w_bars_s,scaled_A_s,row_p_size,start,MAX_ALPHA,ALPHA_MULT,alpha_val)
         if blockRK:
-            x_s, alpha = globalFastBlockRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size, start, b_norm)
+            x_s, alpha = globalFastBlockRandomizedKaczmarz(sum_y, real_x, b_s, w_bars_s, scaled_A_s, row_p_size, start, b_norm)
         else:
-            x_s, alpha = globalRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size, row - start, b_norm)
+            x_s, alpha = globalRandomizedKaczmarz(sum_y, real_x, b_s, w_bars_s, scaled_A_s, row_p_size, row - start, b_norm)
+
 
         x = x_s.reshape((n,1))
 
-        curr_norm_val = np.linalg.norm(x-x_true)/np.linalg.norm(x_true)
+        curr_norm_val = np.linalg.norm(x-real_x_true)/np.linalg.norm(real_x_true)
 
         if k>1:
             if blockRK:
@@ -272,14 +283,13 @@ if rank == ROOT_PROCESS_RANK:
                                     probabilities)
 
         norm_val.append(curr_norm_val)
+        x = x/MAX_PRECISION
         x_list.append(x)
         alpha_list.append(alpha)
-
-        err = x - x_true
         k = k + 1
 
     for i in range(n):
-        print(k, x_true[i], x[i])
+        print(k, real_x_true[i], MAX_PRECISION*x[i])
 
     print(norm_val)
     fig1 = plt.plot(norm_val)
