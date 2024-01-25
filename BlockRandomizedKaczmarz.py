@@ -2,7 +2,8 @@ import meliso
 import numpy as np
 from mpi4py import MPI
 
-def parallelMatVec(x):
+def parallelMatVec(x_val):
+    x = np.copy(x_val)
     # send chunks of x to all processes on chosen row
     for col_id in range(col_parts):
         start = col_id * col_p_size
@@ -32,15 +33,15 @@ def globalRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,i):
     res = y[i] - b_s[i]
     norm_ai = np.power(np.linalg.norm(a_i),2)
     weighted_projection_sum = (res[0]/norm_ai)*a_i
-    print(x_s)
+    print("x_s1",x_s)
     alpha = 1
     x_update = alpha*weighted_projection_sum
     print(x_update)
     x_s = x_s - x_update.reshape(x_s.shape)
 
-    x_s_max = max(x_s)
-    x_s_min = min(x_s)
-    x_s = (x_s-x_s_min)/(x_s_max - x_s_min)
+    # x_s_max = max(x_s)
+    # x_s_min = min(x_s)
+    # x_s = (x_s-x_s_min)/(x_s_max - x_s_min)
     print(x_s)
     return x_s,alpha
 
@@ -127,10 +128,10 @@ n=4
 row_p_size = int(m/row_parts)
 col_p_size = int(n/col_parts)
 
-MAX_ITR = 2
+MAX_ITR = 20
 
 ROOT_PROCESS_RANK=size-1
-turnOnHardware = 0
+turnOnHardware = 1
 MAX_TOL = 1.0
 MIN_TOL = 0.0
 
@@ -184,7 +185,7 @@ if rank == ROOT_PROCESS_RANK:
     k = 0
 
     x = np.zeros(n)
-
+    #x = np.random.rand(n)
     x_list = []
     alpha_list = []
 
@@ -224,11 +225,11 @@ if rank == ROOT_PROCESS_RANK:
         #x_s, alpha = globalFastBlockRandomizedKaczmarz(sum_y, x, b_s, w_bars_s, scaled_A_s, row_p_size, start, MAX_ALPHA,ALPHA_MULT, alpha_val)
 
         x = x_s.reshape((n,1))
-        for i in range(m):
-            if x[i] > 1:
-                x[i] = 1
-            if x[i] < 0:
-                x[i] = 0
+        # for i in range(m):
+        #     if x[i] > 1:
+        #         x[i] = 1
+        #     if x[i] < 0:
+        #         x[i] = 0
 
         x_list.append(x)
         alpha_list.append(alpha)
@@ -260,7 +261,7 @@ else:
 
     print("Process:",rank,scaled_A)
 
-    meliso_obj = meliso.MelisoPy(1,row_p_size,col_p_size,MAX_TOL,MIN_TOL,turnOnHardware)
+    meliso_obj = meliso.MelisoPy(3,row_p_size,col_p_size,MAX_TOL,MIN_TOL,turnOnHardware)
 
     #initialize weights to 0 on the memristor device
     meliso_obj.initializeWeights()
