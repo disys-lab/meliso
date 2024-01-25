@@ -47,8 +47,8 @@ You can do this by either mapping on the GUI or through the command line using t
 3. You can then log into the running container by using the command `docker exec -it neurosim bash`
 
 ## Using MPI on the Docker container
-Use the following command to run simulations with MPI enabled.
-`mpiexec --allow-run-as-root --oversubscribe -n <num_procs> python3 <filename.py>`
-For example to run `MelisoDriver.py` on 4 separate processes, execute the following command inside the container command prompt.
+- Use the following command to run simulations with MPI enabled.
+- `mpiexec --allow-run-as-root --oversubscribe -n <num_procs> python3 <filename.py>`
+- For example to run `MelisoDriver.py` on 4 separate processes, execute the following command inside the container command prompt.
 `mpiexec --allow-run-as-root --oversubscribe -n 4 python3 MelisoDriver.py`
 
