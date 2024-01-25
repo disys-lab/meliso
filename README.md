@@ -43,7 +43,7 @@ Run through the tutorial in `MelisoDriver.py`. The tutorial presents a simple ex
 1. Pull the image `pramanan3/meliso:v0.0.4` from DockerHub either using the GUI (Docker Desktop) or through the command line.
 2. Run the container and map the directory of your working copy to the directory `/meliso_edit/` on the container. 
 You can do this by either mapping on the GUI or through the command line using the following commmand
-`docker run -v /path/to/meliso/on/host:/neurosim_edit/ --name neurosim -d pramanan3/meliso:v0.0.4 /bin/sh -c "tail -f /dev/null" `
+`docker run -v /path/to/meliso/on/host:/meliso_edit/ --name neurosim -d pramanan3/meliso:v0.0.4 /bin/sh -c "tail -f /dev/null" `
 3. You can then log into the running container by using the command `docker exec -it neurosim bash`
 
 ## Using MPI on the Docker container
@@ -51,4 +51,5 @@ You can do this by either mapping on the GUI or through the command line using t
 - `mpiexec --allow-run-as-root --oversubscribe -n <num_procs> python3 <filename.py>`
 - For example to run `MelisoDriver.py` on 4 separate processes, execute the following command inside the container command prompt.
 `mpiexec --allow-run-as-root --oversubscribe -n 4 python3 MelisoDriver.py`
+- Remember that process count must be 1 greater than memristor tiles you wish to simulate!
 
