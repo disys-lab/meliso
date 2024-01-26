@@ -66,8 +66,14 @@ void Meliso::matVec(){
 void Meliso::getResults(){
       for (int k = 0; k < param->nHide; k++) {
             //y[k] = (sign[k]*Output[0][k] -y_adj_min[k])/(MAX_TOL-TOL);
-            y[k] = (sign[k]*Output[0][k] -2.0*y_adj_min[k])/delta[k];
-            y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
+            if (scalingAdjusted){
+                y[k] = (sign[k]*Output[0][k] - y_adj_min[k])/delta[k];
+                y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
+            }
+            else{
+                y[k] = Output[0][k];
+
+            }
         }
 }
 

@@ -18,12 +18,12 @@ Second and third arguments are rows and columns of weight matrix
 MAX_TOL = 1.0
 MIN_TOL = 0.0
 
-turnOnHardware = 0
-meliso_obj = meliso.MelisoPy(1,32,32,MAX_TOL,MIN_TOL,turnOnHardware)
+turnOnHardware = 1
+meliso_obj = meliso.MelisoPy(0,32,32,MAX_TOL,MIN_TOL,turnOnHardware)
 
 #obtain an A matrix with values between 0,1
 #I have observed that having matrix between 0,1 gives the best results
-scaled_A = np.random.randint(0,1000,size=(32,32))/1000.0
+scaled_A = np.random.randint(-10000,10000,size=(32,32))/10000.0
 
 print(scaled_A)
 
@@ -34,7 +34,6 @@ meliso_obj.initializeWeights()
 meliso_obj.setWeights(scaled_A)
 j=0
 while j<1:
-
     #consider the actual input vector and get hardware matvec results
     #x = -2*np.ones((32,1))
     x = np.random.rand(32,1)
@@ -47,5 +46,3 @@ while j<1:
     print("real_Ax:",real_Ax.reshape((1,32)))
     print(y_rescaled_mem_result.reshape((1,32))-real_Ax.reshape((1,32)))
     j = j+1
-
-

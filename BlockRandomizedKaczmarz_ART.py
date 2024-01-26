@@ -4,8 +4,37 @@ from mpi4py import MPI
 
 import matplotlib.pyplot as plt
 
-def parallelMatVec(x_val):
+
+def parallelMatVecProcess(ITR):
+    k=0
+    while k< ITR:
+
+        data = np.empty(1, dtype='i')
+        comm.Bcast(data, root=ROOT_PROCESS_RANK)
+        if data[0] == my_row_rank:
+            x = np.zeros(col_p_size, dtype=np.float64)
+            comm.Recv(x,source=ROOT_PROCESS_RANK)
+            meliso_obj.loadInput(x)
+            meliso_obj.matVec()
+            y = meliso_obj.getResults()
+            comm.Send(y, dest=ROOT_PROCESS_RANK)
+        #print(rank, ITR)
+        k=k+1
+
+def parallelMatVecRoot(x_val):
+    sum_y = np.zeros(row_p_size*row_parts, dtype=np.float64)
+    for row_id in range(row_parts):
+        sum_y_part = parallelMatVecRootPartial(x_val,row_id)
+        start = row_id * row_p_size
+        end = (row_id + 1) * row_p_size
+        sum_y[start:end] = sum_y_part[:]
+    return sum_y
+
+def parallelMatVecRootPartial(x_val,row_id):
+    data = np.array([row_id], dtype='i')
+    comm.Bcast(data, root=ROOT_PROCESS_RANK)
     x = np.copy(x_val)
+    #print(x_val)
     # send chunks of x to all processes on chosen row
     for col_id in range(col_parts):
         start = col_id * col_p_size
@@ -20,7 +49,6 @@ def parallelMatVec(x_val):
         y = np.empty(row_p_size, dtype=np.float64)
         comm.Recv(y, source=source_rank)
         sum_y = sum_y + y
-
 
     return sum_y
 
@@ -118,12 +146,16 @@ def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,prob
                 break
 
     trials[row] = trials[row] + 1
+    old_probabilities = probabilities.copy()
     probabilities[row] *= ( 1.0 - float(failures[row]) / trials[row])
 
     print(trials,failures,probabilities)
 
     sum_p = sum(probabilities)
-    probabilities = [p/sum_p for p in probabilities]
+    if sum_p == 0:
+        probabilities = old_probabilities
+    else:
+        probabilities = [p/sum_p for p in probabilities]
 
     return x,curr_norm_val,probabilities
 
@@ -147,8 +179,8 @@ For more information read src/cython/Meliso.cpp
 Second and third arguments are rows and columns of weight matrix
 '''
 
-col_parts = 8
-row_parts = 8
+col_parts = 2
+row_parts = 2
 
 m=32
 n=32
@@ -156,19 +188,19 @@ n=32
 row_p_size = int(m/row_parts)
 col_p_size = int(n/col_parts)
 
-MAX_ITR = 500
+MAX_ITR = 200
 blockRK = True
 MAX_PRECISION = 1.0
 
 ROOT_PROCESS_RANK=size-1
 turnOnHardware = 1
 
+scalingAdjusted = True
 
 MAX_TOL = 1.0
 MIN_TOL = 0.0
 
 if rank == ROOT_PROCESS_RANK:
-
 
     #obtain an A matrix with values between 0,1
     #I have observed that having matrix between 0,1 gives the best results
@@ -182,15 +214,6 @@ if rank == ROOT_PROCESS_RANK:
         w_bars[i] = float(1) / (row_p_size*np.power(scaled_A_row_norm[i], 2))
         scaled_A_frobenius_rows[i][0] = np.linalg.norm(scaled_A[i,:])
 
-
-    x_true = np.random.rand(n,1)
-
-
-    real_x_true = MAX_PRECISION*x_true
-
-    b = MAX_PRECISION*np.dot(scaled_A,x_true)
-    #b_norm = 1.0
-    b_norm = np.linalg.norm(b)
     # b=b/b_norm
 
     norm_val = []
@@ -213,6 +236,29 @@ if rank == ROOT_PROCESS_RANK:
 
         scaled_A_frobenius_parts[r][0] = np.linalg.norm(scaled_A[row_start:row_end,:],ord='fro')
 
+    scatter_A_matrix.append(None)
+
+    scaled_A_recv = comm.scatter(scatter_A_matrix,root=ROOT_PROCESS_RANK)
+
+    x_true = np.random.rand(n,1)
+
+    b = MAX_PRECISION * np.dot(scaled_A, x_true)
+    # if not scalingAdjusted:
+    #     for row_id in range(row_parts):
+    #         data = np.array([row_id], dtype='i')
+    #         comm.Bcast(data, root=ROOT_PROCESS_RANK)
+    #         b_i = parallelMatVecRootPartial(x_true,row_id)
+    #
+    #         start = row_id * row_p_size
+    #         end = (row_id + 1) * row_p_size
+    #
+    #         b[start:end,:] = np.copy(b_i.reshape(col_p_size,1))
+    #     print(b)
+    real_x_true = MAX_PRECISION*x_true
+
+    #b_norm = 1.0
+    b_norm = np.linalg.norm(b)
+
     if blockRK:
         size = row_parts
         failures = [0 for i in range(size)]
@@ -225,9 +271,8 @@ if rank == ROOT_PROCESS_RANK:
         trials = [0 for i in range(size)]
         probabilities = [np.power(scaled_A_frobenius_rows[i][0] / scaled_A_frobenius, 2) for i in range(size)]
 
-    scatter_A_matrix.append(None)
 
-    scaled_A_recv = comm.scatter(scatter_A_matrix,root=ROOT_PROCESS_RANK)
+
     k = 0
 
     x = np.zeros(n)
@@ -240,6 +285,10 @@ if rank == ROOT_PROCESS_RANK:
 
     while k < MAX_ITR:
 
+        #Algebraic Reconstruction Technique
+        T = parallelMatVecRoot(x)
+        b_s = b-T
+
         #choose random row of processors
         if blockRK:
             #row_id =  np.random.randint(0,row_parts)
@@ -248,16 +297,13 @@ if rank == ROOT_PROCESS_RANK:
             row = np.random.choice(np.arange(0, m), p=probabilities)
             row_id = int(row/row_p_size)
 
-        data = np.array([row_id], dtype='i')
-        comm.Bcast(data, root=ROOT_PROCESS_RANK)
-
-        sum_y = parallelMatVec(x)
+        sum_y = parallelMatVecRootPartial(x,row_id)
         sum_y = MAX_PRECISION*sum_y
 
         start = row_id * row_p_size
         end = (row_id + 1) * row_p_size
 
-        b_s = b[start:end]
+        b_s = b_s[start:end]
 
         w_bars_s = w_bars[start:end]
 
@@ -271,7 +317,7 @@ if rank == ROOT_PROCESS_RANK:
             x_s, alpha = globalRandomizedKaczmarz(sum_y, real_x, b_s, w_bars_s, scaled_A_s, row_p_size, row - start, b_norm)
 
 
-        x = x_s.reshape((n,1))
+        x = x.reshape((n,1))+x_s.reshape((n,1))
 
         curr_norm_val = np.linalg.norm(x-real_x_true)/np.linalg.norm(real_x_true)
 
@@ -296,15 +342,15 @@ if rank == ROOT_PROCESS_RANK:
     plt.savefig("./plots/norm_val.png")
     #print(alpha_list)
 
-
 else:
+
     k=0
     scatter_A_matrix = None
     scaled_A = comm.scatter(scatter_A_matrix, root=ROOT_PROCESS_RANK)
 
     print("Process:",rank,scaled_A)
 
-    meliso_obj = meliso.MelisoPy(1,row_p_size,col_p_size,MAX_TOL,MIN_TOL,turnOnHardware)
+    meliso_obj = meliso.MelisoPy(0,row_p_size,col_p_size,MAX_TOL,MIN_TOL,turnOnHardware)
 
     #initialize weights to 0 on the memristor device
     meliso_obj.initializeWeights()
@@ -317,19 +363,30 @@ else:
     my_row_rank = int(rank/col_parts)
     my_col_rank = int(rank-my_row_rank*col_parts)
 
+    # if not scalingAdjusted:
+    #     MAX_ITR += row_parts
+
     while k < MAX_ITR:
-        data = np.empty(1, dtype='i')
-        comm.Bcast(data, root=ROOT_PROCESS_RANK)
+        parallelMatVecProcess(row_parts)
 
-        if data[0] == my_row_rank:
+        parallelMatVecProcess(1)
 
-            x = np.empty(col_p_size, dtype=np.float64)
+        k = k+1
 
-            comm.Recv(x,source=ROOT_PROCESS_RANK)
-            meliso_obj.loadInput(x)
-            meliso_obj.matVec()
-            y = meliso_obj.getResults()
-
-            comm.Send(y, dest=ROOT_PROCESS_RANK)
-
-        k = k + 1
+    # while k < MAX_ITR:
+    #
+    #     data = np.empty(1, dtype='i')
+    #     comm.Bcast(data, root=ROOT_PROCESS_RANK)
+    #
+    #     if data[0] == my_row_rank:
+    #
+    #         x = np.empty(col_p_size, dtype=np.float64)
+    #
+    #         comm.Recv(x,source=ROOT_PROCESS_RANK)
+    #         meliso_obj.loadInput(x)
+    #         meliso_obj.matVec()
+    #         y = meliso_obj.getResults()
+    #
+    #         comm.Send(y, dest=ROOT_PROCESS_RANK)
+    #
+    #     k = k + 1

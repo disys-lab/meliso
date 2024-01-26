@@ -40,7 +40,7 @@ public:
     int rows, columns;
 
     double *real_A_matrix;
-    double *y;
+    double *y; //Ax = y, y must be close to b
     double *delta; //rhs of Ax=b
     double *y_adj_min; //residual b-Ax
 
