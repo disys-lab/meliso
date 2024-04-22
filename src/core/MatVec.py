@@ -19,7 +19,7 @@ class MatVec:
             self.mca = NonRootMCA(self.comm)
     
     def parallelMatVec(self):
-        if self.rank == self.comm.size - 1:
+        if self.rank == self.comm.size - 1: #root process
             self.mca.x = np.random.randint(0, 10000, size=(self.mca.matRows, 1)) / 10000.0
 
         self.y = self.mca.parallelMatVec()
