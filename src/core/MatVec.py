@@ -25,6 +25,9 @@ class MatVec:
         self.y = self.mca.parallelMatVec()
         
         if self.rank == self.comm.size - 1:
+            decomp_dir = self.mca.getDecompositionDir()
+            y_result = self.y[self.mca.origMatRows]
+            np.savetxt(y_result,"{}/y_result.txt".format(decomp_dir))
             return self.y[self.mca.origMatRows]
     
     def acquireMCAStats(self):

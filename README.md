@@ -15,6 +15,7 @@ git clone https://github.com/paritoshpr/meliso.git
 2. Run the following from the home directory i.e
 ```
 cd meliso
+mkdir build
 export PYTHONPATH=$PYTHONPATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
 make all
