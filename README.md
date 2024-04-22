@@ -53,3 +53,10 @@ You can do this by either mapping on the GUI or through the command line using t
 `mpiexec --allow-run-as-root --oversubscribe -n 4 python3 MelisoDriver.py`
 - Remember that process count must be 1 greater than memristor tiles you wish to simulate!
 
+## Using Meliso for ICONS24
+- Use the following command to run a specific device/experiment configuration on Pete.
+- `EXP_CONFIG_FILE=/path/to/exp/config/file mpiexec -n <numMCAs+1> python3 DistributedMatVec.py `
+If running on Docker container make sure to use `--allow-run-as-root --oversubscribe` tags
+- The matrices must be located in `/path/to/meliso/matrices` and the decomposition directory must be specified in 
+`distributed: decomposition_dir:`
+- Leaving it at default as `/tmp/` may be a good idea
