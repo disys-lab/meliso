@@ -21,7 +21,7 @@ void Meliso::setWeights(double *A_matrix){
                 }
             }
     WriteWeights();
-    if (!scalingAdjusted)
+    if (!scalingAdjusted && considerScaling)
         adjustScalingLimits();
 
 }
@@ -61,12 +61,20 @@ void Meliso::matVec(){
         printf("\tTransfer energy=%.4e J\n", arrayIH->transferEnergy + subArrayIH->transferDynamicEnergy);// + arrayHO->transferEnergy + subArrayHO->transferDynamicEnergy);
      }
 	printf("\n");
+
+
+	//acquire the values that can change with compute operations
+    mcaStats[4] += subArrayIH->writeLatency;
+    mcaStats[5] += arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy;
+    mcaStats[6] += subArrayIH->readLatency;
+    mcaStats[7] += arrayIH->readEnergy + subArrayIH->readDynamicEnergy;
+
 }
 
 void Meliso::getResults(){
       for (int k = 0; k < param->nHide; k++) {
             //y[k] = (sign[k]*Output[0][k] -y_adj_min[k])/(MAX_TOL-TOL);
-            if (scalingAdjusted){
+            if ( scalingAdjusted && considerScaling){
                 y[k] = (sign[k]*Output[0][k] - y_adj_min[k])/delta[k];
                 y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
             }
@@ -120,6 +128,148 @@ void Meliso::adjustScalingLimits(){
     scalingAdjusted = true;
 }
 
+
+void Meliso::setConductanceProperties(  double maxConductance,
+                                        double minConductance,
+                                        double avgMaxConductance,
+                                        double avgMinConductance,
+                                        double conductance,
+                                        double conductancePrev
+                                     ){
+        //ConductanceProperties:
+        //    maxConductance: 3.846153846e-8 # To be dynamically determined or specified
+        //    minConductance: 3.076923077e-9 # To be dynamically determined or specified
+        //    avgMaxConductance: maxConductance # To be dynamically determined or specified
+        //    avgMinConductance: minConductance # To be dynamically determined or specified
+        //    conductance: minConductance # This will be dynamically updated
+        //    conductancePrev: conductance # This will be dynamically updated
+        for (int k = 0; k < param->nInput; k++) {
+            for (int j = 0; j < param->nHide; j++) {
+                //only if the Cell can be cast as an AnalogNVM
+                if (AnalogNVM *temp = dynamic_cast<AnalogNVM*>(arrayIH->cell[j][k])) {	// Analog eNVM
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->maxConductance = maxConductance;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->minConductance = minConductance;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->avgMaxConductance = avgMaxConductance;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->avgMinConductance = avgMinConductance;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->conductance = conductance;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->conductancePrev = conductancePrev;
+            }
+          }
+        }
+}
+
+void Meliso::getConductanceProperties(int j,int k){
+    memset(conductanceProperties,0,6*sizeof(double));
+    if (AnalogNVM *temp = dynamic_cast<AnalogNVM*>(arrayIH->cell[j][k])) {	// Analog eNVM
+            conductanceProperties[0] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->maxConductance;
+            conductanceProperties[1] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->minConductance;
+            conductanceProperties[2] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->avgMaxConductance;
+            conductanceProperties[3] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->avgMinConductance;
+            conductanceProperties[4] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->conductance;
+            conductanceProperties[5] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->conductancePrev;
+    }
+
+
+}
+
+
+void Meliso::setWriteProperties(  double writeVoltageLTP,
+                                        double writeVoltageLTD,
+                                        double writePulseWidthLTP,
+                                        double writePulseWidthLTD,
+                                        int maxNumLevelLTP,
+                                        int maxNumLevelLTD
+                                     ){
+        //WriteProperties:
+        //    writeVoltageLTP: 3.20 # To be specified based on device type
+        //    writeVoltageLTD: -2.8 # To be specified based on device type
+        //    writePulseWidthLTP: 300e-6 # To be specified based on device type
+        //    writePulseWidthLTD: 300e-6 # To be specified based on device type
+        //    maxNumLevelLTP: [2, 4, 8, 16, 32, 64, 97, 128, 256, 512, 1024] # To be specified based on device type
+        //    maxNumLevelLTD: [2, 4, 8, 16, 32, 64, 100, 128, 256, 512, 1024] # To be specified based on device type
+
+        for (int k = 0; k < param->nInput; k++) {
+            for (int j = 0; j < param->nHide; j++) {
+                //only if the Cell can be cast as an AnalogNVM
+                if (AnalogNVM *temp = dynamic_cast<AnalogNVM*>(arrayIH->cell[j][k])) {	// Analog eNVM
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->writeVoltageLTP = writeVoltageLTP;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->writeVoltageLTD = writeVoltageLTD;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->writePulseWidthLTP = writePulseWidthLTP;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->writePulseWidthLTD = writePulseWidthLTD;
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->maxNumLevelLTP = double(maxNumLevelLTP);
+                        static_cast<AnalogNVM*>(arrayIH->cell[j][k])->maxNumLevelLTD = double(maxNumLevelLTD);
+            }
+          }
+        }
+}
+
+void Meliso::getWriteProperties(int j,int k){
+    memset(writeProperties,0,6*sizeof(double));
+    if (AnalogNVM *temp = dynamic_cast<AnalogNVM*>(arrayIH->cell[j][k])) {	// Analog eNVM
+            writeProperties[0] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->writeVoltageLTP;
+            writeProperties[1] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->writeVoltageLTD;
+            writeProperties[2] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->writePulseWidthLTP;
+            writeProperties[3] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->writePulseWidthLTD;
+            writeProperties[4] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->maxNumLevelLTP;
+            writeProperties[5] = static_cast<AnalogNVM*>(arrayIH->cell[j][k])->maxNumLevelLTD;
+    }
+
+
+}
+
+
+void Meliso::setDeviceVariation(    double NL_LTP,
+                                    double NL_LTD,
+                                    double sigmaDtoDvar,
+                                    double sigmaCtoCvar
+                               ){
+        //DeviceVariation:
+        //    NL_LTP: 2.4 # Specify if nonlinear write is enabled
+        //    NL_LTD: -4.88 # Specify if nonlinear write is enabled
+        //    sigmaDtoD: 0 # Sigma for device-to-device variation, specify if applicable
+        //    sigmaCtoC: 0.035 #* (maxConductance - minConductance) # Sigma for cycle-to-cycle variation, specify if applicable, may depend on memory window
+
+        for (int k = 0; k < param->nInput; k++) {
+            for (int j = 0; j < param->nHide; j++) {
+                //only if the Cell can be cast as an AnalogNVM
+                if (RealDevice *temp = dynamic_cast<RealDevice*>(arrayIH->cell[j][k])) {	// Analog eNVM
+                        static_cast<RealDevice*>(arrayIH->cell[j][k])->NL_LTP = NL_LTP;
+                        static_cast<RealDevice*>(arrayIH->cell[j][k])->NL_LTD = NL_LTD;
+                        static_cast<RealDevice*>(arrayIH->cell[j][k])->sigmaDtoD = sigmaDtoDvar;
+                        static_cast<RealDevice*>(arrayIH->cell[j][k])->sigmaCtoC = sigmaCtoCvar;
+
+                        double maxNumLevelLTP = static_cast<RealDevice*>(arrayIH->cell[j][k])->maxNumLevelLTP;
+                        double maxNumLevelLTD = static_cast<RealDevice*>(arrayIH->cell[j][k])->maxNumLevelLTD;
+
+                        double maxConductance = static_cast<RealDevice*>(arrayIH->cell[j][k])->maxConductance;
+                        double minConductance = static_cast<RealDevice*>(arrayIH->cell[j][k])->minConductance;
+
+                        std::mt19937 localGen;	// It's OK not to use the external gen, since here the device-to-device vairation is a one-time deal
+	                    localGen.seed(std::time(0));
+
+                        static_cast<RealDevice*>(arrayIH->cell[j][k])->gaussian_dist2 = new std::normal_distribution<double>(0, sigmaDtoDvar);	// Set up mean and stddev for device-to-device weight update vairation
+                        static_cast<RealDevice*>(arrayIH->cell[j][k])->paramALTP = getParamA(NL_LTP + (*static_cast<AnalogNVM*>(arrayIH->cell[j][k])->gaussian_dist2)(localGen)) * maxNumLevelLTP;	// Parameter A for LTP nonlinearity
+                        static_cast<RealDevice*>(arrayIH->cell[j][k])->paramALTD = getParamA(NL_LTD + (*static_cast<AnalogNVM*>(arrayIH->cell[j][k])->gaussian_dist2)(localGen)) * maxNumLevelLTD;	// Parameter A for LTD nonlinearity
+
+                        /* Cycle-to-cycle weight update variation */
+                        //static_cast<AnalogNVM*>(arrayIH->cell[j][k])->sigmaCtoC = sigmaC2Cvar* (maxConductance - minConductance);	// Sigma of cycle-to-cycle weight update vairation: defined as the percentage of conductance range
+                        static_cast<RealDevice*>(arrayIH->cell[j][k])->gaussian_dist3 = new std::normal_distribution<double>(0, sigmaCtoCvar* (maxConductance - minConductance));    // Set up mean and stddev for cycle-to-cycle weight update vairation
+            }
+          }
+        }
+}
+
+void Meliso::getDeviceVariation(int j,int k){
+    memset(deviceVariation,0,4*sizeof(double));
+    if (AnalogNVM *temp = dynamic_cast<RealDevice*>(arrayIH->cell[j][k])) {	// Analog eNVM
+            deviceVariation[0] = static_cast<RealDevice*>(arrayIH->cell[j][k])->NL_LTP;
+            deviceVariation[1] = static_cast<RealDevice*>(arrayIH->cell[j][k])->NL_LTD;
+            deviceVariation[2] = static_cast<RealDevice*>(arrayIH->cell[j][k])->sigmaDtoD;
+            deviceVariation[3] = static_cast<RealDevice*>(arrayIH->cell[j][k])->sigmaCtoC;
+    }
+}
+
+
 Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int turnOnHardware) {
     rows = m;
     columns = n;
@@ -141,6 +291,19 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
         param->useHardwareInTrainingWU = false;
     }
 	scalingAdjusted = false;
+	considerScaling = false;
+
+    mcaStats = (double*)malloc(MCA_STAT_PROPERTIES*sizeof(double));
+    memset(mcaStats,0,MCA_STAT_PROPERTIES*sizeof(double));
+
+    conductanceProperties = (double*)malloc(CONDUCTANCE_PROPERTIES*sizeof(double));
+    memset(conductanceProperties,0,CONDUCTANCE_PROPERTIES*sizeof(double));
+
+    writeProperties = (double*)malloc(WRITE_PROPERTIES*sizeof(double));
+    memset(writeProperties,0,WRITE_PROPERTIES*sizeof(double));
+
+    deviceVariation = (double*)malloc(DEVICE_VARIATION_PROPERTIES*sizeof(double));
+    memset(deviceVariation,0,DEVICE_VARIATION_PROPERTIES*sizeof(double));
 
     real_A_matrix = (double*)malloc(m*n*sizeof(double));
     memset(real_A_matrix,0,m*n*sizeof(double));
@@ -225,7 +388,16 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
 	printf("Total leakage power of subArray is : %.4e W\n", subArrayIH->leakage);// + subArrayHO->leakage);
 	printf("Total leakage power of Neuron is : %.4e W\n", leakageNeuronIH); // + leakageNeuronHO);
 
+    //only initialized during construction of Meliso
+    mcaStats[0] = totalSubArrayArea;
+    mcaStats[1] = totalNeuronAreaIH;
+    mcaStats[2] = subArrayIH->leakage;
+    mcaStats[3] = leakageNeuronIH;
 
+    //subArrayIH->writeLatency
+    //subArrayIH->readLatency
+    //subArrayIH->writeDynamicEnergy
+    //subArrayIH->readDynamicEnergy
 
 }
 }

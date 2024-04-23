@@ -16,7 +16,15 @@ cdef extern from "Meliso.h" namespace "meliso":
 
         double totalSubArrayArea, totalNeuronAreaIH,heightNeuronIH, widthNeuronIH, leakageNeuronIH;
 
-        double *y,*delta,*y_min;
+        double *y;
+        double *delta;
+        double *y_min;
+        double *conductanceProperties;
+        double *writeProperties;
+        double *deviceVariation;
+
+        double *mcaStats;
+
         int* sign;
 
         void loadInput(double *)
@@ -24,3 +32,13 @@ cdef extern from "Meliso.h" namespace "meliso":
         void setWeights(double *)
         void matVec()
         void getResults()
+        void setConductanceProperties(double,double,double,double,double,double)
+        void getConductanceProperties(int,int)
+
+        void setWriteProperties(double,double,double,double,double,double)
+        void getWriteProperties(int,int)
+
+        void setDeviceVariation(double,double,double,double)
+        void getDeviceVariation(int,int)
+
+

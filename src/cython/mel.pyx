@@ -71,7 +71,61 @@ cdef class MelisoPy:
     def getResults(self):
         self.melisoObj.getResults()
         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
-        print(y.shape)
         for i in xrange(self.m):
             y[i][0] = self.melisoObj.y[i]
         return y
+
+    def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):
+        self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
+
+    def getConductanceProperties(self,x,y):
+        self.melisoObj.getConductanceProperties(x,y)
+
+        conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))
+        for i in xrange(6):
+            conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]
+
+        return conductanceProperties
+
+    def setWriteProperties(self,writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD):
+        self.melisoObj.setWriteProperties(writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD)
+
+    def getWriteProperties(self,x,y):
+        self.melisoObj.getWriteProperties(x,y)
+
+        writeProperties = np.zeros(6,dtype=float).reshape((6,1))
+        for i in xrange(6):
+            writeProperties[i][0] = self.melisoObj.writeProperties[i]
+
+        return writeProperties
+
+    def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):
+        self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
+
+    def getConductanceProperties(self,x,y):
+        self.melisoObj.getConductanceProperties(x,y)
+
+        conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))
+        for i in xrange(6):
+            conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]
+
+        return conductanceProperties
+
+    def setDeviceVariation(self,NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC):
+        self.melisoObj.setDeviceVariation(NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC)
+
+    def getDeviceVariation(self,x,y):
+        self.melisoObj.getDeviceVariation(x,y)
+
+        deviceVariation = np.zeros(4,dtype=float).reshape((4,1))
+        for i in xrange(4):
+            deviceVariation[i][0] = self.melisoObj.deviceVariation[i]
+
+        return deviceVariation
+
+    def getMCAStats(self,num_mca_stats):
+        mcaStats = np.zeros(num_mca_stats,dtype=float).reshape((num_mca_stats,1))
+        for i in range(num_mca_stats):
+            mcaStats[i][0] = self.meliisoObj.mcaStats[i]
+
+        return mcaStats

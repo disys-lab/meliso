@@ -19,11 +19,16 @@ MAX_TOL = 1.0
 MIN_TOL = 0.0
 
 turnOnHardware = 1
-meliso_obj = meliso.MelisoPy(0,32,32,MAX_TOL,MIN_TOL,turnOnHardware)
+meliso_obj = meliso.MelisoPy(1,32,32,MAX_TOL,MIN_TOL,turnOnHardware)
 
 #obtain an A matrix with values between 0,1
 #I have observed that having matrix between 0,1 gives the best results
-scaled_A = np.random.randint(-10000,10000,size=(32,32))/10000.0
+
+scaled_A = np.loadtxt(fname='scaled_A',delimiter=',')
+x = np.loadtxt(fname='input_x',delimiter=',')
+#scaled_A = np.random.randint(0,10000,size=(32,32))/10000.0
+
+
 
 print(scaled_A)
 
@@ -33,10 +38,10 @@ meliso_obj.initializeWeights()
 #set weights on the memristor
 meliso_obj.setWeights(scaled_A)
 j=0
-while j<1:
+while j<2:
     #consider the actual input vector and get hardware matvec results
-    #x = -2*np.ones((32,1))
-    x = np.random.rand(32,1)
+    #x = np.ones((32,1))
+    #x = np.random.rand(32,1)
     meliso_obj.loadInput(x)
     meliso_obj.matVec()
     y_rescaled_mem_result = meliso_obj.getResults()
