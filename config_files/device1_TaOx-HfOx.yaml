@@ -1,0 +1,57 @@
+Device:
+  ConductanceProperties:
+    maxConductance: 1e-5 # To be dynamically determined or specified
+    minConductance: 1e-6 # To be dynamically determined or specified
+    avgMaxConductance: maxConductance # To be dynamically determined or specified
+    avgMinConductance: minConductance # To be dynamically determined or specified
+    conductance: minConductance # This will be dynamically updated
+    conductancePrev: conductance # This will be dynamically updated
+  ReadProperties:
+    readVoltage: 0.5
+    readPulseWidth: 5e-9
+  WriteProperties:
+    writeVoltageLTP: 1.6 # To be specified based on device type
+    writeVoltageLTD: 1.6 # To be specified based on device type
+    writePulseWidthLTP: 50e-9 # To be specified based on device type
+    writePulseWidthLTD: 50e-9 # To be specified based on device type
+    writeEnergy: 0 # This will be dynamically updated
+    maxNumLevelLTP: 128 # To be specified based on device type
+    maxNumLevelLTD: 128 # To be specified based on device type
+    numPulse: 0 # This will be dynamically updated
+  DeviceConfiguration:
+    cmosAccess: true
+    FeFET: false
+    gateCapFeFET: 2.1717e-18
+    resistanceAccess: 15e3
+    nonlinearIV: false
+    nonIdenticalPulse: false
+    NL: 10
+  NonIdenticalPulseSettings:
+    VinitLTP: 2.85
+    VstepLTP: 0.05
+    VinitLTD: 2.1
+    VstepLTD: 0.05
+    PWinitLTP: 75e-9
+    PWstepLTP: 5e-9
+    PWinitLTD: 75e-9
+    PWstepLTD: 5e-9
+    writeVoltageSquareSum: 0 # Dynamic variable
+  ReadNoise:
+    enabled: true #false
+    sigmaReadNoise: 0 # Adjusted based on device specifics
+  ConductanceRangeVariation:
+    enabled: false
+    maxConductanceVar: 0
+    minConductanceVar: 0
+  PhysicalDimensions:
+    heightInFeatureSize: 4 # Depends on cmosAccess and potentially FeFET
+    widthInFeatureSize: 4 # Depends on cmosAccess and potentially FeFET
+  DeviceMaterials:
+    material: TaOx/HfOx # Placeholder for material specification (Ag:a-Si, etc.)
+  NonlinearWrite:
+    enabled: false # Adjust according to device
+  DeviceVariation:
+    NL_LTP: 0.04 # Specify if nonlinear write is enabled
+    NL_LTD: -0.63 # Specify if nonlinear write is enabled
+    sigmaDtoD: 0 # Sigma for device-to-device variation, specify if applicable
+    sigmaCtoC: 0.037 #* (maxConductance - minConductance) # Sigma for cycle-to-cycle variation, specify if applicable, may depend on memory window

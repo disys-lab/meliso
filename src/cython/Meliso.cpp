@@ -291,7 +291,7 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
         param->useHardwareInTrainingWU = false;
     }
 	scalingAdjusted = false;
-	considerScaling = false;
+	considerScaling = true;
 
     mcaStats = (double*)malloc(MCA_STAT_PROPERTIES*sizeof(double));
     memset(mcaStats,0,MCA_STAT_PROPERTIES*sizeof(double));

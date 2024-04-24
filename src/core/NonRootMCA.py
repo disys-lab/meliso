@@ -90,7 +90,6 @@ class NonRootMCA(BaseMCA):
         self.mcaStats = self.melisoObj.getMCAStats(self.num_mca_stats)
         comm.Gather(mcaStats, recvbuf, root=self.ROOT_PROCESS_RANK)
 
-
     def getDeviceConfig(self):
         self.device_config = None
         for device_config_file in self.exp_config["device_config"]["assignment"].keys():
@@ -131,8 +130,8 @@ class NonRootMCA(BaseMCA):
                                            maxNumLevelLTP, maxNumLevelLTD)
 
     def setConductanceProperties(self):
-        maxConductance = self.device_config["ConductanceProperties"]["maxConductance"]
-        minConductance = self.device_config["ConductanceProperties"]["minConductance"]
+        maxConductance = float(self.device_config["ConductanceProperties"]["maxConductance"])
+        minConductance = float(self.device_config["ConductanceProperties"]["minConductance"])
         avgMaxConductance = maxConductance
         avgMinConductance = minConductance
         conductance = minConductance

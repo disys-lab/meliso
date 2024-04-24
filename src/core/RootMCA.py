@@ -55,7 +55,7 @@ class RootMCA(BaseMCA):
 
         if not isinstance(mat, np.ndarray):
             mat = mat.toarray()
-            
+
         #preprocess and set the matrix
         self.setMat(mat)
 
