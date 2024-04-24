@@ -20,15 +20,21 @@ class MatVec:
     
     def parallelMatVec(self):
         if self.rank == self.comm.size - 1: #root process
-            self.mca.x = np.random.randint(0, 10000, size=(self.mca.matRows, 1)) / 10000.0
+            # x = 0.9*np.ones((self.mca.matRows,1))
+            # self.mca.x = x[:self.mca.matRows, :]
+            x = np.loadtxt(fname='input_x', delimiter=',')
+            self.mca.x = x.reshape(x.shape[0],1)[:self.mca.matRows]
+            #self.mca.x = np.random.randint(0, 10000, size=(self.mca.matRows, 1)) / 10000.0
+
 
         self.y = self.mca.parallelMatVec()
         
         if self.rank == self.comm.size - 1:
             decomp_dir = self.mca.getDecompositionDir()
-            y_result = self.y[self.mca.origMatRows]
-            np.savetxt(y_result,"{}/y_result.txt".format(decomp_dir))
-            return self.y[self.mca.origMatRows]
+            y_result = self.y[:self.mca.origMatRows]
+            print(y_result)
+            #np.savetxt(y_result,"{}/y_result.txt".format(decomp_dir))
+            #return self.y[self.mca.origMatRows]
     
     def acquireMCAStats(self):
         self.mca.getMCAStats()

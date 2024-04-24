@@ -1,0 +1,19 @@
+exp_params:
+  turnOnHardware: 1
+  matrix_name: "identity"
+  matrix_file: "matrices/identity.mtx"
+  distributed:
+    decomposition_dir: "/tmp/"
+    mca_rows: 3
+    mca_cols: 3
+
+device_config:
+  root: "config_files/"
+  cell_rows: 32
+  cell_cols: 32
+  #convention: if it is -1 then this device configuration applies to all MCAs
+  #if different MCAs need different config files then
+  #device1.yaml: [[1,2,3,5,8]] or a continous chunk such as [[3-23]]
+  #device2.yaml: [[4,6,7,9-23]] etc.
+  assignment:
+    device1.yaml: [[-1]]

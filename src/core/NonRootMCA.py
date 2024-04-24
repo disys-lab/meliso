@@ -60,6 +60,8 @@ class NonRootMCA(BaseMCA):
         self.acquireLocalA()
         self.initializeMCA()
 
+
+
     def acquireLocalA(self):
         decomp_folder_name = self.getDecompositionDir()
         i = int(self.rank/self.mcaRows)
@@ -70,6 +72,7 @@ class NonRootMCA(BaseMCA):
         self.locCols = self.A.shape[1]
 
     def initializeMCA(self):
+        #print("before initialize weights")
         self.meliso_obj.initializeWeights()
         self.setWeights(self.A)
 

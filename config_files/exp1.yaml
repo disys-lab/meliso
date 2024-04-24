@@ -1,5 +1,5 @@
 exp_params:
-  turnOnHardware: 1
+  turnOnHardware: 0
   matrix_name: "bcsstk02"
   matrix_file: "matrices/bcsstk02.mtx"
   distributed:
