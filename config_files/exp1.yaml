@@ -1,5 +1,5 @@
 exp_params:
-  turnOnHardware: 0
+  turnOnHardware: 1
   matrix_name: "bcsstk02"
   matrix_file: "matrices/bcsstk02.mtx"
   distributed:
@@ -16,4 +16,4 @@ device_config:
   #device1.yaml: [[1,2,3,5,8]] or a continous chunk such as [[3-23]]
   #device2.yaml: [[4,6,7,9-23]] etc.
   assignment:
-    device1.yaml: [[-1]]
+    device1_1_1000.yaml: [[-1]]
