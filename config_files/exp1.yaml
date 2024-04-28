@@ -5,13 +5,13 @@ exp_params:
   matrix_file: "matrices/bcsstk02.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 1
-    mca_cols: 3
+    mca_rows: 3
+    mca_cols: 1
 
 device_config:
   root: "config_files/"
-  cell_rows: 66
-  cell_cols: 32
+  cell_rows: 32
+  cell_cols: 66
   #convention: if it is -1 then this device configuration applies to all MCAs
   #if different MCAs need different config files then
   #device1.yaml: [[1,2,3,5,8]] or a continous chunk such as [[3-23]]

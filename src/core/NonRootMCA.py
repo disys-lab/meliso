@@ -49,6 +49,8 @@ class NonRootMCA(BaseMCA):
         else:
             self.turnOnScaling = SC
 
+        
+
         self.meliso_obj = meliso.MelisoPy(self.device_type, self.cellRows, self.cellCols, self.MAX_TOL, self.MIN_TOL, self.turnOnHardware,self.turnOnScaling)
 
         if "device_config" not in self.exp_config.keys():
@@ -69,16 +71,15 @@ class NonRootMCA(BaseMCA):
         self.acquireLocalA()
         self.initializeMCA()
 
-
-
     def acquireLocalA(self):
         decomp_folder_name = self.getDecompositionDir()
-        i = int(self.rank/self.mcaRows)
-        j = self.rank-(i*self.mcaRows)
+        i = int(self.rank/self.mcaCols)
+        j = self.rank-(i*self.mcaCols)
         mat_file_path = os.path.join(decomp_folder_name, "{}_{}.npy".format(i, j))
         self.A = np.load(mat_file_path)
         self.locRows = self.A.shape[0]
         self.locCols = self.A.shape[1]
+        
 
     def initializeMCA(self):
         #print("before initialize weights")

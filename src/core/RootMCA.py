@@ -121,7 +121,7 @@ class RootMCA(BaseMCA):
                 "MatrixMCADimensionMismatch: Cannot encode Matrix (MCA cols {} x Cell cols {}) - Matrix cols {} < 0".format(
                     mca_cols, cell_cols, cols))
         if mca_cols*cell_cols - cols < cell_cols:
-            col_padding_size = mca_rows*cell_cols - cols
+            col_padding_size = mca_cols*cell_cols - cols
             col_padding = np.zeros((rows,col_padding_size),dtype=float)
 
             print("Adding zero col padding of size ({},{})".format(rows,col_padding_size))
@@ -148,7 +148,7 @@ class RootMCA(BaseMCA):
                     mat_file_path = os.path.join(decomp_folder_name,"{}_{}.npy".format(i,j))
                     np.save(mat_file_path,mat_ij)
 
-                    rank = i*self.mcaRows +j
+                    rank = i*self.mcaCols +j
 
                     if sr not in self.row_parts_ranks.keys():
                         self.row_parts_ranks[sr] = []
@@ -206,11 +206,14 @@ class RootMCA(BaseMCA):
 
     def parallelMatVec(self):
         x = self.x #np.copy(self.x)
+        #print(x.shape)
         print(self.col_parts)
+        print(self.row_parts_ranks)
         # send chunks of x to all processes on chosen row
         for rank in self.col_parts.keys():
             start = self.col_parts[rank][0]
             end = self.col_parts[rank][1]
+            #print(start,end,rank)
             self.comm.Send(x[start:end,:], dest=rank)
 
         sum_y = np.zeros(self.matRows,dtype=np.float64)
@@ -233,6 +236,8 @@ class RootMCA(BaseMCA):
 
                 #recieve from each rank
                 self.comm.Recv(y, source=rank)
+
+                #print(rank,y)
 
                 #add the result to the running sum of that rank.
                 sum_y[start:end] = sum_y[start:end] + y

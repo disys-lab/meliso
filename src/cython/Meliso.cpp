@@ -16,8 +16,8 @@ void Meliso::loadInput(double *x){
 void Meliso::setWeights(double *A_matrix){
     for (int k = 0; k < param->nHide; k++) {
                 for (int j = 0; j < param->nInput; j++){
-                    deltaWeight1[k][j] = A_matrix[k*param->nHide + j];
-                    real_A_matrix[k*param->nHide + j] = A_matrix[k*param->nHide + j];
+                    deltaWeight1[k][j] = A_matrix[k*param->nInput + j];
+                    real_A_matrix[k*param->nInput + j] = A_matrix[k*param->nInput + j];
                 }
             }
     WriteWeights();
@@ -101,11 +101,11 @@ void Meliso::getScalingLimits(double *y_scaled_result,double *real_y_result, dou
         y_scaled_result[i] = Output[0][i];
     }
 
-    for (int k = 0; k < param->nInput; k++) {
-                for (int j = 0; j < param->nHide; j++){
-                    real_y_result[k] = real_y_result[k] + real_A_matrix[k*param->nHide + j]*x[j];
-                }
-            }
+    for (int k = 0; k < param->nHide; k++) {
+        for (int j = 0; j < param->nInput; j++){
+            real_y_result[k] = real_y_result[k] + real_A_matrix[k*param->nInput + j]*x[j];
+        }
+    }
 
 }
 

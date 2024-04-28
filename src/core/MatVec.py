@@ -22,6 +22,7 @@ class MatVec:
             self.mca = NonRootMCA(self.comm)
 
     def parallelMatVec(self):
+
         if self.rank == self.comm.size - 1: #root process
             x = np.loadtxt(fname='input_x', delimiter=',')
             self.mca.x = x.reshape(x.shape[0],1)[:self.mca.matRows]
@@ -29,7 +30,6 @@ class MatVec:
         self.y = self.mca.parallelMatVec()
         
         if self.rank == self.comm.size - 1:
-            decomp_dir = self.mca.getDecompositionDir()
             self.y_mem_result = self.y[:self.mca.origMatRows]
             print(self.y_mem_result)
 
