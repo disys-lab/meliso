@@ -52,6 +52,12 @@ cdef class MelisoPy:
 
         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn,ScalingOn)
 
+    def setHardwareOn(self,turnOnHardware):
+        self.melisoObj.setHardwareOn(turnOnHardware)
+
+    def setScalingOn(self,turnOnScaling):
+        self.melisoObj.setScalingOn(turnOnScaling)
+
     def initializeWeights(self):
         self.melisoObj.initializeWeights()
 

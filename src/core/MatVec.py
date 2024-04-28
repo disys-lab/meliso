@@ -12,29 +12,59 @@ class MatVec:
         self.size = self.comm.Get_size()
         self.x = None
         self.y = None
+        self.y_mem_result = None
+        self.y_benchmark_result = None
+        self.error = None
         if self.rank == self.comm.size-1:
             self.mca = RootMCA(self.comm)
 
         else:
             self.mca = NonRootMCA(self.comm)
-    
+
     def parallelMatVec(self):
         if self.rank == self.comm.size - 1: #root process
-            # x = 0.9*np.ones((self.mca.matRows,1))
-            # self.mca.x = x[:self.mca.matRows, :]
             x = np.loadtxt(fname='input_x', delimiter=',')
             self.mca.x = x.reshape(x.shape[0],1)[:self.mca.matRows]
-            #self.mca.x = np.random.randint(0, 10000, size=(self.mca.matRows, 1)) / 10000.0
-
 
         self.y = self.mca.parallelMatVec()
         
         if self.rank == self.comm.size - 1:
             decomp_dir = self.mca.getDecompositionDir()
-            y_result = self.y[:self.mca.origMatRows]
-            print(y_result)
-            #np.savetxt(y_result,"{}/y_result.txt".format(decomp_dir))
-            #return self.y[self.mca.origMatRows]
+            self.y_mem_result = self.y[:self.mca.origMatRows]
+            print(self.y_mem_result)
+
+            # real_Ax = np.dot(self.mca.mat, self.mca.x)
+            # print("y_rescaled:", y_rescaled_mem_result.reshape((1, self.mca.origMatRows)))
+            # print("real_Ax:", real_Ax.reshape((1, self.mca.origMatRows)))
+            # print(y_rescaled_mem_result.reshape((1, self.mca.origMatRows)) - real_Ax.reshape((1, self.mca.origMatRows)))
+
+    def benchmarkMatVec(self):
+        if self.rank == self.comm.size - 1:
+            y = np.dot(self.mca.mat, self.mca.x)
+            self.y_benchmark_result = y[:self.mca.origMatRows]
+            self.error = self.y_mem_result - self.y_benchmark_result
+            print("error", self.error)
+
+    def benchmarkMatVecParallel(self,hardwareOn=0,scalingOn=0):
+        # if self.rank == self.comm.size - 1:
+        #     x = np.loadtxt(fname='input_x', delimiter=',')
+        #     self.mca.x = x.reshape(x.shape[0],1)[:self.mca.matRows]
+        # else:
+        #     self.mca.meliso_obj.setHardwareOn(hardwareOn)
+        #     self.mca.meliso_obj.setScalingOn(scalingOn)
+        if self.rank != self.comm.size - 1:
+            self.mca.meliso_obj.setHardwareOn(hardwareOn)
+            self.mca.meliso_obj.setScalingOn(scalingOn)
+            self.mca.initializeMCA()
+
+        self.y = self.mca.parallelMatVec()
+
+        if self.rank == self.comm.size - 1:
+            decomp_dir = self.mca.getDecompositionDir()
+            self.y_benchmark_result = self.y[:self.mca.origMatRows]
+            print(self.y_benchmark_result)
+            self.error = self.y_mem_result - self.y_benchmark_result
+            print("error",self.error)
     
     def acquireMCAStats(self):
         self.mca.getMCAStats()

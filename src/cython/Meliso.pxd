@@ -27,6 +27,8 @@ cdef extern from "Meliso.h" namespace "meliso":
 
         int* sign;
 
+        void setHardwareOn(int)
+        void setScalingOn(int)
         void loadInput(double *)
         void initializeWeights()
         void setWeights(double *)

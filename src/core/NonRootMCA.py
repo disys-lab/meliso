@@ -4,7 +4,7 @@ import os,sys,yaml
 import meliso
 
 class NonRootMCA(BaseMCA):
-    def __init__(self,comm):
+    def __init__(self,comm,HW=-1,SC=-1):
         super().__init__(comm)
 
         # acquire from root process
@@ -38,11 +38,16 @@ class NonRootMCA(BaseMCA):
         self.device_config = None
         self.getDeviceConfig()
 
-        if "turnOnHardware" in self.exp_config["exp_params"].keys():
-            self.turnOnHardware = self.exp_config["exp_params"]["turnOnHardware"]
-
-        if "turnOnScaling" in self.exp_config["exp_params"].keys():
-            self.turnOnScaling = self.exp_config["exp_params"]["turnOnScaling"]
+        if HW==-1:
+            if "turnOnHardware" in self.exp_config["exp_params"].keys():
+                self.turnOnHardware = self.exp_config["exp_params"]["turnOnHardware"]
+        else:
+            self.turnOnHardware = HW
+        if SC==-1:
+            if "turnOnScaling" in self.exp_config["exp_params"].keys():
+                self.turnOnScaling = self.exp_config["exp_params"]["turnOnScaling"]
+        else:
+            self.turnOnScaling = SC
 
         self.meliso_obj = meliso.MelisoPy(self.device_type, self.cellRows, self.cellCols, self.MAX_TOL, self.MIN_TOL, self.turnOnHardware,self.turnOnScaling)
 

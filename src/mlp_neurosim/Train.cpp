@@ -640,12 +640,16 @@ void Train(const int numTrain, const int epochs, char *optimization_type) {
 				}
         } 
         else {    // Algorithm
-				#pragma omp parallel for
+				//#pragma omp parallel for
 				for (int j = 0; j < param->nHide; j++) {
+				    //printf("algorithm before:: a1[%d] = %f, outN1[%d] = %f\n",j,a1[j],j,outN1[j]);
 					for (int k = 0; k < param->nInput; k++) {
-						outN1[j] += Input[i][k] * weight1[j][k];
+
+						outN1[j] = outN1[j] + Input[i][k] * weight1[j][k];
 					}
 					a1[j] = linear(outN1[j]);
+					//printf("algorithm after:: a1[%d] = %f\n",j,a1[j]);
+					//printf("algorithm after:: a1[%d] = %f, outN1[%d]=%f\n",j,a1[j],j,outN1[j]);
 				}
         }
         //printf("Result element %d epochs is : %.2f%\n", j, a1[j]);

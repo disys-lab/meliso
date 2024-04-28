@@ -22,7 +22,6 @@ void Meliso::setWeights(double *A_matrix){
             }
     WriteWeights();
     if (considerScaling && !scalingAdjusted){
-        printf("scaling adjusted : %d consider scaling %d",scalingAdjusted,considerScaling);
         adjustScalingLimits();
     }
 
@@ -41,9 +40,7 @@ void Meliso::initializeWeights(){
 }
 
 void Meliso::matVec(){
-
     Train(1, 1, param->optimization_type);
-
     if (HybridCell *temp = dynamic_cast<HybridCell*>(arrayIH->cell[0][0]))
         WeightTransfer();
     else if(_2T1F *temp = dynamic_cast<_2T1F*>(arrayIH->cell[0][0]))
@@ -74,15 +71,16 @@ void Meliso::matVec(){
 }
 
 void Meliso::getResults(){
-
+      //memset(y,0,rows*sizeof(double));
       for (int k = 0; k < param->nHide; k++) {
-            //y[k] = (sign[k]*Output[0][k] -y_adj_min[k])/(MAX_TOL-TOL);
-            if (considerScaling && scalingAdjusted){
+            if ( considerScaling && scalingAdjusted){
                 y[k] = (sign[k]*Output[0][k] - y_adj_min[k])/delta[k];
                 y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
+                //printf("getResults:: scaling adjusted : %d consider scaling %d\n",scalingAdjusted,sc);
             }
             else{
                 y[k] = Output[0][k];
+                //printf("getResults after:: Output[%d] = %f\n",k,Output[0][k]);
             }
         }
 }
@@ -130,7 +128,6 @@ void Meliso::adjustScalingLimits(){
     scalingAdjusted = true;
 }
 
-
 void Meliso::setConductanceProperties(  double maxConductance,
                                         double minConductance,
                                         double avgMaxConductance,
@@ -173,7 +170,6 @@ void Meliso::getConductanceProperties(int j,int k){
 
 
 }
-
 
 void Meliso::setWriteProperties(  double writeVoltageLTP,
                                         double writeVoltageLTD,
@@ -218,7 +214,6 @@ void Meliso::getWriteProperties(int j,int k){
 
 
 }
-
 
 void Meliso::setDeviceVariation(    double NL_LTP,
                                     double NL_LTD,
@@ -292,16 +287,31 @@ void Meliso::initializeParam(int m,int n){
 
     dInput = std::vector< std::vector<int> > (param->numMnistTrainImages, std::vector<int>(param->nInput));
 
-//    dTestInput = std::vector< std::vector<int> > (param->numMnistTestImages, std::vector<int>(param->nInput));
-//
-//    /* Inputs of testing set */
-//    testInput = std::vector< std::vector<double> >(param->numMnistTestImages, std::vector<double>(param->nInput));
-//
-    /* Outputs of testing set */
-//    testOutput = std::vector< std::vector<double> >(param->numMnistTestImages, std::vector<double>(param->nOutput));
+}
 
+void Meliso::setHardwareOn(int turnOnHardware){
 
+    if(turnOnHardware){
+        param->useHardwareInTrainingFF = true;
+        param->useHardwareInTrainingWU = true;
+    }
+    else{
+        param->useHardwareInTrainingFF = false;
+        param->useHardwareInTrainingWU = false;
+    }
 
+}
+
+void Meliso::setScalingOn(int turnOnScaling){
+
+    if (turnOnScaling){
+	    considerScaling = true;
+    }
+    else{
+        considerScaling = false;
+        //printf("setScaling:: scaling adjusted : %d consider scaling %d\n",scalingAdjusted,considerScaling);
+    }
+    //
 }
 
 Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int turnOnHardware,int turnOnScaling) {
@@ -313,29 +323,13 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
 
     initializeParam(m,n);
 
-//    printf("param->nInput:%d, param->nHide:%d\n",param->nInput,param->nHide);
-//    fflush(stdout);
-
 	gen.seed(0);
 
-    if(turnOnHardware){
-        param->useHardwareInTrainingFF = true;
-        param->useHardwareInTrainingWU = true;
-    }
-    else{
-        param->useHardwareInTrainingFF = false;
-        param->useHardwareInTrainingWU = false;
-    }
 	scalingAdjusted = false;
 	considerScaling = false;
 
-	if (turnOnScaling){
-	    considerScaling = true;
-    }
-
-
-
-	//weight1 = std::vector< std::vector<double> > (param->nHide, std::vector<double>(param->nInput));
+    setHardwareOn(turnOnHardware);
+    setScalingOn(turnOnScaling);
 
     mcaStats = (double*)malloc(MCA_STAT_PROPERTIES*sizeof(double));
     memset(mcaStats,0,MCA_STAT_PROPERTIES*sizeof(double));

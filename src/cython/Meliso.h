@@ -85,6 +85,9 @@ public:
 
     void initializeParam(int,int);
 
+    void setHardwareOn(int);
+    void setScalingOn(int);
+
     void loadInput(double *);
     void initializeWeights();
     void setWeights(double *);

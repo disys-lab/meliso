@@ -18,16 +18,24 @@ Second and third arguments are rows and columns of weight matrix
 
 MAX_TOL = 1.0
 MIN_TOL = 1e-6
-dim=32
+dim=66
 turnOnHardware = 1
 turnOnScaling = 1
-meliso_obj = meliso.MelisoPy(0,dim,dim,MAX_TOL,MIN_TOL,turnOnHardware,turnOnScaling)
+meliso_obj = meliso.MelisoPy(1,dim,dim,MAX_TOL,MIN_TOL,turnOnHardware,turnOnScaling)
 
 #obtain an A matrix with values between 0,1
 #I have observed that having matrix between 0,1 gives the best results
 
 #scaled_A = np.loadtxt(fname='matrices/3232_random.mtx',delimiter=',')
-scaled_A = mmread('matrices/3232_random.mtx')
+#scaled_A = mmread('matrices/3232_random.mtx')
+scaled_A = mmread('matrices/bcsstk02.mtx')
+
+if not isinstance(scaled_A, np.ndarray):
+    scaled_A = scaled_A.toarray()
+
+    scaled_A -= scaled_A.min()
+    scaled_A /= scaled_A.ptp()
+
 x_raw = np.loadtxt(fname='input_x',delimiter=',')
 x = x_raw.reshape(x_raw.shape[0],1)[:dim]
 #scaled_A = np.random.randint(0,10000,size=(32,32))/10000.0

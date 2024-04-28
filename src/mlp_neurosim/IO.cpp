@@ -113,43 +113,6 @@ void ReadTrainingDataFromFile(const char *trainPatchFileName, const char *trainL
 	fclose(fp_label);
 }
 
-/* Read testing data from file */
-void ReadTestingDataFromFile(const char *testPatchFileName, const char *testLabelFileName) {
-	FILE *fp_patch = fopen(testPatchFileName, "r");
-	FILE *fp_label = fopen(testLabelFileName, "r");
-
-	if (!fp_patch) {
-		std::cout << testPatchFileName << " cannot be found!\n";
-		exit(-1);
-	}
-	if (!fp_label) {
-		std::cout << testLabelFileName << " cannot be found!\n";
-		exit(-1);
-	}
-
-	int i = 0;
-	int j = 0;
-//	while (fscanf(fp_patch, "%lf", &testInput[i][j]) != EOF){
-//		//testInput[i][j] = truncate(testInput[i][j], param->numInputLevel - 1, param->BWthreshold);
-//		//dTestInput[i][j] = round(testInput[i][j] * (param->numInputLevel - 1));
-//		i += 1;
-//		if (i%param->numMnistTestImages == 0){
-//			j += 1;
-//			i = 0;
-//		}
-//	}
-	i = 0;
-	j = 0;
-	int k = 0;
-	while (fscanf(fp_label, "%d", &k) != EOF){
-		//testOutput[i][k] = 1;
-		i += 1;
-	}
-
-	fclose(fp_patch);
-	fclose(fp_label);
-}
-
 /* Print weight to file */
 void PrintWeightToFile(const char *str) {
 	/* Print weight1 */
