@@ -14,15 +14,17 @@ void Meliso::loadInput(double *x){
 }
 
 void Meliso::setWeights(double *A_matrix){
-    for (int k = 0; k < param->nInput; k++) {
-                for (int j = 0; j < param->nHide; j++){
+    for (int k = 0; k < param->nHide; k++) {
+                for (int j = 0; j < param->nInput; j++){
                     deltaWeight1[k][j] = A_matrix[k*param->nHide + j];
                     real_A_matrix[k*param->nHide + j] = A_matrix[k*param->nHide + j];
                 }
             }
     WriteWeights();
-    if (!scalingAdjusted && considerScaling)
+    if (considerScaling && !scalingAdjusted){
+        printf("scaling adjusted : %d consider scaling %d",scalingAdjusted,considerScaling);
         adjustScalingLimits();
+    }
 
 }
 
@@ -72,15 +74,15 @@ void Meliso::matVec(){
 }
 
 void Meliso::getResults(){
+
       for (int k = 0; k < param->nHide; k++) {
             //y[k] = (sign[k]*Output[0][k] -y_adj_min[k])/(MAX_TOL-TOL);
-            if ( scalingAdjusted && considerScaling){
+            if (considerScaling && scalingAdjusted){
                 y[k] = (sign[k]*Output[0][k] - y_adj_min[k])/delta[k];
                 y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
             }
             else{
                 y[k] = Output[0][k];
-
             }
         }
 }
@@ -269,16 +271,50 @@ void Meliso::getDeviceVariation(int j,int k){
     }
 }
 
+void Meliso::initializeParam(int m,int n){
 
-Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int turnOnHardware) {
+    param = new Param(); // Parameter set
+    param->nInput = n;
+    param->nHide = m;
+    param->numMnistTrainImages = 1;
+    param->numMnistTestImages = 1;
+
+    weight1 = std::vector< std::vector<double> > (param->nHide, std::vector<double>(param->nInput));
+//    weight2 = std::vector< std::vector<double> > (param->nOutput, std::vector<double>(param->nHide));
+    real_weight1 = std::vector< std::vector<double> > (param->nHide, std::vector<double>(param->nInput));
+    deltaWeight1 = std::vector< std::vector<double> > (param->nHide, std::vector<double>(param->nInput));
+    totalDeltaWeight1 = std::vector< std::vector<double> > (param->nHide, std::vector<double>(param->nInput));
+    totalDeltaWeight1_abs = std::vector< std::vector<double> > (param->nHide, std::vector<double>(param->nInput));
+
+    arrayIH = new Array(param->nHide, param->nInput, param->arrayWireWidth);
+    Input = std::vector< std::vector<double> > (param->numMnistTrainImages, std::vector<double>(param->nInput));
+    Output = std::vector< std::vector<double> > (param->numMnistTrainImages, std::vector<double>(param->nHide));
+
+    dInput = std::vector< std::vector<int> > (param->numMnistTrainImages, std::vector<int>(param->nInput));
+
+//    dTestInput = std::vector< std::vector<int> > (param->numMnistTestImages, std::vector<int>(param->nInput));
+//
+//    /* Inputs of testing set */
+//    testInput = std::vector< std::vector<double> >(param->numMnistTestImages, std::vector<double>(param->nInput));
+//
+    /* Outputs of testing set */
+//    testOutput = std::vector< std::vector<double> >(param->numMnistTestImages, std::vector<double>(param->nOutput));
+
+
+
+}
+
+Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int turnOnHardware,int turnOnScaling) {
     rows = m;
     columns = n;
 
     TOL = min_tol;
     MAX_TOL = max_tol;
 
-    param->nInput = n;
-    param->nHide = m;
+    initializeParam(m,n);
+
+//    printf("param->nInput:%d, param->nHide:%d\n",param->nInput,param->nHide);
+//    fflush(stdout);
 
 	gen.seed(0);
 
@@ -292,6 +328,14 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
     }
 	scalingAdjusted = false;
 	considerScaling = false;
+
+	if (turnOnScaling){
+	    considerScaling = true;
+    }
+
+
+
+	//weight1 = std::vector< std::vector<double> > (param->nHide, std::vector<double>(param->nInput));
 
     mcaStats = (double*)malloc(MCA_STAT_PROPERTIES*sizeof(double));
     memset(mcaStats,0,MCA_STAT_PROPERTIES*sizeof(double));

@@ -17,10 +17,11 @@ Second and third arguments are rows and columns of weight matrix
 '''
 
 MAX_TOL = 1.0
-MIN_TOL = 0.0
-
+MIN_TOL = 1e-6
+dim=32
 turnOnHardware = 1
-meliso_obj = meliso.MelisoPy(0,32,32,MAX_TOL,MIN_TOL,turnOnHardware)
+turnOnScaling = 1
+meliso_obj = meliso.MelisoPy(0,dim,dim,MAX_TOL,MIN_TOL,turnOnHardware,turnOnScaling)
 
 #obtain an A matrix with values between 0,1
 #I have observed that having matrix between 0,1 gives the best results
@@ -28,10 +29,10 @@ meliso_obj = meliso.MelisoPy(0,32,32,MAX_TOL,MIN_TOL,turnOnHardware)
 #scaled_A = np.loadtxt(fname='matrices/3232_random.mtx',delimiter=',')
 scaled_A = mmread('matrices/3232_random.mtx')
 x_raw = np.loadtxt(fname='input_x',delimiter=',')
-x = x_raw.reshape(x_raw.shape[0],1)[:32]
+x = x_raw.reshape(x_raw.shape[0],1)[:dim]
 #scaled_A = np.random.randint(0,10000,size=(32,32))/10000.0
 
-print(scaled_A)
+
 
 #initialize weights to 0 on the memristor device
 meliso_obj.initializeWeights()
@@ -48,7 +49,7 @@ while j<2:
     y_rescaled_mem_result = meliso_obj.getResults()
 
     real_Ax = np.dot(scaled_A,x)
-    print("y_rescaled:",y_rescaled_mem_result.reshape((1,32)))
-    print("real_Ax:",real_Ax.reshape((1,32)))
-    print(y_rescaled_mem_result.reshape((1,32))-real_Ax.reshape((1,32)))
+    print("y_rescaled:",y_rescaled_mem_result.reshape((1,dim)))
+    print("real_Ax:",real_Ax.reshape((1,dim)))
+    print(y_rescaled_mem_result.reshape((1,dim))-real_Ax.reshape((1,dim)))
     j = j+1

@@ -55,13 +55,16 @@ extern Array *arrayHO;
 /* Weights initialization */
 void WeightInitialize() {
     srand(2);
+    //printf("param->nInput:%d, param->nHide:%d\n",param->nInput,param->nHide);
+    fflush(stdout);
     /* Initialize weights for the input layer */
     for (int i = 0; i < param->nHide; i++) {
         for (int j = 0; j < param->nInput; j++) {
                 weight1[i][j] = 0.0;
-            //printf("weight 1 is %.4f\n", weight1[i][j]);
+            //printf("weight 1 is %d,%d %.4f\n",i,j, weight1[i][j]);
         }
     }
+    //printf("after WeightInitialize\n");
 
 }
 

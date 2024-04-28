@@ -30,7 +30,7 @@ cdef class MelisoPy:
     cdef double *x
     cdef double *y
 
-    def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware):
+    def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware,turnOnScaling):
         self.m = rows
         self.n = columns
 
@@ -46,7 +46,11 @@ cdef class MelisoPy:
         if turnOnHardware:
             HardwareOn = 1
 
-        self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn)
+        ScalingOn = 0
+        if turnOnScaling:
+            ScalingOn = 1
+
+        self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn,ScalingOn)
 
     def initializeWeights(self):
         self.melisoObj.initializeWeights()

@@ -15,7 +15,8 @@ class NonRootMCA(BaseMCA):
         self.endCol = 0
         self.startRow = 0
         self.endRow = 0
-        self.turnOnHardware = 1
+        self.turnOnHardware = 0
+        self.turnOnScaling = 0
         self.mcaStats = np.zeros((self.num_mca_stats,1),dtype=float)
 
         self.MAX_TOL = 1.0
@@ -40,7 +41,10 @@ class NonRootMCA(BaseMCA):
         if "turnOnHardware" in self.exp_config["exp_params"].keys():
             self.turnOnHardware = self.exp_config["exp_params"]["turnOnHardware"]
 
-        self.meliso_obj = meliso.MelisoPy(self.device_type, self.cellRows, self.cellCols, self.MAX_TOL, self.MIN_TOL, self.turnOnHardware)
+        if "turnOnScaling" in self.exp_config["exp_params"].keys():
+            self.turnOnScaling = self.exp_config["exp_params"]["turnOnScaling"]
+
+        self.meliso_obj = meliso.MelisoPy(self.device_type, self.cellRows, self.cellCols, self.MAX_TOL, self.MIN_TOL, self.turnOnHardware,self.turnOnScaling)
 
         if "device_config" not in self.exp_config.keys():
             raise Exception("ExperimentConfigFileError: Device config not specified in %s for MCA rank %s".format(expConfigFile,self.rank))

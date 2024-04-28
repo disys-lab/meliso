@@ -41,107 +41,110 @@
 /* Global variables */
 inline Param *param = new Param(); // Parameter set
 
+
 /* Inputs of training set */
 std::vector< std::vector<double> >
-inline Input(param->numMnistTrainImages, std::vector<double>(param->nInput));
+inline Input;//(param->numMnistTrainImages, std::vector<double>(param->nInput));
 
 /* Outputs of training set */
 std::vector< std::vector<double> >
-inline Output(param->numMnistTrainImages, std::vector<double>(param->nHide));
+inline Output; //(param->numMnistTrainImages, std::vector<double>(param->nHide));
+
+///* Weights from input to hidden layer */
+std::vector< std::vector<double> >inline weight1; //(param->nHide, std::vector<double>(param->nInput));
 
 /* Weights from input to hidden layer */
-std::vector< std::vector<double> >
-inline weight1(param->nHide, std::vector<double>(param->nInput));
-
-/* Weights from input to hidden layer */
-std::vector< std::vector<double> >
-inline real_weight1(param->nHide, std::vector<double>(param->nInput));
-
-/* Weights from hidden layer to output layer */
-std::vector< std::vector<double> >
-inline weight2(param->nOutput, std::vector<double>(param->nHide));
+std::vector< std::vector<double> > inline real_weight1; //(param->nHide, std::vector<double>(param->nInput));
 
 /* Weight change of weight1 */
-std::vector< std::vector<double> >
-inline deltaWeight1(param->nHide, std::vector<double>(param->nInput));
-
-/* Weight change of weight2 */
-std::vector< std::vector<double> >
-inline deltaWeight2(param->nOutput, std::vector<double>(param->nHide));
+std::vector< std::vector<double> > inline deltaWeight1; //(param->nHide, std::vector<double>(param->nInput));
 
 /*the variables to track the ΔW*/
-std::vector< std::vector<double> >
-inline totalDeltaWeight1(param->nHide, std::vector<double>(param->nInput));
-std::vector< std::vector<double> >
-inline totalDeltaWeight1_abs(param->nHide, std::vector<double>(param->nInput));
-/*the variables to track the ΔW*/
-std::vector< std::vector<double> >
-inline totalDeltaWeight2(param->nOutput, std::vector<double>(param->nHide));
-std::vector< std::vector<double> >
-inline totalDeltaWeight2_abs(param->nOutput, std::vector<double>(param->nHide));
+std::vector< std::vector<double> > inline totalDeltaWeight1; //(param->nHide, std::vector<double>(param->nInput));
+std::vector< std::vector<double> > inline totalDeltaWeight1_abs; //(param->nHide, std::vector<double>(param->nInput));
 
-/* Inputs of testing set */
-std::vector< std::vector<double> >
-inline testInput(param->numMnistTestImages, std::vector<double>(param->nInput));
-/* Outputs of testing set */
-std::vector< std::vector<double> >
-inline testOutput(param->numMnistTestImages, std::vector<double>(param->nOutput));
+
+/* Weights from hidden layer to output layer */
+//std::vector< std::vector<double> > inline weight2; //(param->nOutput, std::vector<double>(param->nHide));
+
+///* Weight change of weight2 */
+//std::vector< std::vector<double> >
+//inline deltaWeight2(param->nOutput, std::vector<double>(param->nHide));
+//
+///*the variables to track the ΔW*/
+//std::vector< std::vector<double> >
+//inline totalDeltaWeight2(param->nOutput, std::vector<double>(param->nHide));
+//std::vector< std::vector<double> >
+//inline totalDeltaWeight2_abs(param->nOutput, std::vector<double>(param->nHide));
+
+///* Inputs of testing set */
+//std::vector< std::vector<double> >
+//inline testInput; //(param->numMnistTestImages, std::vector<double>(param->nInput));
+///* Outputs of testing set */
+//std::vector< std::vector<double> >
+//inline testOutput; //(param->numMnistTestImages, std::vector<double>(param->nOutput));
 
 /* Digitized inputs of training set (an integer between 0 to 2^numBitInput-1) */
 std::vector< std::vector<int> >
-inline dInput(param->numMnistTrainImages, std::vector<int>(param->nInput));
+inline dInput; //(param->numMnistTrainImages, std::vector<int>(param->nInput));
 /* Digitized inputs of testing set (an integer between 0 to 2^numBitInput-1) */
-std::vector< std::vector<int> >
-inline dTestInput(param->numMnistTestImages, std::vector<int>(param->nInput));
+//std::vector< std::vector<int> >
+//inline dTestInput; //(param->numMnistTestImages, std::vector<int>(param->nInput));
 
 
 
-// the arrays for optimization
-std::vector< std::vector<double> >
-inline gradSquarePrev1(param->nHide, std::vector<double>(param->nInput));
-std::vector< std::vector<double> >
-inline gradSquarePrev2(param->nOutput, std::vector<double>(param->nHide));
-std::vector< std::vector<double> >
-inline gradSum1(param->nHide, std::vector<double>(param->nInput));
-std::vector< std::vector<double> >
-inline gradSum2(param->nOutput, std::vector<double>(param->nHide));
-std::vector< std::vector<double> >
-inline momentumPrev1(param->nHide, std::vector<double>(param->nInput));
-std::vector< std::vector<double> >
-inline momentumPrev2(param->nOutput, std::vector<double>(param->nHide));
+//// the arrays for optimization
+//std::vector< std::vector<double> >
+//inline gradSquarePrev1(param->nHide, std::vector<double>(param->nInput));
+//std::vector< std::vector<double> >
+//inline gradSquarePrev2(param->nOutput, std::vector<double>(param->nHide));
+//std::vector< std::vector<double> >
+//inline gradSum1(param->nHide, std::vector<double>(param->nInput));
+//std::vector< std::vector<double> >
+//inline gradSum2(param->nOutput, std::vector<double>(param->nHide));
+//std::vector< std::vector<double> >
+//inline momentumPrev1(param->nHide, std::vector<double>(param->nInput));
+//std::vector< std::vector<double> >
+//inline momentumPrev2(param->nOutput, std::vector<double>(param->nHide));
 
 
 /* # of correct prediction */
 inline int correct = 0;
 
 /* Synaptic array between input and hidden layer */
-inline Array *arrayIH = new Array(param->nHide, param->nInput, param->arrayWireWidth);
-/* Synaptic array between hidden and output layer */
-inline Array *arrayHO = new Array(param->nOutput, param->nHide, param->arrayWireWidth);
+inline Array *arrayIH; //= new Array(param->nHide, param->nInput, param->arrayWireWidth);
+
+///* Synaptic array between hidden and output layer */
+//inline Array *arrayHO = new Array(param->nOutput, param->nHide, param->arrayWireWidth);
 
 /* Random number generator engine */
 inline std::mt19937 gen;
 
 /* NeuroSim */
 inline SubArray *subArrayIH;   // NeuroSim synaptic core for arrayIH
-inline SubArray *subArrayHO;   // NeuroSim synaptic core for arrayHO
+
 /* Global properties of subArrayIH */
 inline InputParameter inputParameterIH;
 inline Technology techIH;
 inline MemCell cellIH;
-/* Global properties of subArrayHO */
-inline InputParameter inputParameterHO;
-inline Technology techHO;
-inline MemCell cellHO;
+
 /* Neuron peripheries below subArrayIH */
 inline Adder adderIH(inputParameterIH, techIH, cellIH);
 inline Mux muxIH(inputParameterIH, techIH, cellIH);
 inline RowDecoder muxDecoderIH(inputParameterIH, techIH, cellIH);
 inline DFF dffIH(inputParameterIH, techIH, cellIH);
 inline Subtractor subtractorIH(inputParameterIH, techIH, cellIH);
-/* Neuron peripheries below subArrayHO */
-inline Adder adderHO(inputParameterHO, techHO, cellHO);
-inline Mux muxHO(inputParameterHO, techHO, cellHO);
-inline RowDecoder muxDecoderHO(inputParameterHO, techHO, cellHO);
-inline DFF dffHO(inputParameterHO, techHO, cellHO);
-inline Subtractor subtractorHO(inputParameterHO, techHO, cellHO);
+
+
+
+//inline SubArray *subArrayHO;   // NeuroSim synaptic core for arrayHO
+///* Global properties of subArrayHO */
+//inline InputParameter inputParameterHO;
+//inline Technology techHO;
+//inline MemCell cellHO;
+///* Neuron peripheries below subArrayHO */
+//inline Adder adderHO(inputParameterHO, techHO, cellHO);
+//inline Mux muxHO(inputParameterHO, techHO, cellHO);
+//inline RowDecoder muxDecoderHO(inputParameterHO, techHO, cellHO);
+//inline DFF dffHO(inputParameterHO, techHO, cellHO);
+//inline Subtractor subtractorHO(inputParameterHO, techHO, cellHO);

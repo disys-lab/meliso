@@ -81,7 +81,9 @@ public:
     bool considerScaling;
 
     Meliso();
-    Meliso(int,int,int,double,double,int);
+    Meliso(int,int,int,double,double,int,int);
+
+    void initializeParam(int,int);
 
     void loadInput(double *);
     void initializeWeights();

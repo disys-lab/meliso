@@ -3008,6 +3008,7 @@ static const char __pyx_k_version_info[] = "version_info";
 static const char __pyx_k_class_getitem[] = "__class_getitem__";
 static const char __pyx_k_num_mca_stats[] = "num_mca_stats";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
+static const char __pyx_k_turnOnScaling[] = "turnOnScaling";
 static const char __pyx_k_AssertionError[] = "AssertionError";
 static const char __pyx_k_maxConductance[] = "maxConductance";
 static const char __pyx_k_maxNumLevelLTD[] = "maxNumLevelLTD";
@@ -3126,7 +3127,7 @@ static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewsl
 static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_MAX_TOL, PyObject *__pyx_v_TOL, PyObject *__pyx_v_turnOnHardware); /* proto */
+static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_MAX_TOL, PyObject *__pyx_v_TOL, PyObject *__pyx_v_turnOnHardware, PyObject *__pyx_v_turnOnScaling); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_A_matrix); /* proto */
 static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_np_x); /* proto */
@@ -3383,6 +3384,7 @@ typedef struct {
   PyObject *__pyx_n_s_sys;
   PyObject *__pyx_n_s_test;
   PyObject *__pyx_n_s_turnOnHardware;
+  PyObject *__pyx_n_s_turnOnScaling;
   PyObject *__pyx_kp_s_unable_to_allocate_array_data;
   PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
   PyObject *__pyx_n_s_unpack;
@@ -3678,6 +3680,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_sys);
   Py_CLEAR(clear_module_state->__pyx_n_s_test);
   Py_CLEAR(clear_module_state->__pyx_n_s_turnOnHardware);
+  Py_CLEAR(clear_module_state->__pyx_n_s_turnOnScaling);
   Py_CLEAR(clear_module_state->__pyx_kp_s_unable_to_allocate_array_data);
   Py_CLEAR(clear_module_state->__pyx_kp_s_unable_to_allocate_shape_and_str);
   Py_CLEAR(clear_module_state->__pyx_n_s_unpack);
@@ -3951,6 +3954,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_sys);
   Py_VISIT(traverse_module_state->__pyx_n_s_test);
   Py_VISIT(traverse_module_state->__pyx_n_s_turnOnHardware);
+  Py_VISIT(traverse_module_state->__pyx_n_s_turnOnScaling);
   Py_VISIT(traverse_module_state->__pyx_kp_s_unable_to_allocate_array_data);
   Py_VISIT(traverse_module_state->__pyx_kp_s_unable_to_allocate_shape_and_str);
   Py_VISIT(traverse_module_state->__pyx_n_s_unpack);
@@ -4256,6 +4260,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_sys __pyx_mstate_global->__pyx_n_s_sys
 #define __pyx_n_s_test __pyx_mstate_global->__pyx_n_s_test
 #define __pyx_n_s_turnOnHardware __pyx_mstate_global->__pyx_n_s_turnOnHardware
+#define __pyx_n_s_turnOnScaling __pyx_mstate_global->__pyx_n_s_turnOnScaling
 #define __pyx_kp_s_unable_to_allocate_array_data __pyx_mstate_global->__pyx_kp_s_unable_to_allocate_array_data
 #define __pyx_kp_s_unable_to_allocate_shape_and_str __pyx_mstate_global->__pyx_kp_s_unable_to_allocate_shape_and_str
 #define __pyx_n_s_unpack __pyx_mstate_global->__pyx_n_s_unpack
@@ -17956,7 +17961,7 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
 /* "src/cython/mel.pyx":33
  *     cdef double *y
  * 
- *     def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware,turnOnScaling):             # <<<<<<<<<<<<<<
  *         self.m = rows
  *         self.n = columns
  */
@@ -17970,9 +17975,10 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   PyObject *__pyx_v_MAX_TOL = 0;
   PyObject *__pyx_v_TOL = 0;
   PyObject *__pyx_v_turnOnHardware = 0;
+  PyObject *__pyx_v_turnOnScaling = 0;
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
-  PyObject* values[6] = {0,0,0,0,0,0};
+  PyObject* values[7] = {0,0,0,0,0,0,0};
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -17986,10 +17992,12 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   #endif
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
   {
-    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_type,&__pyx_n_s_rows,&__pyx_n_s_columns,&__pyx_n_s_MAX_TOL,&__pyx_n_s_TOL,&__pyx_n_s_turnOnHardware,0};
+    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_type,&__pyx_n_s_rows,&__pyx_n_s_columns,&__pyx_n_s_MAX_TOL,&__pyx_n_s_TOL,&__pyx_n_s_turnOnHardware,&__pyx_n_s_turnOnScaling,0};
     if (__pyx_kwds) {
       Py_ssize_t kw_args;
       switch (__pyx_nargs) {
+        case  7: values[6] = __Pyx_Arg_VARARGS(__pyx_args, 6);
+        CYTHON_FALLTHROUGH;
         case  6: values[5] = __Pyx_Arg_VARARGS(__pyx_args, 5);
         CYTHON_FALLTHROUGH;
         case  5: values[4] = __Pyx_Arg_VARARGS(__pyx_args, 4);
@@ -18022,7 +18030,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 1); __PYX_ERR(0, 33, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 1); __PYX_ERR(0, 33, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -18032,7 +18040,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 2); __PYX_ERR(0, 33, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 2); __PYX_ERR(0, 33, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -18042,7 +18050,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 3); __PYX_ERR(0, 33, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 3); __PYX_ERR(0, 33, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -18052,7 +18060,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 4); __PYX_ERR(0, 33, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 4); __PYX_ERR(0, 33, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -18062,14 +18070,24 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 5); __PYX_ERR(0, 33, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 5); __PYX_ERR(0, 33, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  6:
+        if (likely((values[6] = __Pyx_GetKwValue_VARARGS(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_turnOnScaling)) != 0)) {
+          (void)__Pyx_Arg_NewRef_VARARGS(values[6]);
+          kw_args--;
+        }
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L3_error)
+        else {
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 6); __PYX_ERR(0, 33, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "__cinit__") < 0)) __PYX_ERR(0, 33, __pyx_L3_error)
       }
-    } else if (unlikely(__pyx_nargs != 6)) {
+    } else if (unlikely(__pyx_nargs != 7)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_Arg_VARARGS(__pyx_args, 0);
@@ -18078,6 +18096,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
       values[3] = __Pyx_Arg_VARARGS(__pyx_args, 3);
       values[4] = __Pyx_Arg_VARARGS(__pyx_args, 4);
       values[5] = __Pyx_Arg_VARARGS(__pyx_args, 5);
+      values[6] = __Pyx_Arg_VARARGS(__pyx_args, 6);
     }
     __pyx_v_device_type = values[0];
     __pyx_v_rows = values[1];
@@ -18085,10 +18104,11 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
     __pyx_v_MAX_TOL = values[3];
     __pyx_v_TOL = values[4];
     __pyx_v_turnOnHardware = values[5];
+    __pyx_v_turnOnScaling = values[6];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 33, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, __pyx_nargs); __PYX_ERR(0, 33, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18102,7 +18122,7 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy___cinit__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_device_type, __pyx_v_rows, __pyx_v_columns, __pyx_v_MAX_TOL, __pyx_v_TOL, __pyx_v_turnOnHardware);
+  __pyx_r = __pyx_pf_5build_6meliso_8MelisoPy___cinit__(((struct __pyx_obj_5build_6meliso_MelisoPy *)__pyx_v_self), __pyx_v_device_type, __pyx_v_rows, __pyx_v_columns, __pyx_v_MAX_TOL, __pyx_v_TOL, __pyx_v_turnOnHardware, __pyx_v_turnOnScaling);
 
   /* function exit code */
   {
@@ -18115,8 +18135,9 @@ static int __pyx_pw_5build_6meliso_8MelisoPy_1__cinit__(PyObject *__pyx_v_self, 
   return __pyx_r;
 }
 
-static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_MAX_TOL, PyObject *__pyx_v_TOL, PyObject *__pyx_v_turnOnHardware) {
+static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6meliso_MelisoPy *__pyx_v_self, PyObject *__pyx_v_device_type, PyObject *__pyx_v_rows, PyObject *__pyx_v_columns, PyObject *__pyx_v_MAX_TOL, PyObject *__pyx_v_TOL, PyObject *__pyx_v_turnOnHardware, PyObject *__pyx_v_turnOnScaling) {
   long __pyx_v_HardwareOn;
+  long __pyx_v_ScalingOn;
   int __pyx_r;
   int __pyx_t_1;
   double __pyx_t_2;
@@ -18129,7 +18150,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
 
   /* "src/cython/mel.pyx":34
  * 
- *     def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware):
+ *     def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware,turnOnScaling):
  *         self.m = rows             # <<<<<<<<<<<<<<
  *         self.n = columns
  * 
@@ -18138,7 +18159,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
   __pyx_v_self->m = __pyx_t_1;
 
   /* "src/cython/mel.pyx":35
- *     def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware):
+ *     def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware,turnOnScaling):
  *         self.m = rows
  *         self.n = columns             # <<<<<<<<<<<<<<
  * 
@@ -18228,7 +18249,7 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
  *         if turnOnHardware:
  *             HardwareOn = 1             # <<<<<<<<<<<<<<
  * 
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn)
+ *         ScalingOn = 0
  */
     __pyx_v_HardwareOn = 1;
 
@@ -18244,24 +18265,61 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
   /* "src/cython/mel.pyx":49
  *             HardwareOn = 1
  * 
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn)             # <<<<<<<<<<<<<<
+ *         ScalingOn = 0             # <<<<<<<<<<<<<<
+ *         if turnOnScaling:
+ *             ScalingOn = 1
+ */
+  __pyx_v_ScalingOn = 0;
+
+  /* "src/cython/mel.pyx":50
+ * 
+ *         ScalingOn = 0
+ *         if turnOnScaling:             # <<<<<<<<<<<<<<
+ *             ScalingOn = 1
+ * 
+ */
+  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_v_turnOnScaling); if (unlikely((__pyx_t_3 < 0))) __PYX_ERR(0, 50, __pyx_L1_error)
+  if (__pyx_t_3) {
+
+    /* "src/cython/mel.pyx":51
+ *         ScalingOn = 0
+ *         if turnOnScaling:
+ *             ScalingOn = 1             # <<<<<<<<<<<<<<
+ * 
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn,ScalingOn)
+ */
+    __pyx_v_ScalingOn = 1;
+
+    /* "src/cython/mel.pyx":50
+ * 
+ *         ScalingOn = 0
+ *         if turnOnScaling:             # <<<<<<<<<<<<<<
+ *             ScalingOn = 1
+ * 
+ */
+  }
+
+  /* "src/cython/mel.pyx":53
+ *             ScalingOn = 1
+ * 
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn,ScalingOn)             # <<<<<<<<<<<<<<
  * 
  *     def initializeWeights(self):
  */
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_MAX_TOL); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_TOL); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_MAX_TOL); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_TOL); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 53, __pyx_L1_error)
   try {
-    __pyx_t_5 = meliso::Meliso(__pyx_v_self->device_type, __pyx_v_self->m, __pyx_v_self->n, __pyx_t_2, __pyx_t_4, __pyx_v_HardwareOn);
+    __pyx_t_5 = meliso::Meliso(__pyx_v_self->device_type, __pyx_v_self->m, __pyx_v_self->n, __pyx_t_2, __pyx_t_4, __pyx_v_HardwareOn, __pyx_v_ScalingOn);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 49, __pyx_L1_error)
+    __PYX_ERR(0, 53, __pyx_L1_error)
   }
   __pyx_v_self->melisoObj = __PYX_STD_MOVE_IF_SUPPORTED(__pyx_t_5);
 
   /* "src/cython/mel.pyx":33
  *     cdef double *y
  * 
- *     def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self,device_type,rows,columns,MAX_TOL,TOL,turnOnHardware,turnOnScaling):             # <<<<<<<<<<<<<<
  *         self.m = rows
  *         self.n = columns
  */
@@ -18276,8 +18334,8 @@ static int __pyx_pf_5build_6meliso_8MelisoPy___cinit__(struct __pyx_obj_5build_6
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":51
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn)
+/* "src/cython/mel.pyx":55
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn,ScalingOn)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
@@ -18330,7 +18388,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __p
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("initializeWeights", 1);
 
-  /* "src/cython/mel.pyx":52
+  /* "src/cython/mel.pyx":56
  * 
  *     def initializeWeights(self):
  *         self.melisoObj.initializeWeights()             # <<<<<<<<<<<<<<
@@ -18339,8 +18397,8 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __p
  */
   __pyx_v_self->melisoObj.initializeWeights();
 
-  /* "src/cython/mel.pyx":51
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn)
+  /* "src/cython/mel.pyx":55
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn,ScalingOn)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
@@ -18354,7 +18412,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_2initializeWeights(struct __p
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":54
+/* "src/cython/mel.pyx":58
  *         self.melisoObj.initializeWeights()
  * 
  *     def setWeights(self,np_A_matrix):             # <<<<<<<<<<<<<<
@@ -18415,12 +18473,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 54, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setWeights") < 0)) __PYX_ERR(0, 54, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setWeights") < 0)) __PYX_ERR(0, 58, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
@@ -18431,7 +18489,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("setWeights", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 54, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("setWeights", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 58, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18479,7 +18537,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("setWeights", 1);
 
-  /* "src/cython/mel.pyx":55
+  /* "src/cython/mel.pyx":59
  * 
  *     def setWeights(self,np_A_matrix):
  *         ctr = 0             # <<<<<<<<<<<<<<
@@ -18489,7 +18547,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_ctr = __pyx_int_0;
 
-  /* "src/cython/mel.pyx":56
+  /* "src/cython/mel.pyx":60
  *     def setWeights(self,np_A_matrix):
  *         ctr = 0
  *         for i in xrange(self.m):             # <<<<<<<<<<<<<<
@@ -18501,7 +18559,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "src/cython/mel.pyx":57
+    /* "src/cython/mel.pyx":61
  *         ctr = 0
  *         for i in xrange(self.m):
  *             for j in xrange(self.n):             # <<<<<<<<<<<<<<
@@ -18513,38 +18571,38 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_j = __pyx_t_6;
 
-      /* "src/cython/mel.pyx":58
+      /* "src/cython/mel.pyx":62
  *         for i in xrange(self.m):
  *             for j in xrange(self.n):
  *                 self.A_matrix[ctr] = np_A_matrix[i][j]             # <<<<<<<<<<<<<<
  *                 ctr = ctr +1
  * 
  */
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_np_A_matrix, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 58, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_np_A_matrix, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 58, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_8); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L1_error)
+      __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_t_8); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 62, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_v_ctr); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_v_ctr); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 62, __pyx_L1_error)
       (__pyx_v_self->A_matrix[__pyx_t_10]) = __pyx_t_9;
 
-      /* "src/cython/mel.pyx":59
+      /* "src/cython/mel.pyx":63
  *             for j in xrange(self.n):
  *                 self.A_matrix[ctr] = np_A_matrix[i][j]
  *                 ctr = ctr +1             # <<<<<<<<<<<<<<
  * 
  *         self.melisoObj.setWeights(self.A_matrix)
  */
-      __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_ctr, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 59, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_ctr, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF_SET(__pyx_v_ctr, __pyx_t_8);
       __pyx_t_8 = 0;
     }
   }
 
-  /* "src/cython/mel.pyx":61
+  /* "src/cython/mel.pyx":65
  *                 ctr = ctr +1
  * 
  *         self.melisoObj.setWeights(self.A_matrix)             # <<<<<<<<<<<<<<
@@ -18553,7 +18611,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
  */
   __pyx_v_self->melisoObj.setWeights(__pyx_v_self->A_matrix);
 
-  /* "src/cython/mel.pyx":54
+  /* "src/cython/mel.pyx":58
  *         self.melisoObj.initializeWeights()
  * 
  *     def setWeights(self,np_A_matrix):             # <<<<<<<<<<<<<<
@@ -18576,7 +18634,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_4setWeights(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":63
+/* "src/cython/mel.pyx":67
  *         self.melisoObj.setWeights(self.A_matrix)
  * 
  *     def loadInput(self,np_x):             # <<<<<<<<<<<<<<
@@ -18637,12 +18695,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 63, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "loadInput") < 0)) __PYX_ERR(0, 63, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "loadInput") < 0)) __PYX_ERR(0, 67, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
@@ -18653,7 +18711,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("loadInput", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 63, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("loadInput", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 67, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18694,7 +18752,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("loadInput", 1);
 
-  /* "src/cython/mel.pyx":64
+  /* "src/cython/mel.pyx":68
  * 
  *     def loadInput(self,np_x):
  *         for j in xrange(self.n):             # <<<<<<<<<<<<<<
@@ -18706,21 +18764,21 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_j = __pyx_t_3;
 
-    /* "src/cython/mel.pyx":65
+    /* "src/cython/mel.pyx":69
  *     def loadInput(self,np_x):
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]             # <<<<<<<<<<<<<<
  *         self.melisoObj.loadInput(self.x)
  * 
  */
-    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_np_x, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_np_x, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 69, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     (__pyx_v_self->x[__pyx_v_j]) = __pyx_t_5;
   }
 
-  /* "src/cython/mel.pyx":66
+  /* "src/cython/mel.pyx":70
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]
  *         self.melisoObj.loadInput(self.x)             # <<<<<<<<<<<<<<
@@ -18729,7 +18787,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5
  */
   __pyx_v_self->melisoObj.loadInput(__pyx_v_self->x);
 
-  /* "src/cython/mel.pyx":63
+  /* "src/cython/mel.pyx":67
  *         self.melisoObj.setWeights(self.A_matrix)
  * 
  *     def loadInput(self,np_x):             # <<<<<<<<<<<<<<
@@ -18750,7 +18808,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_6loadInput(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":68
+/* "src/cython/mel.pyx":72
  *         self.melisoObj.loadInput(self.x)
  * 
  *     def matVec(self):             # <<<<<<<<<<<<<<
@@ -18804,7 +18862,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_8matVec(struct __pyx_obj_5bui
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("matVec", 1);
 
-  /* "src/cython/mel.pyx":69
+  /* "src/cython/mel.pyx":73
  * 
  *     def matVec(self):
  *         self.melisoObj.matVec()             # <<<<<<<<<<<<<<
@@ -18813,7 +18871,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_8matVec(struct __pyx_obj_5bui
  */
   __pyx_v_self->melisoObj.matVec();
 
-  /* "src/cython/mel.pyx":68
+  /* "src/cython/mel.pyx":72
  *         self.melisoObj.loadInput(self.x)
  * 
  *     def matVec(self):             # <<<<<<<<<<<<<<
@@ -18828,7 +18886,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_8matVec(struct __pyx_obj_5bui
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":71
+/* "src/cython/mel.pyx":75
  *         self.melisoObj.matVec()
  * 
  *     def getResults(self):             # <<<<<<<<<<<<<<
@@ -18895,7 +18953,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("getResults", 1);
 
-  /* "src/cython/mel.pyx":72
+  /* "src/cython/mel.pyx":76
  * 
  *     def getResults(self):
  *         self.melisoObj.getResults()             # <<<<<<<<<<<<<<
@@ -18904,45 +18962,45 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
  */
   __pyx_v_self->melisoObj.getResults();
 
-  /* "src/cython/mel.pyx":73
+  /* "src/cython/mel.pyx":77
  *     def getResults(self):
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))             # <<<<<<<<<<<<<<
  *         for i in xrange(self.m):
  *             y[i][0] = self.melisoObj.y[i]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->m); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->m); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error);
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 73, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_reshape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_reshape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->m); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_self->m); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5)) __PYX_ERR(0, 77, __pyx_L1_error);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1)) __PYX_ERR(0, 73, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1)) __PYX_ERR(0, 77, __pyx_L1_error);
   __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
   __pyx_t_6 = 0;
@@ -18963,14 +19021,14 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 73, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 77, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
   __pyx_v_y = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/cython/mel.pyx":74
+  /* "src/cython/mel.pyx":78
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  *         for i in xrange(self.m):             # <<<<<<<<<<<<<<
@@ -18982,23 +19040,23 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "src/cython/mel.pyx":75
+    /* "src/cython/mel.pyx":79
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  *         for i in xrange(self.m):
  *             y[i][0] = self.melisoObj.y[i]             # <<<<<<<<<<<<<<
  *         return y
  * 
  */
-    __pyx_t_1 = PyFloat_FromDouble((__pyx_v_self->melisoObj.y[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble((__pyx_v_self->melisoObj.y[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_y, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_y, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (unlikely((__Pyx_SetItemInt(__pyx_t_2, 0, __pyx_t_1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 75, __pyx_L1_error)
+    if (unlikely((__Pyx_SetItemInt(__pyx_t_2, 0, __pyx_t_1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 79, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "src/cython/mel.pyx":76
+  /* "src/cython/mel.pyx":80
  *         for i in xrange(self.m):
  *             y[i][0] = self.melisoObj.y[i]
  *         return y             # <<<<<<<<<<<<<<
@@ -19010,7 +19068,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
   __pyx_r = __pyx_v_y;
   goto __pyx_L0;
 
-  /* "src/cython/mel.pyx":71
+  /* "src/cython/mel.pyx":75
  *         self.melisoObj.matVec()
  * 
  *     def getResults(self):             # <<<<<<<<<<<<<<
@@ -19034,7 +19092,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_10getResults(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":78
+/* "src/cython/mel.pyx":82
  *         return y
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):             # <<<<<<<<<<<<<<
@@ -19110,7 +19168,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 78, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -19118,9 +19176,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 78, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 1); __PYX_ERR(0, 78, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 1); __PYX_ERR(0, 82, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -19128,9 +19186,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 78, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 2); __PYX_ERR(0, 78, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 2); __PYX_ERR(0, 82, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -19138,9 +19196,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 78, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 3); __PYX_ERR(0, 78, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 3); __PYX_ERR(0, 82, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -19148,9 +19206,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 78, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 4); __PYX_ERR(0, 78, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 4); __PYX_ERR(0, 82, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -19158,14 +19216,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 78, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 5); __PYX_ERR(0, 78, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 5); __PYX_ERR(0, 82, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setConductanceProperties") < 0)) __PYX_ERR(0, 78, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setConductanceProperties") < 0)) __PYX_ERR(0, 82, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 6)) {
       goto __pyx_L5_argtuple_error;
@@ -19186,7 +19244,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 78, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 82, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19227,22 +19285,22 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_12setConductanceProperties(st
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("setConductanceProperties", 1);
 
-  /* "src/cython/mel.pyx":79
+  /* "src/cython/mel.pyx":83
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)             # <<<<<<<<<<<<<<
  * 
  *     def getConductanceProperties(self,x,y):
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_maxConductance); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_minConductance); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_avgMaxConductance); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_avgMinConductance); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
-  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_v_conductance); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
-  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_v_conductancePrev); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_maxConductance); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_minConductance); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_avgMaxConductance); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_avgMinConductance); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_v_conductance); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_v_conductancePrev); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L1_error)
   __pyx_v_self->melisoObj.setConductanceProperties(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, __pyx_t_5, __pyx_t_6);
 
-  /* "src/cython/mel.pyx":78
+  /* "src/cython/mel.pyx":82
  *         return y
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):             # <<<<<<<<<<<<<<
@@ -19262,7 +19320,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_12setConductanceProperties(st
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":81
+/* "src/cython/mel.pyx":85
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  *     def getConductanceProperties(self,x,y):             # <<<<<<<<<<<<<<
@@ -19326,7 +19384,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 81, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 85, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -19334,14 +19392,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 81, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 85, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("getConductanceProperties", 1, 2, 2, 1); __PYX_ERR(0, 81, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getConductanceProperties", 1, 2, 2, 1); __PYX_ERR(0, 85, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getConductanceProperties") < 0)) __PYX_ERR(0, 81, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getConductanceProperties") < 0)) __PYX_ERR(0, 85, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -19354,7 +19412,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getConductanceProperties", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 81, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getConductanceProperties", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 85, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19398,37 +19456,37 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_14getConductanceProperties(st
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("getConductanceProperties", 1);
 
-  /* "src/cython/mel.pyx":82
+  /* "src/cython/mel.pyx":86
  * 
  *     def getConductanceProperties(self,x,y):
  *         self.melisoObj.getConductanceProperties(x,y)             # <<<<<<<<<<<<<<
  * 
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_x); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_y); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_x); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_y); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L1_error)
   __pyx_v_self->melisoObj.getConductanceProperties(__pyx_t_1, __pyx_t_2);
 
-  /* "src/cython/mel.pyx":84
+  /* "src/cython/mel.pyx":88
  *         self.melisoObj.getConductanceProperties(x,y)
  * 
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))             # <<<<<<<<<<<<<<
  *         for i in xrange(6):
  *             conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 84, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__9, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 84, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 88, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__9, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_t_6 = NULL;
@@ -19449,14 +19507,14 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_14getConductanceProperties(st
     PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_tuple__10};
     __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_2, 1+__pyx_t_2);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 84, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 88, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __pyx_v_conductanceProperties = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "src/cython/mel.pyx":85
+  /* "src/cython/mel.pyx":89
  * 
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))
  *         for i in xrange(6):             # <<<<<<<<<<<<<<
@@ -19466,23 +19524,23 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_14getConductanceProperties(st
   for (__pyx_t_7 = 0; __pyx_t_7 < 6; __pyx_t_7+=1) {
     __pyx_v_i = __pyx_t_7;
 
-    /* "src/cython/mel.pyx":86
+    /* "src/cython/mel.pyx":90
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))
  *         for i in xrange(6):
  *             conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]             # <<<<<<<<<<<<<<
  * 
  *         return conductanceProperties
  */
-    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_self->melisoObj.conductanceProperties[__pyx_v_i])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 86, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_self->melisoObj.conductanceProperties[__pyx_v_i])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 90, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_conductanceProperties, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 86, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_conductanceProperties, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (unlikely((__Pyx_SetItemInt(__pyx_t_4, 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 86, __pyx_L1_error)
+    if (unlikely((__Pyx_SetItemInt(__pyx_t_4, 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 90, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
 
-  /* "src/cython/mel.pyx":88
+  /* "src/cython/mel.pyx":92
  *             conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]
  * 
  *         return conductanceProperties             # <<<<<<<<<<<<<<
@@ -19494,7 +19552,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_14getConductanceProperties(st
   __pyx_r = __pyx_v_conductanceProperties;
   goto __pyx_L0;
 
-  /* "src/cython/mel.pyx":81
+  /* "src/cython/mel.pyx":85
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  *     def getConductanceProperties(self,x,y):             # <<<<<<<<<<<<<<
@@ -19517,7 +19575,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_14getConductanceProperties(st
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":90
+/* "src/cython/mel.pyx":94
  *         return conductanceProperties
  * 
  *     def setWriteProperties(self,writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD):             # <<<<<<<<<<<<<<
@@ -19593,7 +19651,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -19601,9 +19659,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 1); __PYX_ERR(0, 90, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 1); __PYX_ERR(0, 94, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -19611,9 +19669,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 2); __PYX_ERR(0, 90, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 2); __PYX_ERR(0, 94, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -19621,9 +19679,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 3); __PYX_ERR(0, 90, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 3); __PYX_ERR(0, 94, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -19631,9 +19689,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 4); __PYX_ERR(0, 90, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 4); __PYX_ERR(0, 94, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -19641,14 +19699,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 5); __PYX_ERR(0, 90, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, 5); __PYX_ERR(0, 94, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setWriteProperties") < 0)) __PYX_ERR(0, 90, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setWriteProperties") < 0)) __PYX_ERR(0, 94, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 6)) {
       goto __pyx_L5_argtuple_error;
@@ -19669,7 +19727,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 90, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("setWriteProperties", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 94, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19710,22 +19768,22 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_16setWriteProperties(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("setWriteProperties", 1);
 
-  /* "src/cython/mel.pyx":91
+  /* "src/cython/mel.pyx":95
  * 
  *     def setWriteProperties(self,writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD):
  *         self.melisoObj.setWriteProperties(writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD)             # <<<<<<<<<<<<<<
  * 
  *     def getWriteProperties(self,x,y):
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_writeVoltageLTP); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_writeVoltageLTD); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_writePulseWidthLTP); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_writePulseWidthLTD); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
-  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_v_maxNumLevelLTP); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
-  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_v_maxNumLevelLTD); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_writeVoltageLTP); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_writeVoltageLTD); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_writePulseWidthLTP); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_writePulseWidthLTD); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_v_maxNumLevelLTP); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_v_maxNumLevelLTD); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
   __pyx_v_self->melisoObj.setWriteProperties(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, __pyx_t_5, __pyx_t_6);
 
-  /* "src/cython/mel.pyx":90
+  /* "src/cython/mel.pyx":94
  *         return conductanceProperties
  * 
  *     def setWriteProperties(self,writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD):             # <<<<<<<<<<<<<<
@@ -19745,7 +19803,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_16setWriteProperties(struct _
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":93
+/* "src/cython/mel.pyx":97
  *         self.melisoObj.setWriteProperties(writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD)
  * 
  *     def getWriteProperties(self,x,y):             # <<<<<<<<<<<<<<
@@ -19809,7 +19867,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 93, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 97, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -19817,14 +19875,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 93, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 97, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("getWriteProperties", 1, 2, 2, 1); __PYX_ERR(0, 93, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getWriteProperties", 1, 2, 2, 1); __PYX_ERR(0, 97, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getWriteProperties") < 0)) __PYX_ERR(0, 93, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getWriteProperties") < 0)) __PYX_ERR(0, 97, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -19837,7 +19895,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getWriteProperties", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 93, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getWriteProperties", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 97, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19881,37 +19939,37 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_18getWriteProperties(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("getWriteProperties", 1);
 
-  /* "src/cython/mel.pyx":94
+  /* "src/cython/mel.pyx":98
  * 
  *     def getWriteProperties(self,x,y):
  *         self.melisoObj.getWriteProperties(x,y)             # <<<<<<<<<<<<<<
  * 
  *         writeProperties = np.zeros(6,dtype=float).reshape((6,1))
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_x); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_y); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_x); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_y); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 98, __pyx_L1_error)
   __pyx_v_self->melisoObj.getWriteProperties(__pyx_t_1, __pyx_t_2);
 
-  /* "src/cython/mel.pyx":96
+  /* "src/cython/mel.pyx":100
  *         self.melisoObj.getWriteProperties(x,y)
  * 
  *         writeProperties = np.zeros(6,dtype=float).reshape((6,1))             # <<<<<<<<<<<<<<
  *         for i in xrange(6):
  *             writeProperties[i][0] = self.melisoObj.writeProperties[i]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 96, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 96, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 96, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 96, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__9, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 96, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 100, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__9, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 96, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_t_6 = NULL;
@@ -19932,14 +19990,14 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_18getWriteProperties(struct _
     PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_tuple__10};
     __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_2, 1+__pyx_t_2);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 96, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __pyx_v_writeProperties = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "src/cython/mel.pyx":97
+  /* "src/cython/mel.pyx":101
  * 
  *         writeProperties = np.zeros(6,dtype=float).reshape((6,1))
  *         for i in xrange(6):             # <<<<<<<<<<<<<<
@@ -19949,23 +20007,23 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_18getWriteProperties(struct _
   for (__pyx_t_7 = 0; __pyx_t_7 < 6; __pyx_t_7+=1) {
     __pyx_v_i = __pyx_t_7;
 
-    /* "src/cython/mel.pyx":98
+    /* "src/cython/mel.pyx":102
  *         writeProperties = np.zeros(6,dtype=float).reshape((6,1))
  *         for i in xrange(6):
  *             writeProperties[i][0] = self.melisoObj.writeProperties[i]             # <<<<<<<<<<<<<<
  * 
  *         return writeProperties
  */
-    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_self->melisoObj.writeProperties[__pyx_v_i])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_self->melisoObj.writeProperties[__pyx_v_i])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 102, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_writeProperties, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 98, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_writeProperties, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 102, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (unlikely((__Pyx_SetItemInt(__pyx_t_4, 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 98, __pyx_L1_error)
+    if (unlikely((__Pyx_SetItemInt(__pyx_t_4, 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 102, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
 
-  /* "src/cython/mel.pyx":100
+  /* "src/cython/mel.pyx":104
  *             writeProperties[i][0] = self.melisoObj.writeProperties[i]
  * 
  *         return writeProperties             # <<<<<<<<<<<<<<
@@ -19977,7 +20035,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_18getWriteProperties(struct _
   __pyx_r = __pyx_v_writeProperties;
   goto __pyx_L0;
 
-  /* "src/cython/mel.pyx":93
+  /* "src/cython/mel.pyx":97
  *         self.melisoObj.setWriteProperties(writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD)
  * 
  *     def getWriteProperties(self,x,y):             # <<<<<<<<<<<<<<
@@ -20000,7 +20058,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_18getWriteProperties(struct _
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":102
+/* "src/cython/mel.pyx":106
  *         return writeProperties
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):             # <<<<<<<<<<<<<<
@@ -20076,7 +20134,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -20084,9 +20142,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 1); __PYX_ERR(0, 102, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 1); __PYX_ERR(0, 106, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -20094,9 +20152,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 2); __PYX_ERR(0, 102, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 2); __PYX_ERR(0, 106, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -20104,9 +20162,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 3); __PYX_ERR(0, 102, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 3); __PYX_ERR(0, 106, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -20114,9 +20172,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 4); __PYX_ERR(0, 102, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 4); __PYX_ERR(0, 106, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -20124,14 +20182,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 5); __PYX_ERR(0, 102, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, 5); __PYX_ERR(0, 106, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setConductanceProperties") < 0)) __PYX_ERR(0, 102, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setConductanceProperties") < 0)) __PYX_ERR(0, 106, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 6)) {
       goto __pyx_L5_argtuple_error;
@@ -20152,7 +20210,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 102, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("setConductanceProperties", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 106, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -20193,22 +20251,22 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_20setConductanceProperties(st
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("setConductanceProperties", 1);
 
-  /* "src/cython/mel.pyx":103
+  /* "src/cython/mel.pyx":107
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)             # <<<<<<<<<<<<<<
  * 
  *     def getConductanceProperties(self,x,y):
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_maxConductance); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_minConductance); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_avgMaxConductance); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_avgMinConductance); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
-  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_v_conductance); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
-  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_v_conductancePrev); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_maxConductance); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_minConductance); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_avgMaxConductance); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_avgMinConductance); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_v_conductance); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_v_conductancePrev); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 107, __pyx_L1_error)
   __pyx_v_self->melisoObj.setConductanceProperties(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, __pyx_t_5, __pyx_t_6);
 
-  /* "src/cython/mel.pyx":102
+  /* "src/cython/mel.pyx":106
  *         return writeProperties
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):             # <<<<<<<<<<<<<<
@@ -20228,7 +20286,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_20setConductanceProperties(st
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":105
+/* "src/cython/mel.pyx":109
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  *     def getConductanceProperties(self,x,y):             # <<<<<<<<<<<<<<
@@ -20292,7 +20350,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 109, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -20300,14 +20358,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 109, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("getConductanceProperties", 1, 2, 2, 1); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getConductanceProperties", 1, 2, 2, 1); __PYX_ERR(0, 109, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getConductanceProperties") < 0)) __PYX_ERR(0, 105, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getConductanceProperties") < 0)) __PYX_ERR(0, 109, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -20320,7 +20378,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getConductanceProperties", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 105, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getConductanceProperties", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 109, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -20364,37 +20422,37 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_22getConductanceProperties(st
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("getConductanceProperties", 1);
 
-  /* "src/cython/mel.pyx":106
+  /* "src/cython/mel.pyx":110
  * 
  *     def getConductanceProperties(self,x,y):
  *         self.melisoObj.getConductanceProperties(x,y)             # <<<<<<<<<<<<<<
  * 
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_x); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_y); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_x); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_y); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 110, __pyx_L1_error)
   __pyx_v_self->melisoObj.getConductanceProperties(__pyx_t_1, __pyx_t_2);
 
-  /* "src/cython/mel.pyx":108
+  /* "src/cython/mel.pyx":112
  *         self.melisoObj.getConductanceProperties(x,y)
  * 
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))             # <<<<<<<<<<<<<<
  *         for i in xrange(6):
  *             conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 108, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__9, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 108, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 112, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__9, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_t_6 = NULL;
@@ -20415,14 +20473,14 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_22getConductanceProperties(st
     PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_tuple__10};
     __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_2, 1+__pyx_t_2);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 108, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 112, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __pyx_v_conductanceProperties = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "src/cython/mel.pyx":109
+  /* "src/cython/mel.pyx":113
  * 
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))
  *         for i in xrange(6):             # <<<<<<<<<<<<<<
@@ -20432,23 +20490,23 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_22getConductanceProperties(st
   for (__pyx_t_7 = 0; __pyx_t_7 < 6; __pyx_t_7+=1) {
     __pyx_v_i = __pyx_t_7;
 
-    /* "src/cython/mel.pyx":110
+    /* "src/cython/mel.pyx":114
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))
  *         for i in xrange(6):
  *             conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]             # <<<<<<<<<<<<<<
  * 
  *         return conductanceProperties
  */
-    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_self->melisoObj.conductanceProperties[__pyx_v_i])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 110, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_self->melisoObj.conductanceProperties[__pyx_v_i])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 114, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_conductanceProperties, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 110, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_conductanceProperties, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 114, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (unlikely((__Pyx_SetItemInt(__pyx_t_4, 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 110, __pyx_L1_error)
+    if (unlikely((__Pyx_SetItemInt(__pyx_t_4, 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 114, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
 
-  /* "src/cython/mel.pyx":112
+  /* "src/cython/mel.pyx":116
  *             conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]
  * 
  *         return conductanceProperties             # <<<<<<<<<<<<<<
@@ -20460,7 +20518,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_22getConductanceProperties(st
   __pyx_r = __pyx_v_conductanceProperties;
   goto __pyx_L0;
 
-  /* "src/cython/mel.pyx":105
+  /* "src/cython/mel.pyx":109
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  *     def getConductanceProperties(self,x,y):             # <<<<<<<<<<<<<<
@@ -20483,7 +20541,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_22getConductanceProperties(st
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":114
+/* "src/cython/mel.pyx":118
  *         return conductanceProperties
  * 
  *     def setDeviceVariation(self,NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC):             # <<<<<<<<<<<<<<
@@ -20553,7 +20611,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 114, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 118, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -20561,9 +20619,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 114, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 118, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setDeviceVariation", 1, 4, 4, 1); __PYX_ERR(0, 114, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setDeviceVariation", 1, 4, 4, 1); __PYX_ERR(0, 118, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -20571,9 +20629,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 114, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 118, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setDeviceVariation", 1, 4, 4, 2); __PYX_ERR(0, 114, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setDeviceVariation", 1, 4, 4, 2); __PYX_ERR(0, 118, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -20581,14 +20639,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 114, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 118, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("setDeviceVariation", 1, 4, 4, 3); __PYX_ERR(0, 114, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("setDeviceVariation", 1, 4, 4, 3); __PYX_ERR(0, 118, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setDeviceVariation") < 0)) __PYX_ERR(0, 114, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "setDeviceVariation") < 0)) __PYX_ERR(0, 118, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 4)) {
       goto __pyx_L5_argtuple_error;
@@ -20605,7 +20663,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("setDeviceVariation", 1, 4, 4, __pyx_nargs); __PYX_ERR(0, 114, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("setDeviceVariation", 1, 4, 4, __pyx_nargs); __PYX_ERR(0, 118, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -20644,20 +20702,20 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_24setDeviceVariation(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("setDeviceVariation", 1);
 
-  /* "src/cython/mel.pyx":115
+  /* "src/cython/mel.pyx":119
  * 
  *     def setDeviceVariation(self,NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC):
  *         self.melisoObj.setDeviceVariation(NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC)             # <<<<<<<<<<<<<<
  * 
  *     def getDeviceVariation(self,x,y):
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_NL_LTP); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_NL_LTD); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_sigmaDtoD); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_sigmaCtoC); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_NL_LTP); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 119, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_NL_LTD); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 119, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_sigmaDtoD); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 119, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_sigmaCtoC); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 119, __pyx_L1_error)
   __pyx_v_self->melisoObj.setDeviceVariation(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4);
 
-  /* "src/cython/mel.pyx":114
+  /* "src/cython/mel.pyx":118
  *         return conductanceProperties
  * 
  *     def setDeviceVariation(self,NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC):             # <<<<<<<<<<<<<<
@@ -20677,7 +20735,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_24setDeviceVariation(struct _
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":117
+/* "src/cython/mel.pyx":121
  *         self.melisoObj.setDeviceVariation(NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC)
  * 
  *     def getDeviceVariation(self,x,y):             # <<<<<<<<<<<<<<
@@ -20741,7 +20799,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 117, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 121, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -20749,14 +20807,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 117, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 121, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("getDeviceVariation", 1, 2, 2, 1); __PYX_ERR(0, 117, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("getDeviceVariation", 1, 2, 2, 1); __PYX_ERR(0, 121, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getDeviceVariation") < 0)) __PYX_ERR(0, 117, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getDeviceVariation") < 0)) __PYX_ERR(0, 121, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -20769,7 +20827,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getDeviceVariation", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 117, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getDeviceVariation", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 121, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -20813,37 +20871,37 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_26getDeviceVariation(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("getDeviceVariation", 1);
 
-  /* "src/cython/mel.pyx":118
+  /* "src/cython/mel.pyx":122
  * 
  *     def getDeviceVariation(self,x,y):
  *         self.melisoObj.getDeviceVariation(x,y)             # <<<<<<<<<<<<<<
  * 
  *         deviceVariation = np.zeros(4,dtype=float).reshape((4,1))
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_x); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 118, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_y); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 118, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_x); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 122, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_y); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 122, __pyx_L1_error)
   __pyx_v_self->melisoObj.getDeviceVariation(__pyx_t_1, __pyx_t_2);
 
-  /* "src/cython/mel.pyx":120
+  /* "src/cython/mel.pyx":124
  *         self.melisoObj.getDeviceVariation(x,y)
  * 
  *         deviceVariation = np.zeros(4,dtype=float).reshape((4,1))             # <<<<<<<<<<<<<<
  *         for i in xrange(4):
  *             deviceVariation[i][0] = self.melisoObj.deviceVariation[i]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 120, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 120, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__11, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 120, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 124, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__11, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_t_6 = NULL;
@@ -20864,14 +20922,14 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_26getDeviceVariation(struct _
     PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_tuple__12};
     __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_2, 1+__pyx_t_2);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 120, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 124, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __pyx_v_deviceVariation = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "src/cython/mel.pyx":121
+  /* "src/cython/mel.pyx":125
  * 
  *         deviceVariation = np.zeros(4,dtype=float).reshape((4,1))
  *         for i in xrange(4):             # <<<<<<<<<<<<<<
@@ -20881,23 +20939,23 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_26getDeviceVariation(struct _
   for (__pyx_t_7 = 0; __pyx_t_7 < 4; __pyx_t_7+=1) {
     __pyx_v_i = __pyx_t_7;
 
-    /* "src/cython/mel.pyx":122
+    /* "src/cython/mel.pyx":126
  *         deviceVariation = np.zeros(4,dtype=float).reshape((4,1))
  *         for i in xrange(4):
  *             deviceVariation[i][0] = self.melisoObj.deviceVariation[i]             # <<<<<<<<<<<<<<
  * 
  *         return deviceVariation
  */
-    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_self->melisoObj.deviceVariation[__pyx_v_i])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_self->melisoObj.deviceVariation[__pyx_v_i])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 126, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_deviceVariation, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_deviceVariation, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 126, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (unlikely((__Pyx_SetItemInt(__pyx_t_4, 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 122, __pyx_L1_error)
+    if (unlikely((__Pyx_SetItemInt(__pyx_t_4, 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 126, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
 
-  /* "src/cython/mel.pyx":124
+  /* "src/cython/mel.pyx":128
  *             deviceVariation[i][0] = self.melisoObj.deviceVariation[i]
  * 
  *         return deviceVariation             # <<<<<<<<<<<<<<
@@ -20909,7 +20967,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_26getDeviceVariation(struct _
   __pyx_r = __pyx_v_deviceVariation;
   goto __pyx_L0;
 
-  /* "src/cython/mel.pyx":117
+  /* "src/cython/mel.pyx":121
  *         self.melisoObj.setDeviceVariation(NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC)
  * 
  *     def getDeviceVariation(self,x,y):             # <<<<<<<<<<<<<<
@@ -20932,7 +20990,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_26getDeviceVariation(struct _
   return __pyx_r;
 }
 
-/* "src/cython/mel.pyx":126
+/* "src/cython/mel.pyx":130
  *         return deviceVariation
  * 
  *     def getMCAStats(self,num_mca_stats):             # <<<<<<<<<<<<<<
@@ -20993,12 +21051,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 126, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 130, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getMCAStats") < 0)) __PYX_ERR(0, 126, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "getMCAStats") < 0)) __PYX_ERR(0, 130, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
@@ -21009,7 +21067,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getMCAStats", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 126, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getMCAStats", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 130, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -21054,42 +21112,42 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_28getMCAStats(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("getMCAStats", 1);
 
-  /* "src/cython/mel.pyx":127
+  /* "src/cython/mel.pyx":131
  * 
  *     def getMCAStats(self,num_mca_stats):
  *         mcaStats = np.zeros(num_mca_stats,dtype=float).reshape((num_mca_stats,1))             # <<<<<<<<<<<<<<
  *         for i in range(num_mca_stats):
  *             mcaStats[i][0] = self.meliisoObj.mcaStats[i]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_num_mca_stats);
   __Pyx_GIVEREF(__pyx_v_num_mca_stats);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_num_mca_stats)) __PYX_ERR(0, 127, __pyx_L1_error);
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 127, __pyx_L1_error)
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_num_mca_stats)) __PYX_ERR(0, 131, __pyx_L1_error);
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 127, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 127, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 131, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_INCREF(__pyx_v_num_mca_stats);
   __Pyx_GIVEREF(__pyx_v_num_mca_stats);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_v_num_mca_stats)) __PYX_ERR(0, 127, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_v_num_mca_stats)) __PYX_ERR(0, 131, __pyx_L1_error);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_1)) __PYX_ERR(0, 127, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_1)) __PYX_ERR(0, 131, __pyx_L1_error);
   __pyx_t_2 = NULL;
   __pyx_t_6 = 0;
   #if CYTHON_UNPACK_METHODS
@@ -21109,30 +21167,30 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_28getMCAStats(struct __pyx_ob
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __pyx_v_mcaStats = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "src/cython/mel.pyx":128
+  /* "src/cython/mel.pyx":132
  *     def getMCAStats(self,num_mca_stats):
  *         mcaStats = np.zeros(num_mca_stats,dtype=float).reshape((num_mca_stats,1))
  *         for i in range(num_mca_stats):             # <<<<<<<<<<<<<<
  *             mcaStats[i][0] = self.meliisoObj.mcaStats[i]
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_v_num_mca_stats); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_v_num_mca_stats); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
     __pyx_t_4 = __pyx_t_1; __Pyx_INCREF(__pyx_t_4);
     __pyx_t_7 = 0;
     __pyx_t_8 = NULL;
   } else {
-    __pyx_t_7 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __pyx_t_7 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 132, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 132, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   for (;;) {
@@ -21141,28 +21199,28 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_28getMCAStats(struct __pyx_ob
         {
           Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_4);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 128, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 132, __pyx_L1_error)
           #endif
           if (__pyx_t_7 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 128, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 132, __pyx_L1_error)
         #else
-        __pyx_t_1 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         {
           Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_4);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 128, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 132, __pyx_L1_error)
           #endif
           if (__pyx_t_7 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 128, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 132, __pyx_L1_error)
         #else
-        __pyx_t_1 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -21172,7 +21230,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_28getMCAStats(struct __pyx_ob
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 128, __pyx_L1_error)
+          else __PYX_ERR(0, 132, __pyx_L1_error)
         }
         break;
       }
@@ -21181,28 +21239,28 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_28getMCAStats(struct __pyx_ob
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "src/cython/mel.pyx":129
+    /* "src/cython/mel.pyx":133
  *         mcaStats = np.zeros(num_mca_stats,dtype=float).reshape((num_mca_stats,1))
  *         for i in range(num_mca_stats):
  *             mcaStats[i][0] = self.meliisoObj.mcaStats[i]             # <<<<<<<<<<<<<<
  * 
  *         return mcaStats
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_meliisoObj); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_meliisoObj); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_mcaStats); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_mcaStats); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 133, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_v_i); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_v_i); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_mcaStats, __pyx_v_i); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_mcaStats, __pyx_v_i); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 133, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (unlikely((__Pyx_SetItemInt(__pyx_t_5, 0, __pyx_t_1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 129, __pyx_L1_error)
+    if (unlikely((__Pyx_SetItemInt(__pyx_t_5, 0, __pyx_t_1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0))) __PYX_ERR(0, 133, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "src/cython/mel.pyx":128
+    /* "src/cython/mel.pyx":132
  *     def getMCAStats(self,num_mca_stats):
  *         mcaStats = np.zeros(num_mca_stats,dtype=float).reshape((num_mca_stats,1))
  *         for i in range(num_mca_stats):             # <<<<<<<<<<<<<<
@@ -21212,7 +21270,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_28getMCAStats(struct __pyx_ob
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "src/cython/mel.pyx":131
+  /* "src/cython/mel.pyx":135
  *             mcaStats[i][0] = self.meliisoObj.mcaStats[i]
  * 
  *         return mcaStats             # <<<<<<<<<<<<<<
@@ -21222,7 +21280,7 @@ static PyObject *__pyx_pf_5build_6meliso_8MelisoPy_28getMCAStats(struct __pyx_ob
   __pyx_r = __pyx_v_mcaStats;
   goto __pyx_L0;
 
-  /* "src/cython/mel.pyx":126
+  /* "src/cython/mel.pyx":130
  *         return deviceVariation
  * 
  *     def getMCAStats(self,num_mca_stats):             # <<<<<<<<<<<<<<
@@ -22759,6 +22817,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_sys, __pyx_k_sys, sizeof(__pyx_k_sys), 0, 0, 1, 1},
     {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
     {&__pyx_n_s_turnOnHardware, __pyx_k_turnOnHardware, sizeof(__pyx_k_turnOnHardware), 0, 0, 1, 1},
+    {&__pyx_n_s_turnOnScaling, __pyx_k_turnOnScaling, sizeof(__pyx_k_turnOnScaling), 0, 0, 1, 1},
     {&__pyx_kp_s_unable_to_allocate_array_data, __pyx_k_unable_to_allocate_array_data, sizeof(__pyx_k_unable_to_allocate_array_data), 0, 0, 1, 0},
     {&__pyx_kp_s_unable_to_allocate_shape_and_str, __pyx_k_unable_to_allocate_shape_and_str, sizeof(__pyx_k_unable_to_allocate_shape_and_str), 0, 0, 1, 0},
     {&__pyx_n_s_unpack, __pyx_k_unpack, sizeof(__pyx_k_unpack), 0, 0, 1, 1},
@@ -22780,11 +22839,11 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
   #if PY_MAJOR_VERSION >= 3
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) __PYX_ERR(0, 60, __pyx_L1_error)
   #else
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) __PYX_ERR(0, 60, __pyx_L1_error)
   #endif
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 132, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 141, __pyx_L1_error)
@@ -22840,31 +22899,31 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "src/cython/mel.pyx":84
+  /* "src/cython/mel.pyx":88
  *         self.melisoObj.getConductanceProperties(x,y)
  * 
  *         conductanceProperties = np.zeros(6,dtype=float).reshape((6,1))             # <<<<<<<<<<<<<<
  *         for i in xrange(6):
  *             conductanceProperties[i][0] = self.melisoObj.conductanceProperties[i]
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_int_6); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_int_6); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
-  __pyx_tuple__10 = PyTuple_Pack(2, __pyx_int_6, __pyx_int_1); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_tuple__10 = PyTuple_Pack(2, __pyx_int_6, __pyx_int_1); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "src/cython/mel.pyx":120
+  /* "src/cython/mel.pyx":124
  *         self.melisoObj.getDeviceVariation(x,y)
  * 
  *         deviceVariation = np.zeros(4,dtype=float).reshape((4,1))             # <<<<<<<<<<<<<<
  *         for i in xrange(4):
  *             deviceVariation[i][0] = self.melisoObj.deviceVariation[i]
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 120, __pyx_L1_error)
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
-  __pyx_tuple__12 = PyTuple_Pack(2, __pyx_int_4, __pyx_int_1); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 120, __pyx_L1_error)
+  __pyx_tuple__12 = PyTuple_Pack(2, __pyx_int_4, __pyx_int_1); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
 
@@ -22969,164 +23028,164 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__22);
   __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":51
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn)
+  /* "src/cython/mel.pyx":55
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn,ScalingOn)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
  * 
  */
-  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_initializeWeights, 51, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_initializeWeights, 55, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 55, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":54
+  /* "src/cython/mel.pyx":58
  *         self.melisoObj.initializeWeights()
  * 
  *     def setWeights(self,np_A_matrix):             # <<<<<<<<<<<<<<
  *         ctr = 0
  *         for i in xrange(self.m):
  */
-  __pyx_tuple__26 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_np_A_matrix, __pyx_n_s_ctr, __pyx_n_s_i, __pyx_n_s_j); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_tuple__26 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_np_A_matrix, __pyx_n_s_ctr, __pyx_n_s_i, __pyx_n_s_j); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__26);
   __Pyx_GIVEREF(__pyx_tuple__26);
-  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setWeights, 54, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setWeights, 58, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 58, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":63
+  /* "src/cython/mel.pyx":67
  *         self.melisoObj.setWeights(self.A_matrix)
  * 
  *     def loadInput(self,np_x):             # <<<<<<<<<<<<<<
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]
  */
-  __pyx_tuple__28 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_np_x, __pyx_n_s_j); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_tuple__28 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_np_x, __pyx_n_s_j); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
-  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_loadInput, 63, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_loadInput, 67, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(0, 67, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":68
+  /* "src/cython/mel.pyx":72
  *         self.melisoObj.loadInput(self.x)
  * 
  *     def matVec(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.matVec()
  * 
  */
-  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_matVec, 68, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_matVec, 72, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 72, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":71
+  /* "src/cython/mel.pyx":75
  *         self.melisoObj.matVec()
  * 
  *     def getResults(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  */
-  __pyx_tuple__31 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_y, __pyx_n_s_i); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_tuple__31 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_y, __pyx_n_s_i); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__31);
   __Pyx_GIVEREF(__pyx_tuple__31);
-  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getResults, 71, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getResults, 75, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 75, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":78
+  /* "src/cython/mel.pyx":82
  *         return y
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):             # <<<<<<<<<<<<<<
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  */
-  __pyx_tuple__33 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_maxConductance, __pyx_n_s_minConductance, __pyx_n_s_avgMaxConductance, __pyx_n_s_avgMinConductance, __pyx_n_s_conductance, __pyx_n_s_conductancePrev); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_tuple__33 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_maxConductance, __pyx_n_s_minConductance, __pyx_n_s_avgMaxConductance, __pyx_n_s_avgMinConductance, __pyx_n_s_conductance, __pyx_n_s_conductancePrev); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__33);
   __Pyx_GIVEREF(__pyx_tuple__33);
-  __pyx_codeobj__34 = (PyObject*)__Pyx_PyCode_New(7, 0, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__33, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setConductanceProperties, 78, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__34)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_codeobj__34 = (PyObject*)__Pyx_PyCode_New(7, 0, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__33, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setConductanceProperties, 82, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__34)) __PYX_ERR(0, 82, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":81
+  /* "src/cython/mel.pyx":85
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  *     def getConductanceProperties(self,x,y):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getConductanceProperties(x,y)
  * 
  */
-  __pyx_tuple__35 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_conductanceProperties, __pyx_n_s_i); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __pyx_tuple__35 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_conductanceProperties, __pyx_n_s_i); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__35);
   __Pyx_GIVEREF(__pyx_tuple__35);
-  __pyx_codeobj__36 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getConductanceProperties, 81, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__36)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __pyx_codeobj__36 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getConductanceProperties, 85, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__36)) __PYX_ERR(0, 85, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":90
+  /* "src/cython/mel.pyx":94
  *         return conductanceProperties
  * 
  *     def setWriteProperties(self,writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD):             # <<<<<<<<<<<<<<
  *         self.melisoObj.setWriteProperties(writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD)
  * 
  */
-  __pyx_tuple__37 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_writeVoltageLTP, __pyx_n_s_writeVoltageLTD, __pyx_n_s_writePulseWidthLTP, __pyx_n_s_writePulseWidthLTD, __pyx_n_s_maxNumLevelLTP, __pyx_n_s_maxNumLevelLTD); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_tuple__37 = PyTuple_Pack(7, __pyx_n_s_self, __pyx_n_s_writeVoltageLTP, __pyx_n_s_writeVoltageLTD, __pyx_n_s_writePulseWidthLTP, __pyx_n_s_writePulseWidthLTD, __pyx_n_s_maxNumLevelLTP, __pyx_n_s_maxNumLevelLTD); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__37);
   __Pyx_GIVEREF(__pyx_tuple__37);
-  __pyx_codeobj__38 = (PyObject*)__Pyx_PyCode_New(7, 0, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__37, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setWriteProperties, 90, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__38)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_codeobj__38 = (PyObject*)__Pyx_PyCode_New(7, 0, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__37, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setWriteProperties, 94, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__38)) __PYX_ERR(0, 94, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":93
+  /* "src/cython/mel.pyx":97
  *         self.melisoObj.setWriteProperties(writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD)
  * 
  *     def getWriteProperties(self,x,y):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getWriteProperties(x,y)
  * 
  */
-  __pyx_tuple__39 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_writeProperties, __pyx_n_s_i); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_tuple__39 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_writeProperties, __pyx_n_s_i); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(0, 97, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__39);
   __Pyx_GIVEREF(__pyx_tuple__39);
-  __pyx_codeobj__40 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__39, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getWriteProperties, 93, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__40)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_codeobj__40 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__39, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getWriteProperties, 97, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__40)) __PYX_ERR(0, 97, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":102
+  /* "src/cython/mel.pyx":106
  *         return writeProperties
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):             # <<<<<<<<<<<<<<
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  */
-  __pyx_codeobj__41 = (PyObject*)__Pyx_PyCode_New(7, 0, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__33, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setConductanceProperties, 102, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__41)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_codeobj__41 = (PyObject*)__Pyx_PyCode_New(7, 0, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__33, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setConductanceProperties, 106, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__41)) __PYX_ERR(0, 106, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":105
+  /* "src/cython/mel.pyx":109
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  *     def getConductanceProperties(self,x,y):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getConductanceProperties(x,y)
  * 
  */
-  __pyx_codeobj__42 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getConductanceProperties, 105, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__42)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_codeobj__42 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getConductanceProperties, 109, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__42)) __PYX_ERR(0, 109, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":114
+  /* "src/cython/mel.pyx":118
  *         return conductanceProperties
  * 
  *     def setDeviceVariation(self,NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC):             # <<<<<<<<<<<<<<
  *         self.melisoObj.setDeviceVariation(NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC)
  * 
  */
-  __pyx_tuple__43 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_NL_LTP, __pyx_n_s_NL_LTD, __pyx_n_s_sigmaDtoD, __pyx_n_s_sigmaCtoC); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_tuple__43 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_NL_LTP, __pyx_n_s_NL_LTD, __pyx_n_s_sigmaDtoD, __pyx_n_s_sigmaCtoC); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__43);
   __Pyx_GIVEREF(__pyx_tuple__43);
-  __pyx_codeobj__44 = (PyObject*)__Pyx_PyCode_New(5, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__43, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setDeviceVariation, 114, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__44)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_codeobj__44 = (PyObject*)__Pyx_PyCode_New(5, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__43, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_setDeviceVariation, 118, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__44)) __PYX_ERR(0, 118, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":117
+  /* "src/cython/mel.pyx":121
  *         self.melisoObj.setDeviceVariation(NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC)
  * 
  *     def getDeviceVariation(self,x,y):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getDeviceVariation(x,y)
  * 
  */
-  __pyx_tuple__45 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_deviceVariation, __pyx_n_s_i); if (unlikely(!__pyx_tuple__45)) __PYX_ERR(0, 117, __pyx_L1_error)
+  __pyx_tuple__45 = PyTuple_Pack(5, __pyx_n_s_self, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_deviceVariation, __pyx_n_s_i); if (unlikely(!__pyx_tuple__45)) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__45);
   __Pyx_GIVEREF(__pyx_tuple__45);
-  __pyx_codeobj__46 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__45, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getDeviceVariation, 117, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__46)) __PYX_ERR(0, 117, __pyx_L1_error)
+  __pyx_codeobj__46 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__45, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getDeviceVariation, 121, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__46)) __PYX_ERR(0, 121, __pyx_L1_error)
 
-  /* "src/cython/mel.pyx":126
+  /* "src/cython/mel.pyx":130
  *         return deviceVariation
  * 
  *     def getMCAStats(self,num_mca_stats):             # <<<<<<<<<<<<<<
  *         mcaStats = np.zeros(num_mca_stats,dtype=float).reshape((num_mca_stats,1))
  *         for i in range(num_mca_stats):
  */
-  __pyx_tuple__47 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_num_mca_stats, __pyx_n_s_mcaStats, __pyx_n_s_i); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __pyx_tuple__47 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_num_mca_stats, __pyx_n_s_mcaStats, __pyx_n_s_i); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(0, 130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__47);
   __Pyx_GIVEREF(__pyx_tuple__47);
-  __pyx_codeobj__48 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getMCAStats, 126, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__48)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __pyx_codeobj__48 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_cython_mel_pyx, __pyx_n_s_getMCAStats, 130, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__48)) __PYX_ERR(0, 130, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
@@ -24232,185 +24291,185 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_7) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "src/cython/mel.pyx":51
- *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn)
+  /* "src/cython/mel.pyx":55
+ *         self.melisoObj = Meliso(self.device_type,self.m,self.n,MAX_TOL,TOL,HardwareOn,ScalingOn)
  * 
  *     def initializeWeights(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.initializeWeights()
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_3initializeWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_initializeWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_3initializeWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_initializeWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_initializeWeights, __pyx_t_7) < 0) __PYX_ERR(0, 51, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_initializeWeights, __pyx_t_7) < 0) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":54
+  /* "src/cython/mel.pyx":58
  *         self.melisoObj.initializeWeights()
  * 
  *     def setWeights(self,np_A_matrix):             # <<<<<<<<<<<<<<
  *         ctr = 0
  *         for i in xrange(self.m):
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_5setWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_5setWeights, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setWeights, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setWeights, __pyx_t_7) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setWeights, __pyx_t_7) < 0) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":63
+  /* "src/cython/mel.pyx":67
  *         self.melisoObj.setWeights(self.A_matrix)
  * 
  *     def loadInput(self,np_x):             # <<<<<<<<<<<<<<
  *         for j in xrange(self.n):
  *             self.x[j] = np_x[j]
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_7loadInput, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_loadInput, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_7loadInput, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_loadInput, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_loadInput, __pyx_t_7) < 0) __PYX_ERR(0, 63, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_loadInput, __pyx_t_7) < 0) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":68
+  /* "src/cython/mel.pyx":72
  *         self.melisoObj.loadInput(self.x)
  * 
  *     def matVec(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.matVec()
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_9matVec, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_matVec, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__30)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_9matVec, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_matVec, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__30)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_matVec, __pyx_t_7) < 0) __PYX_ERR(0, 68, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_matVec, __pyx_t_7) < 0) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":71
+  /* "src/cython/mel.pyx":75
  *         self.melisoObj.matVec()
  * 
  *     def getResults(self):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getResults()
  *         y = np.zeros(self.m,dtype=float).reshape((self.m,1))
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_11getResults, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getResults, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__32)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_11getResults, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getResults, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__32)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getResults, __pyx_t_7) < 0) __PYX_ERR(0, 71, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getResults, __pyx_t_7) < 0) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":78
+  /* "src/cython/mel.pyx":82
  *         return y
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):             # <<<<<<<<<<<<<<
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_13setConductanceProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setConductancePropertie, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__34)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_13setConductanceProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setConductancePropertie, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__34)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setConductanceProperties, __pyx_t_7) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setConductanceProperties, __pyx_t_7) < 0) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":81
+  /* "src/cython/mel.pyx":85
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  *     def getConductanceProperties(self,x,y):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getConductanceProperties(x,y)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_15getConductanceProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getConductancePropertie, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__36)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_15getConductanceProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getConductancePropertie, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__36)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getConductanceProperties, __pyx_t_7) < 0) __PYX_ERR(0, 81, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getConductanceProperties, __pyx_t_7) < 0) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":90
+  /* "src/cython/mel.pyx":94
  *         return conductanceProperties
  * 
  *     def setWriteProperties(self,writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD):             # <<<<<<<<<<<<<<
  *         self.melisoObj.setWriteProperties(writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_17setWriteProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setWriteProperties, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__38)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_17setWriteProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setWriteProperties, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__38)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setWriteProperties, __pyx_t_7) < 0) __PYX_ERR(0, 90, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setWriteProperties, __pyx_t_7) < 0) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":93
+  /* "src/cython/mel.pyx":97
  *         self.melisoObj.setWriteProperties(writeVoltageLTP,writeVoltageLTD,writePulseWidthLTP,writePulseWidthLTD,maxNumLevelLTP,maxNumLevelLTD)
  * 
  *     def getWriteProperties(self,x,y):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getWriteProperties(x,y)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_19getWriteProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getWriteProperties, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__40)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_19getWriteProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getWriteProperties, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__40)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 97, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getWriteProperties, __pyx_t_7) < 0) __PYX_ERR(0, 93, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getWriteProperties, __pyx_t_7) < 0) __PYX_ERR(0, 97, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":102
+  /* "src/cython/mel.pyx":106
  *         return writeProperties
  * 
  *     def setConductanceProperties(self,maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev):             # <<<<<<<<<<<<<<
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_21setConductanceProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setConductancePropertie, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__41)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_21setConductanceProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setConductancePropertie, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__41)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setConductanceProperties, __pyx_t_7) < 0) __PYX_ERR(0, 102, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setConductanceProperties, __pyx_t_7) < 0) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":105
+  /* "src/cython/mel.pyx":109
  *         self.melisoObj.setConductanceProperties(maxConductance,minConductance,avgMaxConductance,avgMinConductance,conductance,conductancePrev)
  * 
  *     def getConductanceProperties(self,x,y):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getConductanceProperties(x,y)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_23getConductanceProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getConductancePropertie, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__42)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_23getConductanceProperties, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getConductancePropertie, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__42)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getConductanceProperties, __pyx_t_7) < 0) __PYX_ERR(0, 105, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getConductanceProperties, __pyx_t_7) < 0) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":114
+  /* "src/cython/mel.pyx":118
  *         return conductanceProperties
  * 
  *     def setDeviceVariation(self,NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC):             # <<<<<<<<<<<<<<
  *         self.melisoObj.setDeviceVariation(NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_25setDeviceVariation, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setDeviceVariation, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__44)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_25setDeviceVariation, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_setDeviceVariation, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__44)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setDeviceVariation, __pyx_t_7) < 0) __PYX_ERR(0, 114, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_setDeviceVariation, __pyx_t_7) < 0) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":117
+  /* "src/cython/mel.pyx":121
  *         self.melisoObj.setDeviceVariation(NL_LTP, NL_LTD,sigmaDtoD,sigmaCtoC)
  * 
  *     def getDeviceVariation(self,x,y):             # <<<<<<<<<<<<<<
  *         self.melisoObj.getDeviceVariation(x,y)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_27getDeviceVariation, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getDeviceVariation, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__46)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 117, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_27getDeviceVariation, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getDeviceVariation, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__46)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getDeviceVariation, __pyx_t_7) < 0) __PYX_ERR(0, 117, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getDeviceVariation, __pyx_t_7) < 0) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 
-  /* "src/cython/mel.pyx":126
+  /* "src/cython/mel.pyx":130
  *         return deviceVariation
  * 
  *     def getMCAStats(self,num_mca_stats):             # <<<<<<<<<<<<<<
  *         mcaStats = np.zeros(num_mca_stats,dtype=float).reshape((num_mca_stats,1))
  *         for i in range(num_mca_stats):
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_29getMCAStats, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getMCAStats, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__48)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5build_6meliso_8MelisoPy_29getMCAStats, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_MelisoPy_getMCAStats, NULL, __pyx_n_s_build_meliso, __pyx_d, ((PyObject *)__pyx_codeobj__48)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getMCAStats, __pyx_t_7) < 0) __PYX_ERR(0, 126, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict((PyObject *)__pyx_ptype_5build_6meliso_MelisoPy, __pyx_n_s_getMCAStats, __pyx_t_7) < 0) __PYX_ERR(0, 130, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   PyType_Modified(__pyx_ptype_5build_6meliso_MelisoPy);
 

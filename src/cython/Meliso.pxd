@@ -12,7 +12,7 @@ cdef extern from "Meliso.h" namespace "meliso":
     cdef cppclass Meliso:
         int device_type
         Meliso() except +
-        Meliso(int,int,int,double,double,int) except +
+        Meliso(int,int,int,double,double,int,int) except +
 
         double totalSubArrayArea, totalNeuronAreaIH,heightNeuronIH, widthNeuronIH, leakageNeuronIH;
 

@@ -129,20 +129,20 @@ void ReadTestingDataFromFile(const char *testPatchFileName, const char *testLabe
 
 	int i = 0;
 	int j = 0;
-	while (fscanf(fp_patch, "%lf", &testInput[i][j]) != EOF){
-		testInput[i][j] = truncate(testInput[i][j], param->numInputLevel - 1, param->BWthreshold);
-		dTestInput[i][j] = round(testInput[i][j] * (param->numInputLevel - 1));
-		i += 1;
-		if (i%param->numMnistTestImages == 0){
-			j += 1;
-			i = 0;
-		}
-	}
+//	while (fscanf(fp_patch, "%lf", &testInput[i][j]) != EOF){
+//		//testInput[i][j] = truncate(testInput[i][j], param->numInputLevel - 1, param->BWthreshold);
+//		//dTestInput[i][j] = round(testInput[i][j] * (param->numInputLevel - 1));
+//		i += 1;
+//		if (i%param->numMnistTestImages == 0){
+//			j += 1;
+//			i = 0;
+//		}
+//	}
 	i = 0;
 	j = 0;
 	int k = 0;
 	while (fscanf(fp_label, "%d", &k) != EOF){
-		testOutput[i][k] = 1;
+		//testOutput[i][k] = 1;
 		i += 1;
 	}
 
@@ -167,20 +167,5 @@ void PrintWeightToFile(const char *str) {
 		fprintf(fp_dw1, "\n");
 	}
 	fclose(fp_dw1);
-	/* Print weight2 */
-	char printWeight2FileName[50];
-	sprintf(printWeight2FileName, "%s2.csv", str);
-	FILE *fp_dw2 = fopen(printWeight2FileName, "w");
-	fprintf(fp_dw2, "minWeight=%f, maxWeight=%f\n", param->minWeight, param->maxWeight);
-	for (int j = 0; j < param->nOutput; j++){
-		for (int k = 0; k < param->nHide; k++){
-      //for (int m=0;m<param->numWeightBit;m++){
-			fprintf(fp_dw2, "%f,", weight2[j][k]);
-			//  fprintf(fp_dw1, "%.4e,", static_cast<DigitalNVM*>(arrayHO->cell[j+m][k])->conductance);
-		  //}
-    }
-		fprintf(fp_dw2, "\n");
-	}
-	fclose(fp_dw2);
 }
 
