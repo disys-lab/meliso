@@ -1,61 +1,85 @@
-import meliso
 import numpy as np
 from scipy.io import mmread
+import meliso
 
-'''
-initialize memristor: the first argument is the device type
-0: IdealDevice
-1: RealDevice
-2: MeasuredDevice
-3: SRAM
-4: DigitalNVM
-5: HybridCell
-6: _2T1F
-For more information read src/cython/Meliso.cpp
+"""
+MelisoPy: Initializes a memristor device with a specified type and dimensions for the weight matrix.
 
-Second and third arguments are rows and columns of weight matrix
-'''
+Parameters:
+    device_type (int): Specifies the type of memristor device to be initialized. The options are:
+        0: IdealDevice - A perfect memristor with ideal behavior.
+        1: RealDevice - A realistic memristor with practical imperfections.
+        2: MeasuredDevice - A memristor that uses measured data for simulation.
+        3: SRAM - Static Random Access Memory type memristor.
+        4: DigitalNVM - Digital Non-Volatile Memory memristor.
+        5: HybridCell - A hybrid type memristor cell.
+        6: _2T1F - A dual transistor, single ferroelectric memristor.
+    rows (int): The number of rows in the weight matrix.
+    columns (int): The number of columns in the weight matrix.
+    MAX_TOL (float)
+    MIN_TOL (float)
+    TURN_ON_HARDWARE (int)
+    TURN_ON_SCALING (int)
+
+Returns:
+    memristor (objet)
+
+Notes:
+    For more detailed information about each device type, refer to the implementation in src/cython/Meliso.cpp.
+"""
+
+# Constants
 NRUNS = 1000
 MAX_TOL = 1.0
 MIN_TOL = 0.5
-dim = 32
+DIM = 32
+RANDOM_SEED = 28
+RESULTS_PATH = "./results/"
+MATRIX_PATH = ""
 
-turnOnHardware = 1
-turnOnScaling = 1
-meliso_obj = meliso.MelisoPy(1,dim,dim,MAX_TOL,MIN_TOL,turnOnHardware,turnOnScaling)
+# Memristor initialization parameters
+DEVICE_TYPE = 1  # RealDevice
+TURN_ON_HARDWARE = 1
+TURN_ON_SCALING = 1
 
-RMSE = []
+# Initialize memristor object
+memristor = meliso.MelisoPy(DEVICE_TYPE, DIM, DIM, MAX_TOL, MIN_TOL, TURN_ON_HARDWARE, TURN_ON_SCALING)
+
+# Matrix and vector initialization
+np.random.seed(RANDOM_SEED)
+if not MATRIX_PATH:
+    scaled_A = np.random.randn(DIM, DIM)
+else:
+    scaled_A = mmread(MATRIX_PATH)
+    scaled_A = scaled_A.toarray()
+    if scaled_A.shape != (DIM,DIM):
+        DIM = scaled_A.shape[0]
+        memristor = meliso.MelisoPy(DEVICE_TYPE, DIM, DIM, MAX_TOL, MIN_TOL, 
+                                    TURN_ON_HARDWARE, TURN_ON_SCALING)
+x = np.random.randn(DIM, 1)
+
+# N-runs experiment:
+RMSE = []; ERRORS = []
 for run in range(NRUNS):
-    # Create a standard normal matrix
-    scaled_A = np.random.randn(dim, dim)
-    print(f"Test Matrix: {scaled_A}")
+    memristor.initializeWeights()
+    memristor.setWeights(scaled_A)
+    memristor.loadInput(x)
+    memristor.matVec()
+    y_mca = memristor.getResults().reshape((1, DIM))
 
-    # Initialize weights on the memristor device
-    meliso_obj.initializeWeights()
+    y = np.dot(scaled_A, x).reshape((1, DIM))
+    error = y - y_mca
+    rmse = np.sqrt(np.mean(np.square(error)))
 
-    # Set weights on the memristor
-    meliso_obj.setWeights(scaled_A)
+    RMSE.append(rmse)
+    ERRORS.append(error.flatten())
 
-    j = 0
-    while j<1:
-        x = np.random.randn(dim, 1)
-
-        # Matrix Multiplication (Ax = y) on MCA:
-        meliso_obj.loadInput(x)
-        meliso_obj.matVec()
-        y_MCA = meliso_obj.getResults()
-        print(f"y_MCA: {y_MCA.reshape((1,dim))}")
+    print(f"Run: {run + 1}")
+    print(f"Error vector: {error}")
+    print(f"RMSE = {rmse}")
+    print("#" * 20)
 
 
-        # Matrix Multiplication (Ax = y) on Ground Truth:
-        y = np.dot(scaled_A,x)
-        print(f"y: {y.reshape((1,dim))}")
-
-        # Difference between MCA's and Ground Truth's result:
-        rmse = np.sqrt(np.square(np.subtract(y,y_MCA)).mean())
-        print(f"Iteration{run+1}: RMSE = {rmse}\n")
-
-        RMSE.append(rmse)
-        j +=1
-
-RMSE = np.array([RMSE]); RMSE = RMSE.reshape((NRUNS,1)); np.savetxt("./results/RMSE.txt", RMSE)
+# Save results to files
+np.savetxt(f"{RESULTS_PATH}RMSE.txt", RMSE)
+np.savetxt(f"{RESULTS_PATH}ERRORS.txt", np.hstack(ERRORS))

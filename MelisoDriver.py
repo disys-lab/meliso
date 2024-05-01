@@ -1,63 +1,69 @@
-import meliso
 import numpy as np
 from scipy.io import mmread
+from scipy.sparse import csr_matrix
+import meliso
 
-'''
-initialize memristor: the first argument is the device type
-0: IdealDevice
-1: RealDevice
-2: MeasuredDevice
-3: SRAM
-4: DigitalNVM
-5: HybridCell
-6: _2T1F
-For more information read src/cython/Meliso.cpp
+"""
+MelisoPy: Initializes a memristor device with a specified type and dimensions for the weight matrix.
 
-Second and third arguments are rows and columns of weight matrix
-'''
+Parameters:
+    device_type (int): Specifies the type of memristor device to be initialized. The options are:
+        0: IdealDevice - A perfect memristor with ideal behavior.
+        1: RealDevice - A realistic memristor with practical imperfections.
+        2: MeasuredDevice - A memristor that uses measured data for simulation.
+        3: SRAM - Static Random Access Memory type memristor.
+        4: DigitalNVM - Digital Non-Volatile Memory memristor.
+        5: HybridCell - A hybrid type memristor cell.
+        6: _2T1F - A dual transistor, single ferroelectric memristor.
+    rows (int): The number of rows in the weight matrix.
+    columns (int): The number of columns in the weight matrix.
+    MAX_TOL (float)
+    MIN_TOL (float)
+    TURN_ON_HARDWARE (int)
+    TURN_ON_SCALING (int)
 
+Returns:
+    memristor (objet)
+
+Notes:
+    For more detailed information about each device type, refer to the implementation in src/cython/Meliso.cpp.
+"""
+
+# Constants
+DEVICE_TYPE = 1
+DIM = 66
 MAX_TOL = 1.0
 MIN_TOL = 1e-6
-dim=66
-turnOnHardware = 1
-turnOnScaling = 1
-meliso_obj = meliso.MelisoPy(1,dim,dim,MAX_TOL,MIN_TOL,turnOnHardware,turnOnScaling)
+TURN_ON_HARDWARE = 1
+TURN_ON_SCALING = 1
+RANDOM_SEED = 28
+MATRIX_PATH = 'matrices/bcsstk02.mtx'
 
-#obtain an A matrix with values between 0,1
-#I have observed that having matrix between 0,1 gives the best results
+# Initialize Meliso object
+memristor = meliso.MelisoPy(DEVICE_TYPE, DIM, DIM, MAX_TOL, MIN_TOL, TURN_ON_HARDWARE, TURN_ON_SCALING)
 
-#scaled_A = np.loadtxt(fname='matrices/3232_random.mtx',delimiter=',')
-#scaled_A = mmread('matrices/3232_random.mtx')
-scaled_A = mmread('matrices/bcsstk02.mtx')
-
-if not isinstance(scaled_A, np.ndarray):
+# Matrix and vector initialization
+np.random.seed(RANDOM_SEED)
+if not MATRIX_PATH:
+    scaled_A = np.random.randn(DIM, DIM)
+else:
+    scaled_A = mmread(MATRIX_PATH)
     scaled_A = scaled_A.toarray()
+    if scaled_A.shape != (DIM,DIM):
+        DIM = scaled_A.shape[0]
+        memristor = meliso.MelisoPy(DEVICE_TYPE, DIM, DIM, MAX_TOL, MIN_TOL, 
+                                    TURN_ON_HARDWARE, TURN_ON_SCALING)
+x = np.random.randn(DIM, 1)
 
-    scaled_A -= scaled_A.min()
-    scaled_A /= scaled_A.ptp()
+# Initialize weights on the memristor device
+memristor.initializeWeights()
+memristor.setWeights(scaled_A)
 
-x_raw = np.loadtxt(fname='input_x',delimiter=',')
-x = x_raw.reshape(x_raw.shape[0],1)[:dim]
-#scaled_A = np.random.randint(0,10000,size=(32,32))/10000.0
-
-
-
-#initialize weights to 0 on the memristor device
-meliso_obj.initializeWeights()
-
-#set weights on the memristor
-meliso_obj.setWeights(scaled_A)
-j=0
-while j<2:
-    #consider the actual input vector and get hardware matvec results
-    #x = np.ones((32,1))
-    #x = np.random.rand(32,1)
-    meliso_obj.loadInput(x)
-    meliso_obj.matVec()
-    y_rescaled_mem_result = meliso_obj.getResults()
-
-    real_Ax = np.dot(scaled_A,x)
-    print("y_rescaled:",y_rescaled_mem_result.reshape((1,dim)))
-    print("real_Ax:",real_Ax.reshape((1,dim)))
-    print(y_rescaled_mem_result.reshape((1,dim))-real_Ax.reshape((1,dim)))
-    j = j+1
+# Single-run experiment
+memristor.loadInput(x)
+memristor.matVec()
+y_mca = memristor.getResults().reshape((1, DIM))
+y = np.dot(scaled_A, x).reshape((1, DIM))
+print("y_MCA:", y_mca)
+print("y:", y)
+print("Error:", y_mca - y)
