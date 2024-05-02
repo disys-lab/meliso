@@ -15,15 +15,41 @@ class Root:
         self.y_benchmark_result = None
         self.error = None
         self.comm = comm
-        # if mat is None:
-        #     set_mat = True
-        # else:
-        #     set_mat = False
-        self.mca = RootMCA(self.comm,mat=mat,set_mat=False)
+        self.virtualizationOn = True
+        self.mca = RootMCA(self.comm) #,mat=mat,set_mat=False)
 
-        self.maxVRows = 1
-        self.maxVCols = 1
+        self.origMatRows = None
+        self.origMatCols = None
 
+        self.cellRows = None
+        self.cellCols = None
+
+        self.mcaRows = None
+        self.mcaCols = None
+
+        self.origMat = None
+
+        self.mcaGridRowCap = None
+        self.mcaGridColCap = None
+
+        self.maxVRows = None #math.ceil(float(self.origMatRows) / self.mcaGridRowCap)
+        self.maxVCols = None #math.ceil(float(self.origMatCols) / self.mcaGridColCap)
+
+        # can implement a variety of x vector initializations here.
+        self.x = None  #
+        self.x_min = None
+        self.x_max = None
+
+        self.virtualizer = {}
+
+        self.maxVRows = None
+        self.maxVCols = None
+
+        self.initializeMat(mat)
+        self.initializeX(x)
+
+    def initializeMat(self,mat):
+        self.mca.initializeMatrix(mat)
         self.origMatRows = self.mca.origMatRows
         self.origMatCols = self.mca.origMatCols
 
@@ -41,12 +67,7 @@ class Root:
         self.maxVRows = math.ceil(float(self.origMatRows) / self.mcaGridRowCap)
         self.maxVCols = math.ceil(float(self.origMatCols) / self.mcaGridColCap)
 
-        # can implement a variety of x vector initializations here.
-        self.x = x.reshape(x.shape[0], 1)[:self.origMatCols]
-
         self.virtualizer = {}
-
-        self.virtualizationOn = True
 
         if self.virtualizationOn:
             self.initializeVirtualizer()
@@ -74,9 +95,20 @@ class Root:
                 self.virtualizer[i,j] = {}
                 self.virtualizer[i,j]["rc_limits"] = [[start_vRow,end_vRow],[start_vCol,end_vCol]]
                 self.virtualizer[i,j]["mat"] = self.origMat[start_vRow:end_vRow,start_vCol:end_vCol]
-                self.virtualizer[i,j]["x"] =  np.copy(self.x.reshape(self.x.shape[0],1)[start_vCol:end_vCol])
+
+                if self.x is not None:
+                    self.virtualizer[i,j]["x"] =  np.copy(self.x.reshape(self.x.shape[0],1)[start_vCol:end_vCol])
 
             self.virtualizer[i]["y"] = np.zeros(end_vRow-start_vRow,dtype=np.float64)
+
+    def initializeX(self,x):
+        self.x = x.reshape(x.shape[0], 1)[:self.origMatCols]
+        self.x,self.x_min,self.x_max = self.mca.scaleMatrix(self.x)
+        for i in range(self.maxVRows):
+            for j in range(self.maxVCols):
+                sc = self.virtualizer[i, j]["rc_limits"][1][0]
+                ec = self.virtualizer[i, j]["rc_limits"][1][1]
+                self.virtualizer[i, j]["x"] = np.copy(self.x.reshape(self.x.shape[0], 1)[sc:ec])
 
     def virtualParallelMatVec(self,i,j):
         #set the matrix

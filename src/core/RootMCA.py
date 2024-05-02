@@ -4,7 +4,7 @@ import numpy as np
 import os,sys
 
 class RootMCA(BaseMCA):
-    def __init__(self,comm,mat=None,set_mat=False):
+    def __init__(self,comm):
         super().__init__(comm)
 
         self.col_parts = {}
@@ -26,8 +26,20 @@ class RootMCA(BaseMCA):
         self.mat = None
         self.x = None
 
+        self.mat_min = None
+        self.mat_max = None
+
+        self.x_max = None
+        self.x_min = None
+
         self.allMCAStats = np.zeros((self.size,self.num_mca_stats,1),dtype=float)
 
+        #self.initializeMatrix(mat)
+
+        # if set_mat:
+        #     self.setMat(self.mat)
+
+    def initializeMatrix(self,mat):
         if mat is None:
             self.matrix_file = None
 
@@ -38,16 +50,14 @@ class RootMCA(BaseMCA):
             self.processMatrixFile()
 
         else:
+            self.mat = mat
             # capture original rows and cols
             self.origMatRows = mat.shape[0]
             self.origMatCols = mat.shape[1]
             self.matRows = mat.shape[0]
             self.matCols = mat.shape[1]
-            self.mat = self.scaleMatrix(mat)
 
-
-        if set_mat:
-            self.setMat(self.mat)
+        self.mat, self.mat_min, self.mat_max = self.scaleMatrix(self.mat)
 
     def processMatrixFile(self):
         #read the matrix from file
@@ -70,7 +80,7 @@ class RootMCA(BaseMCA):
         self.origMatCols = mat.shape[1]
         self.matRows = mat.shape[0]
         self.matCols = mat.shape[1]
-        self.mat = self.scaleMatrix(mat)
+        self.mat = mat
 
     def setMat(self,mat):
 
@@ -121,7 +131,7 @@ class RootMCA(BaseMCA):
             raise Exception("The Padded X vector rows {} exceed Padded Matrix Columns {}".format(
                 x.shape[0], self.matCols))
 
-        self.x = x
+        self.x = x #,self.x_min,self.x_max = self.scaleMatrix(x)
 
     def createDecompositionDir(self):
         decomp_folder_name = self.getDecompositionDir()
@@ -129,9 +139,12 @@ class RootMCA(BaseMCA):
             os.makedirs(decomp_folder_name, exist_ok=True)
 
     def scaleMatrix(self,mat):
-        mat -= mat.min()
-        mat /= mat.ptp()
-        return mat
+        #mat = np.copy(matrix)
+        mat_min = mat.min()
+        mat -= mat_min
+        mat_max = mat.ptp()
+        mat /= mat_max
+        return mat,mat_min,mat_max
 
     def padMatrix(self,mat):
         rows = self.origMatRows = mat.shape[0]
