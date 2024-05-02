@@ -1,0 +1,141 @@
+import numpy as np
+import math
+import os,sys
+if "MELISO_SRC_PATH" in os.environ.keys():
+    if not os.isdir(os.environ["MELISO_SRC_PATH"]):
+        raise Exception("Env Var {} MELISO_SRC_PATH is invalid!".format(os.environ["MELISO_SRC_PATH"]))
+    sys.path.append(os.environ["MELISO_SRC_PATH"])
+else:
+    sys.path.append("../../")
+from src.core.RootMCA import RootMCA
+
+class Root:
+    def __init__(self,comm,set_mat=True):
+        self.y_mem_result = None
+        self.y_benchmark_result = None
+        self.error = None
+        self.comm = comm
+        self.mca = RootMCA(self.comm,set_mat=set_mat)
+
+        self.maxVRows = 1
+        self.maxVCols = 1
+
+        self.origMatRows = self.mca.origMatRows
+        self.origMatCols = self.mca.origMatCols
+
+        self.cellRows = self.mca.cellRows
+        self.cellCols = self.mca.cellCols
+
+        self.mcaRows = self.mca.mcaRows
+        self.mcaCols = self.mca.mcaCols
+
+        self.origMat = self.mca.mat
+
+        self.mcaGridRowCap = self.mcaRows * self.cellRows
+        self.mcaGridColCap = self.mcaCols * self.cellCols
+
+        self.maxVRows = math.ceil(float(self.origMatRows) / self.mcaGridRowCap)
+        self.maxVCols = math.ceil(float(self.origMatCols) / self.mcaGridColCap)
+
+        # can implement a variety of x vector initializations here.
+        xpath = "input_x"
+        x = np.loadtxt(fname=xpath, delimiter=',')
+
+        self.x = x.reshape(x.shape[0], 1)[:self.origMatCols]
+
+        self.virtualizer = {}
+
+        self.virtualizationOn = True
+
+        if self.virtualizationOn:
+            self.initializeVirtualizer()
+
+
+    def initializeVirtualizer(self):
+        # do all matrix chunking and preprocessing here
+        for i in range(self.maxVRows):
+            self.virtualizer[i] = {}
+            start_vRow = self.mcaGridRowCap*i
+            vRows = self.mcaGridRowCap
+            if self.origMatRows - self.mcaGridRowCap*i < vRows:
+                vRows = self.origMatRows - self.mcaGridRowCap*(i)
+
+            end_vRow = start_vRow + vRows
+
+            for j in range(self.maxVCols):
+                start_vCol = self.mcaGridColCap*j
+                vCols = self.mcaGridColCap
+                if self.origMatCols - self.mcaGridColCap * j < vCols:
+                    vCols = self.origMatCols - self.mcaGridColCap *j
+
+                end_vCol = start_vCol + vCols
+
+                self.virtualizer[i,j] = {}
+                self.virtualizer[i,j]["rc_limits"] = [[start_vRow,end_vRow],[start_vCol,end_vCol]]
+                self.virtualizer[i,j]["mat"] = self.origMat[start_vRow:end_vRow,start_vCol:end_vCol]
+                self.virtualizer[i,j]["x"] =  np.copy(self.x.reshape(self.x.shape[0],1)[start_vCol:end_vCol])
+
+            self.virtualizer[i]["y"] = np.zeros(end_vRow-start_vRow,dtype=np.float64)
+
+    def virtualParallelMatVec(self,i,j):
+        #set the matrix
+        data = np.array([i,j], dtype=np.float64)
+        self.comm.Bcast(data, root=self.mca.ROOT_PROCESS_RANK)
+        #print("ROOT: broadcasted {} {}".format(i, j))
+
+        self.mca.setMat(self.virtualizer[i,j]["mat"])
+
+        self.mca.setX(self.virtualizer[i,j]["x"])
+
+        y = self.mca.parallelMatVec()
+
+        #print("ROOT: after parallelMatvec {} {}".format(i, j))
+
+        self.virtualizer[i]["y"] = self.virtualizer[i]["y"] + y
+
+    def parallelMatVec(self,type="mca"):
+        if self.virtualizationOn:
+            print(self.maxVRows,self.maxVCols)
+            y = np.zeros(self.origMatRows, dtype=np.float64)
+            for i in range(self.maxVRows):
+                for j in range(self.maxVCols):
+                    #print("ROOT: begin virtualParallelMatVec {},{}".format(i,j))
+                    self.virtualParallelMatVec(i,j)
+
+                sr = self.virtualizer[i,0]["rc_limits"][0][0]
+                er = self.virtualizer[i,0]["rc_limits"][0][1]
+                y[sr:er] = self.virtualizer[i]["y"]
+                self.virtualizer[i]["y"] = np.zeros(er - sr, dtype=np.float64)
+            self.y = y
+        else:
+            self.mca.setX(self.x)
+            self.y = self.mca.parallelMatVec()
+
+        if type == "benchmark":
+            self.y_benchmark_result = np.copy(self.y)
+            print(self.y_benchmark_result)
+        else:
+            self.y_mem_result = np.copy(self.y)
+            print(self.y_mem_result)
+
+    def benchmarkMatVec(self):
+        y = np.dot(self.mca.mat, self.mca.x)
+        self.y_benchmark_result = y[:self.mca.origMatRows]
+        self.error = self.y_mem_result - self.y_benchmark_result
+        print("error", self.error)
+
+    def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0):
+
+        self.parallelMatVec(type="benchmark")
+
+        self.error = self.y_mem_result - self.y_benchmark_result
+        print("error", self.error)
+
+    def acquireMCAStats(self):
+        self.mca.getMCAStats()
+        print("AllMCAStats\n")
+        print(self.mca.allMCAStats)
+
+    def finalize(self):
+        data = np.array([-1, -1], dtype=np.float64)
+        self.comm.Bcast(data, root=self.mca.ROOT_PROCESS_RANK)

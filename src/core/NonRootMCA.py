@@ -4,7 +4,7 @@ import os,sys,yaml
 import meliso
 
 class NonRootMCA(BaseMCA):
-    def __init__(self,comm,HW=-1,SC=-1):
+    def __init__(self,comm,HW=-1,SC=-1,set_mat=True):
         super().__init__(comm)
 
         # acquire from root process
@@ -53,6 +53,8 @@ class NonRootMCA(BaseMCA):
 
         self.meliso_obj = meliso.MelisoPy(self.device_type, self.cellRows, self.cellCols, self.MAX_TOL, self.MIN_TOL, self.turnOnHardware,self.turnOnScaling)
 
+
+
         if "device_config" not in self.exp_config.keys():
             raise Exception("ExperimentConfigFileError: Device config not specified in %s for MCA rank %s".format(expConfigFile,self.rank))
 
@@ -60,26 +62,34 @@ class NonRootMCA(BaseMCA):
             self.setConductanceProperties()
             self.setWriteProperties()
             self.setDeviceVariation()
+
         else:
             print("Device type ={}, ignoring device parameters".format(self.device_type))
 
-        self.comm.Barrier()
-
-        self.setMat()
+        if set_mat:
+            self.setMat()
 
     def setMat(self):
+        if not self.useMPI4MatDist:
+            self.comm.Barrier()
         self.acquireLocalA()
         self.initializeMCA()
 
     def acquireLocalA(self):
-        decomp_folder_name = self.getDecompositionDir()
-        i = int(self.rank/self.mcaCols)
-        j = self.rank-(i*self.mcaCols)
-        mat_file_path = os.path.join(decomp_folder_name, "{}_{}.npy".format(i, j))
-        self.A = np.load(mat_file_path)
+        if self.useMPI4MatDist:
+
+            self.A = np.zeros((self.cellRows,self.cellCols), dtype=np.float64)
+            #print("RANK{}: trying to recieve submatrix".format(self.rank))
+            self.comm.Recv(self.A, source=self.ROOT_PROCESS_RANK)
+            #print("RANK{}: recieved submatrix".format(self.rank))
+        else:
+            decomp_folder_name = self.getDecompositionDir()
+            i = int(self.rank/self.mcaCols)
+            j = self.rank-(i*self.mcaCols)
+            mat_file_path = os.path.join(decomp_folder_name, "{}_{}.npy".format(i, j))
+            self.A = np.load(mat_file_path)
         self.locRows = self.A.shape[0]
         self.locCols = self.A.shape[1]
-        
 
     def initializeMCA(self):
         #print("before initialize weights")
@@ -177,4 +187,5 @@ class NonRootMCA(BaseMCA):
         self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
         self.localMatVec(x)
         self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK)
+        #print("RANK{}: sent y".format(self.rank))
         return self.y

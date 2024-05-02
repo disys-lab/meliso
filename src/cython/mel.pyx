@@ -63,6 +63,7 @@ cdef class MelisoPy:
 
     def setWeights(self,np_A_matrix):
         ctr = 0
+
         for i in xrange(self.m):
             for j in xrange(self.n):
                 self.A_matrix[ctr] = np_A_matrix[i][j]

@@ -1,9 +1,21 @@
 import meliso
 import numpy as np
-from src.core.MatVec import MatVec
+# from src.core.Matvec import Matvec
+# mv = MatVec()
+#
+# mv.parallelMatVec()
+#
+# mv.benchmarkMatVecParallel(0,0)
+#
 
-mv = MatVec()
+from solver.matvec.MatVecSolver import MatVecSolver
 
-mv.parallelMatVec()
+mv = MatVecSolver(set_mat=False)
 
-mv.benchmarkMatVecParallel(0,0)
+mv.matVec()
+
+mv.finalize()
+
+mv.parallelizedBenchmarkMatVec(0,0)
+
+mv.finalize()

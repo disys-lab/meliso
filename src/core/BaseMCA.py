@@ -27,6 +27,8 @@ class BaseMCA:
 
         self.num_mca_stats = 8
 
+        self.useMPI4MatDist = True
+
 
         if "EXP_CONFIG_FILE" not in os.environ.keys():
             if self.rank == 0:
@@ -48,6 +50,9 @@ class BaseMCA:
         self.cellCols = 1
 
         self.readExpConfig(self.expConfigFile)
+
+        if self.size-1 != self.mcaRows*self.mcaCols:
+            raise Exception("ExperimentConfigFileError: MCA grid size {}x{} != mpi processes {}".format(self.mcaRows,self.mcaCols,self.size))
 
         if "matrix_name" not in self.exp_config["exp_params"].keys():
             raise Exception("ExperimentConfigFileError: Matrix name not specified in %s".format(expConfigFile))

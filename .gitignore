@@ -4,3 +4,7 @@ matrices/
 .idea/
 *.so
 *.png
+*.DS_Store
+src/core/__pycache__/
+src/cython/mel.cpp
+solver/matvec/__pycache__/

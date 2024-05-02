@@ -21,6 +21,7 @@ void Meliso::setWeights(double *A_matrix){
                 }
             }
     WriteWeights();
+    //if(!scalingAdjusted){
     if (considerScaling && !scalingAdjusted){
         adjustScalingLimits();
     }
@@ -36,6 +37,15 @@ void Meliso::initializeWeights(){
     	WeightToConductance();
 
 	srand(0);	// Pseudorandom number seed
+
+	scalingAdjusted = false;
+	memset(y,0,rows*sizeof(double));
+    memset(delta,0,rows*sizeof(double));
+    memset(y_adj_min,0,rows*sizeof(double));
+    memset(sign,0,rows*sizeof(int));
+    memset(real_delta,0,rows*sizeof(double));
+    memset(real_y_adj_min,0,rows*sizeof(double));
+
 
 }
 
@@ -73,6 +83,7 @@ void Meliso::matVec(){
 void Meliso::getResults(){
       //memset(y,0,rows*sizeof(double));
       for (int k = 0; k < param->nHide; k++) {
+            //if (scalingAdjusted){
             if ( considerScaling && scalingAdjusted){
                 y[k] = (sign[k]*Output[0][k] - y_adj_min[k])/delta[k];
                 y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
@@ -363,6 +374,7 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
 
     real_y_adj_min = (double*)malloc(m*sizeof(double));
     memset(real_y_adj_min,0,m*sizeof(double));
+
 
 	/* Initialization of synaptic array from input to hidden layer */
 

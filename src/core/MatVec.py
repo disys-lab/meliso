@@ -1,3 +1,5 @@
+##This code is deprecated!
+
 from .RootMCA import RootMCA
 from .NonRootMCA import NonRootMCA
 from mpi4py import MPI
@@ -15,9 +17,9 @@ class MatVec:
         self.y_mem_result = None
         self.y_benchmark_result = None
         self.error = None
+
         if self.rank == self.comm.size-1:
             self.mca = RootMCA(self.comm)
-
         else:
             self.mca = NonRootMCA(self.comm)
 
@@ -46,12 +48,6 @@ class MatVec:
             print("error", self.error)
 
     def benchmarkMatVecParallel(self,hardwareOn=0,scalingOn=0):
-        # if self.rank == self.comm.size - 1:
-        #     x = np.loadtxt(fname='input_x', delimiter=',')
-        #     self.mca.x = x.reshape(x.shape[0],1)[:self.mca.matRows]
-        # else:
-        #     self.mca.meliso_obj.setHardwareOn(hardwareOn)
-        #     self.mca.meliso_obj.setScalingOn(scalingOn)
         if self.rank != self.comm.size - 1:
             self.mca.meliso_obj.setHardwareOn(hardwareOn)
             self.mca.meliso_obj.setScalingOn(scalingOn)
@@ -60,7 +56,6 @@ class MatVec:
         self.y = self.mca.parallelMatVec()
 
         if self.rank == self.comm.size - 1:
-            decomp_dir = self.mca.getDecompositionDir()
             self.y_benchmark_result = self.y[:self.mca.origMatRows]
             print(self.y_benchmark_result)
             self.error = self.y_mem_result - self.y_benchmark_result
