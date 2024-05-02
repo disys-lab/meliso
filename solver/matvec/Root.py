@@ -10,12 +10,16 @@ else:
 from src.core.RootMCA import RootMCA
 
 class Root:
-    def __init__(self,comm,set_mat=True):
+    def __init__(self,comm,x,mat=None):
         self.y_mem_result = None
         self.y_benchmark_result = None
         self.error = None
         self.comm = comm
-        self.mca = RootMCA(self.comm,set_mat=set_mat)
+        # if mat is None:
+        #     set_mat = True
+        # else:
+        #     set_mat = False
+        self.mca = RootMCA(self.comm,mat=mat,set_mat=False)
 
         self.maxVRows = 1
         self.maxVCols = 1
@@ -38,9 +42,6 @@ class Root:
         self.maxVCols = math.ceil(float(self.origMatCols) / self.mcaGridColCap)
 
         # can implement a variety of x vector initializations here.
-        xpath = "input_x"
-        x = np.loadtxt(fname=xpath, delimiter=',')
-
         self.x = x.reshape(x.shape[0], 1)[:self.origMatCols]
 
         self.virtualizer = {}

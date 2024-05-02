@@ -4,7 +4,7 @@ import numpy as np
 import os,sys
 
 class RootMCA(BaseMCA):
-    def __init__(self,comm,mat=None,set_mat=True):
+    def __init__(self,comm,mat=None,set_mat=False):
         super().__init__(comm)
 
         self.col_parts = {}
@@ -28,7 +28,7 @@ class RootMCA(BaseMCA):
 
         self.allMCAStats = np.zeros((self.size,self.num_mca_stats,1),dtype=float)
 
-        if not mat:
+        if mat is None:
             self.matrix_file = None
 
             if "matrix_file" not in self.exp_config["exp_params"].keys():
@@ -38,7 +38,13 @@ class RootMCA(BaseMCA):
             self.processMatrixFile()
 
         else:
-            self.mat = mat
+            # capture original rows and cols
+            self.origMatRows = mat.shape[0]
+            self.origMatCols = mat.shape[1]
+            self.matRows = mat.shape[0]
+            self.matCols = mat.shape[1]
+            self.mat = self.scaleMatrix(mat)
+
 
         if set_mat:
             self.setMat(self.mat)

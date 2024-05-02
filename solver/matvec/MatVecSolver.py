@@ -6,15 +6,25 @@ from .Root import Root
 from .NonRoot import NonRoot
 
 class MatVecSolver:
-    def __init__(self,set_mat=True):
+    def __init__(self):
 
         self.x = None
         self.y = None
 
         if MPI.COMM_WORLD.Get_rank() == MPI.COMM_WORLD.Get_size() - 1:
-            self.solverObject = Root(MPI.COMM_WORLD,set_mat)
+
+            #obtain x here
+            xpath = "input_x"
+            xvec = np.loadtxt(fname=xpath, delimiter=',')
+
+            #you can set a raw unprocessed matrix here or have the RootMCA read directly from config file
+            #for instance you can do:
+            # mat = np.random.rand(128,128)
+            # self.solverObject = Root(MPI.COMM_WORLD,x=xvec,mat=mat)
+
+            self.solverObject = Root(MPI.COMM_WORLD,x=xvec,mat=None)
         else:
-            self.solverObject = NonRoot(MPI.COMM_WORLD,set_mat)
+            self.solverObject = NonRoot(MPI.COMM_WORLD)
 
     def matVec(self):
         self.solverObject.parallelMatVec()

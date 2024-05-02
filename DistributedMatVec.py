@@ -10,7 +10,7 @@ import numpy as np
 
 from solver.matvec.MatVecSolver import MatVecSolver
 
-mv = MatVecSolver(set_mat=False)
+mv = MatVecSolver()
 
 mv.matVec()
 

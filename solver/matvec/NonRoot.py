@@ -9,11 +9,10 @@ else:
 from src.core.NonRootMCA import NonRootMCA
 
 class NonRoot:
-    def __init__(self,comm,set_mat=True):
+    def __init__(self,comm):
         self.comm = comm
         self.virtualizationOn = True
-        print(set_mat)
-        self.mca = NonRootMCA(self.comm,set_mat=set_mat)
+        self.mca = NonRootMCA(self.comm,set_mat=False)
 
     def awaitInstructions(self):
         data = np.array([-1, -1], dtype=np.float64)
