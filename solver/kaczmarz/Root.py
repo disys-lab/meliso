@@ -1,22 +1,57 @@
 from solver.matvec.MatVecSolver import MatVecSolver
+import numpy as np
 
-def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,b_norm):
+def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,probabilities):
+    #curr_norm_val = np.linalg.norm(x - x_true)
+    minval, key = min((v, i) for i, v in enumerate(norm_val))
+    sigma = np.std(norm_val)
+    mu = np.mean(norm_val)
+    lim = 3 * sigma
+    if curr_norm_val > mu + lim or curr_norm_val < mu - lim:
+        x = x_list[key]
+        curr_norm_val = norm_val[key]
+        failures[row] = failures[row] + 1
+    else:
+        for i in range(m):
+            if x[i] > 1.0 or x[i] < 0:
+                x = x_list[key]
+                curr_norm_val = norm_val[key]
+                failures[row] = failures[row] + 1
+                break
+
+    trials[row] = trials[row] + 1
+    old_probabilities = probabilities.copy()
+    probabilities[row] *= ( 1.0 - float(failures[row]) / trials[row])
+
+    print(trials,failures,probabilities)
+
+    sum_p = sum(probabilities)
+    if sum_p == 0:
+        probabilities = old_probabilities
+    else:
+        probabilities = [p/sum_p for p in probabilities]
+
+    return x,curr_norm_val,probabilities
+
+def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,b_norm,n):
 
     '''
     implementation attempt of Theorem 4.2 from paper https://arxiv.org/pdf/1902.09946.pdf
     some minor changes have been made such that alpha value is capped at MAX_ALPHA,
     Alpha values are also scaled with ALPHA_MULT
     '''
+
     weighted_projection_sum = np.zeros((n,1))
     weighted_res_sum = 0 #np.zeros((row_size,1))
+
     for i in range(row_size):
         w_bars_i = w_bars[i][0] #.reshape((1,1))
         a_i = scaled_A[i].reshape((n,1))
         res = (y[i] - b_s[i])/b_norm
 
-        weighted_projection_sum = weighted_projection_sum + w_bars_i * (res[0])*a_i
+        weighted_projection_sum = weighted_projection_sum + w_bars_i * (res)*a_i
         #print(weighted_projection_sum)
-        weighted_res_sum = weighted_res_sum + w_bars_i * (res[0])*(res[0])
+        weighted_res_sum = weighted_res_sum + w_bars_i * (res)*(res)
 
 
     alpha_num = weighted_res_sum
@@ -34,23 +69,30 @@ def initRK(scaled_A,virtualizer,row_parts,row_part_size):
     scaled_A_row_norm = np.zeros((m, 1))
     w_bars = np.zeros((m, 1))
     scaled_A_frobenius_rows = np.zeros((m, 1))
+    scaled_A_frobenius_parts = np.zeros((row_parts, 1))
     for i in range(m):
         scaled_A_row_norm[i] = np.linalg.norm(scaled_A[i][:])
-        scaled_A[i, :] = scaled_A[i, :] / scaled_A_row_norm[i]
+        #scaled_A[i, :] = scaled_A[i, :] / scaled_A_row_norm[i]
         w_bars[i] = float(1) / (row_part_size * np.power(scaled_A_row_norm[i], 2))
         scaled_A_frobenius_rows[i][0] = np.linalg.norm(scaled_A[i, :])
 
-
+    #print(np.sum(scaled_A_row_norm,axis=0),scaled_A_frobenius,)
     for r in range(row_parts):
         sr = virtualizer[r, 0]["rc_limits"][0][0]
         er = virtualizer[r, 0]["rc_limits"][0][1]
-        scaled_A_frobenius_parts[r][0] = np.linalg.norm(scaled_A[sr:er, :], ord='fro')
+        #print(sr,er,scaled_A_frobenius,sr,er)
+
+        scaled_A_frobenius_parts[r][0] = np.linalg.norm(scaled_A[sr:er][:], ord='fro')
+        #print(sr, er, scaled_A_frobenius, scaled_A_frobenius_parts[r][0], scaled_A[sr:er, :].shape)
 
     probabilities = [np.power(scaled_A_frobenius_parts[i][0] / scaled_A_frobenius, 2) for i in
                      range(row_parts)]
 
+    failures = [0 for i in range(row_parts)]
+    trials = [0 for i in range(row_parts)]
 
-    return np.copy(scaled_A),scaled_A_frobenius,scaled_A_row_norm,w_bars,scaled_A_frobenius_rows,scaled_A_frobenius_parts,probabilities
+
+    return np.copy(scaled_A),scaled_A_frobenius,scaled_A_row_norm,w_bars,scaled_A_frobenius_rows,scaled_A_frobenius_parts,probabilities,trials,failures
 
 def correctY(n,y,a_min,a_max,a_row_sum,x_min,x_max,x_sum):
     correctedY = np.copy(y)
@@ -63,6 +105,8 @@ def rootSolve():
 
     mv = MatVecSolver()
 
+    real_x_true = np.copy(mv.solverObject.x)
+
     a_min = mv.solverObject.mca.mat_min
     a_max = mv.solverObject.mca.mat_max
     a_row_sum = mv.solverObject.mca.mat_row_sum
@@ -73,7 +117,9 @@ def rootSolve():
     w_bars, \
     scaled_A_frobenius_rows, \
     scaled_A_frobenius_parts, \
-    probabilities = initRK(mv.solverObject.origMat,
+    probabilities, \
+    trials, \
+    failures    = initRK(mv.solverObject.origMat,
                            mv.solverObject.virtualizer,
                            mv.solverObject.maxVRows,
                            mv.solverObject.mcaGridRowCap)
@@ -81,12 +127,24 @@ def rootSolve():
     mv.parallelizedBenchmarkMatVec(0, 0)
 
     mv.finalize()
+    b = correctY(mv.solverObject.maxVCols,
+             mv.solverObject.y_benchmark_result,
+             a_min,
+             a_max,
+             a_row_sum,
+             mv.solverObject.x_min,
+             mv.solverObject.x_max,
+             mv.solverObject.x_sum)
 
-    b = mv.y_benchmark_result
     b_norm = np.linalg.norm(b)
 
-    x = np.copy(mv.solverObject.x)
-    y = np.zeros(self.origMatRows, dtype=np.float64)
+    x = 0*np.copy(mv.solverObject.x)
+    n = x.shape[0]
+    y = np.zeros(mv.solverObject.origMatRows, dtype=np.float64)
+
+    x_list = []
+    norm_val = []
+    alpha_list = []
 
     for k in range(10):
 
@@ -98,10 +156,10 @@ def rootSolve():
         for j in range(mv.solverObject.maxVCols):
             mv.solverObject.virtualParallelMatVec( i, j)
 
-        sr = self.virtualizer[i, 0]["rc_limits"][0][0]
-        er = self.virtualizer[i, 0]["rc_limits"][0][1]
+        sr = mv.solverObject.virtualizer[i, 0]["rc_limits"][0][0]
+        er = mv.solverObject.virtualizer[i, 0]["rc_limits"][0][1]
         y[sr:er] = np.copy(mv.solverObject.virtualizer[i]["y"])
-        self.virtualizer[i]["y"] = np.zeros(er - sr, dtype=np.float64)
+        mv.solverObject.virtualizer[i]["y"] = np.zeros(er - sr, dtype=np.float64)
 
         #TODO: Obtain true y based on rescaling back output
         y = correctY(mv.solverObject.maxVCols,
@@ -119,10 +177,19 @@ def rootSolve():
 
         scaled_A_s = scaled_A[sr:er, :]
 
-        x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s, mv.solverObject.mcaGridRowCap, b_norm)
+        x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s, mv.solverObject.mcaGridRowCap, b_norm,n)
 
         x = x.reshape((n, 1)) + x_s.reshape((n, 1))
 
+        curr_norm_val = np.linalg.norm(x - real_x_true) / np.linalg.norm(real_x_true)
+
+        # x, curr_norm_val, probabilities = updateProbabilities(i, x, x_list, curr_norm_val, norm_val, trials,
+        #                                                       failures, probabilities)
+
+        x_list.append(x)
+        norm_val.append(curr_norm_val)
+        alpha_list.append(alpha)
+        print(norm_val)
         #use to implement other aspects of Kaczmarz
 
         #a new A matrix can be re-initialized using:
