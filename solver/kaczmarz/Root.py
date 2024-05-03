@@ -1,6 +1,14 @@
 from solver.matvec.MatVecSolver import MatVecSolver
 import numpy as np
 
+'''
+Update as of 5/3/24: This code works but doesnt really converge/has weak convergence.
+For the bcsstk02 matrix, the convergence is very hard especially
+Maybe the 0,1 scaling of both A and x is not working well.
+This can cause the condition number of the matrix to really shoot up, causing poor convergence
+One idea could be to impose hard constraints regarding potential values that each matrix element could possibly take.
+'''
+
 def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,probabilities):
     #curr_norm_val = np.linalg.norm(x - x_true)
     minval, key = min((v, i) for i, v in enumerate(norm_val))
@@ -33,7 +41,7 @@ def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,prob
 
     return x,curr_norm_val,probabilities
 
-def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,b_norm,n):
+def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm,n):
 
     '''
     implementation attempt of Theorem 4.2 from paper https://arxiv.org/pdf/1902.09946.pdf
@@ -43,16 +51,17 @@ def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,b_norm,
 
     weighted_projection_sum = np.zeros((n,1))
     weighted_res_sum = 0 #np.zeros((row_size,1))
+    row_size = er-sr
 
     for i in range(row_size):
         w_bars_i = w_bars[i][0] #.reshape((1,1))
         a_i = scaled_A[i].reshape((n,1))
         res = (y[i] - b_s[i])/b_norm
-
+        #print(res)
         weighted_projection_sum = weighted_projection_sum + w_bars_i * (res)*a_i
-        #print(weighted_projection_sum)
-        weighted_res_sum = weighted_res_sum + w_bars_i * (res)*(res)
 
+        weighted_res_sum = weighted_res_sum + w_bars_i * (res)*(res)
+    #print(weighted_res_sum)
 
     alpha_num = weighted_res_sum
     alpha_denom = np.power(np.linalg.norm(weighted_projection_sum),2)
@@ -60,7 +69,15 @@ def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,b_norm,
     x_update = alpha*weighted_projection_sum
     x_s = x_s - x_update.reshape(x_s.shape)
 
-    print(alpha)
+    # print(x_s.shape,weighted_projection_sum.shape,n)
+    # print(np.max(scaled_A))
+    # print(np.min(scaled_A))
+    # print(w_bars[2][0])
+    # print(w_bars)
+    # print(b_norm)
+    # print(weighted_res_sum)
+    # print(weighted_projection_sum)
+    # print(alpha)
     return x_s,alpha
 
 def initRK(scaled_A,virtualizer,row_parts,row_part_size):
@@ -104,6 +121,9 @@ def correctY(n,y,a_min,a_max,a_row_sum,x_min,x_max,x_sum):
 def rootSolve():
 
     mv = MatVecSolver()
+    #mv.solverObject.initializeMat(np.random.rand(128, 128))
+    # #mv.solverObject.initializeMat(2*np.random.rand(128, 128))
+    #mv.solverObject.initializeX(np.loadtxt(fname="input_x", delimiter=','))
 
     real_x_true = np.copy(mv.solverObject.x)
 
@@ -136,9 +156,11 @@ def rootSolve():
              mv.solverObject.x_max,
              mv.solverObject.x_sum)
 
+    #print(b, a_min, a_max, a_row_sum, mv.solverObject.x_min, mv.solverObject.x_max, mv.solverObject.x_sum, )
+
     b_norm = np.linalg.norm(b)
 
-    x = 0*np.copy(mv.solverObject.x)
+    x = np.random.randn(*mv.solverObject.x.shape) #1e-6*np.random.rand(mv.solverObject.x,1) #np.copy(mv.solverObject.x)
     n = x.shape[0]
     y = np.zeros(mv.solverObject.origMatRows, dtype=np.float64)
 
@@ -146,7 +168,7 @@ def rootSolve():
     norm_val = []
     alpha_list = []
 
-    for k in range(10):
+    for k in range(100):
 
         mv.solverObject.initializeX(x)
 
@@ -171,15 +193,21 @@ def rootSolve():
                      mv.solverObject.x_max,
                      mv.solverObject.x_sum)
 
+        #print(b, a_min, a_max, a_row_sum, mv.solverObject.x_min, mv.solverObject.x_max, mv.solverObject.x_sum, )
+
         b_s = b[sr:er]
 
         w_bars_s = w_bars[sr:er]
 
         scaled_A_s = scaled_A[sr:er, :]
 
-        x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s, mv.solverObject.mcaGridRowCap, b_norm,n)
+        x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
 
-        x = x.reshape((n, 1)) + x_s.reshape((n, 1))
+
+
+        x = x_s.reshape((n, 1))
+
+        #x = x.reshape((n, 1)) + x_s.reshape((n, 1))
 
         curr_norm_val = np.linalg.norm(x - real_x_true) / np.linalg.norm(real_x_true)
 
@@ -189,6 +217,10 @@ def rootSolve():
         x_list.append(x)
         norm_val.append(curr_norm_val)
         alpha_list.append(alpha)
+        # print(x)
+        # print(np.linalg.norm(x - real_x_true))
+        # print(np.linalg.norm(real_x_true))
+        print(alpha_list)
         print(norm_val)
         #use to implement other aspects of Kaczmarz
 

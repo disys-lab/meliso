@@ -111,7 +111,7 @@ class Root:
                 for j in range(self.maxVCols):
                     sc = self.virtualizer[i, j]["rc_limits"][1][0]
                     ec = self.virtualizer[i, j]["rc_limits"][1][1]
-                    self.virtualizer[i, j]["x"] = np.copy(self.x.reshape(self.x.shape[0], 1)[sc:ec])
+                    self.virtualizer[i, j]["x"] = np.copy(self.x.reshape(self.x.shape[0], 1)[sc:ec,:])
 
     def virtualParallelMatVec(self,i,j):
         #set the matrix
