@@ -28,7 +28,7 @@ def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,row_size,b_norm)
     print(alpha)
     return x_s,alpha
 
-def initRK(scaled_A,virtualizer,row_parts,row_p_size):
+def initRK(scaled_A,virtualizer,row_parts,row_part_size):
     m = scaled_A.shape[0]
     scaled_A_frobenius = np.linalg.norm(scaled_A, ord='fro')
     scaled_A_row_norm = np.zeros((m, 1))
@@ -37,7 +37,7 @@ def initRK(scaled_A,virtualizer,row_parts,row_p_size):
     for i in range(m):
         scaled_A_row_norm[i] = np.linalg.norm(scaled_A[i][:])
         scaled_A[i, :] = scaled_A[i, :] / scaled_A_row_norm[i]
-        w_bars[i] = float(1) / (row_p_size * np.power(scaled_A_row_norm[i], 2))
+        w_bars[i] = float(1) / (row_part_size * np.power(scaled_A_row_norm[i], 2))
         scaled_A_frobenius_rows[i][0] = np.linalg.norm(scaled_A[i, :])
 
 
@@ -73,29 +73,44 @@ def rootSolve():
     mv.finalize()
 
     b = mv.y_benchmark_result
+    b_norm = np.linalg.norm(b)
+
+    x = np.copy(mv.solverObject.x)
+    y = np.zeros(self.origMatRows, dtype=np.float64)
 
     for k in range(10):
 
         #implement row selection
         i = np.random.choice(np.arange(0, mv.solverObject.maxVRows), p=probabilities) #np.random.randint(0,mv.solverObject.maxVRows)
+
         for j in range(mv.solverObject.maxVCols):
             mv.solverObject.virtualParallelMatVec( i, j)
 
-            #obtain y
-            y = mv.solverObject.y_mem_result
+        sr = self.virtualizer[i, 0]["rc_limits"][0][0]
+        er = self.virtualizer[i, 0]["rc_limits"][0][1]
+        y[sr:er] = np.copy(mv.solverObject.virtualizer[i]["y"])
+        self.virtualizer[i]["y"] = np.zeros(er - sr, dtype=np.float64)
 
+        #TODO: Obtain true y based on rescaling back output
 
+        b_s = b[sr:er]
 
-            #use to implement other aspects of Kaczmarz
+        w_bars_s = w_bars[sr:er]
 
-            #a new A matrix can be re-initialized using:
-            #mv.solverObject.initializeMatrix(new_mat)
+        scaled_A_s = scaled_A[sr:er, :]
 
-            #initialize a new x using:
-            #mv.solverObject.initializeX(new_x)
+        x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s, mv.solverObject.mcaGridRowCap, b_norm)
 
-            #Remember!: always initialize new matrix before initializing a new vector (if your new matrix has different dimensions)
+        x = x.reshape((n, 1)) + x_s.reshape((n, 1))
 
-        mv.matVec()
+        #use to implement other aspects of Kaczmarz
+
+        #a new A matrix can be re-initialized using:
+        #mv.solverObject.initializeMatrix(new_mat)
+
+        #initialize a new x using:
+        #mv.solverObject.initializeX(new_x)
+
+        #Remember!: always initialize new matrix before initializing a new vector (if your new matrix has different dimensions)
 
     mv.finalize()
