@@ -52,10 +52,20 @@ def initRK(scaled_A,virtualizer,row_parts,row_part_size):
 
     return np.copy(scaled_A),scaled_A_frobenius,scaled_A_row_norm,w_bars,scaled_A_frobenius_rows,scaled_A_frobenius_parts,probabilities
 
+def correctY(n,y,a_min,a_max,a_row_sum,x_min,x_max,x_sum):
+    correctedY = np.copy(y)
+    for i in range(y.shape[0]):
+        correctedY[i] = correctedY[i]*(a_max*x_max) + a_min*x_sum + x_min*a_row_sum[i] - n*a_min*x_min
+
+    return correctedY
 
 def rootSolve():
 
     mv = MatVecSolver()
+
+    a_min = mv.solverObject.mca.mat_min
+    a_max = mv.solverObject.mca.mat_max
+    a_row_sum = mv.solverObject.mca.mat_row_sum
 
     scaled_A, \
     scaled_A_frobenius, \
@@ -80,6 +90,8 @@ def rootSolve():
 
     for k in range(10):
 
+        mv.solverObject.initializeX(x)
+
         #implement row selection
         i = np.random.choice(np.arange(0, mv.solverObject.maxVRows), p=probabilities) #np.random.randint(0,mv.solverObject.maxVRows)
 
@@ -92,6 +104,14 @@ def rootSolve():
         self.virtualizer[i]["y"] = np.zeros(er - sr, dtype=np.float64)
 
         #TODO: Obtain true y based on rescaling back output
+        y = correctY(mv.solverObject.maxVCols,
+                     y,
+                     a_min,
+                     a_max,
+                     a_row_sum,
+                     mv.solverObject.x_min,
+                     mv.solverObject.x_max,
+                     mv.solverObject.x_sum)
 
         b_s = b[sr:er]
 

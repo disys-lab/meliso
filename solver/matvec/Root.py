@@ -39,6 +39,7 @@ class Root:
         self.x = None  #
         self.x_min = None
         self.x_max = None
+        self.x_sum = None
 
         self.virtualizer = {}
 
@@ -104,7 +105,8 @@ class Root:
     def initializeX(self,x):
         if x is not None:
             self.x = x.reshape(x.shape[0], 1)[:self.origMatCols]
-            self.x,self.x_min,self.x_max = self.mca.scaleMatrix(self.x)
+            self.x_sum = np.sum(x)
+            self.x,self.x_min,self.x_max,_ = self.mca.scaleMatrix(self.x)
             for i in range(self.maxVRows):
                 for j in range(self.maxVCols):
                     sc = self.virtualizer[i, j]["rc_limits"][1][0]

@@ -28,9 +28,11 @@ class RootMCA(BaseMCA):
 
         self.mat_min = None
         self.mat_max = None
+        self.mat_row_sum = None
 
         self.x_max = None
         self.x_min = None
+        self.x_sum = None
 
         self.allMCAStats = np.zeros((self.size,self.num_mca_stats,1),dtype=float)
 
@@ -57,7 +59,7 @@ class RootMCA(BaseMCA):
             self.matRows = mat.shape[0]
             self.matCols = mat.shape[1]
 
-        self.mat, self.mat_min, self.mat_max = self.scaleMatrix(self.mat)
+        self.mat, self.mat_min, self.mat_max, self.mat_row_sum = self.scaleMatrix(self.mat)
 
     def processMatrixFile(self):
         #read the matrix from file
@@ -140,11 +142,12 @@ class RootMCA(BaseMCA):
 
     def scaleMatrix(self,mat):
         #mat = np.copy(matrix)
+        mat_row_sum = np.sum(mat, axis=1)
         mat_min = mat.min()
         mat -= mat_min
         mat_max = mat.ptp()
         mat /= mat_max
-        return mat,mat_min,mat_max
+        return mat,mat_min,mat_max,mat_row_sum
 
     def padMatrix(self,mat):
         rows = self.origMatRows = mat.shape[0]
