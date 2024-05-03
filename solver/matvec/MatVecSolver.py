@@ -9,6 +9,7 @@ class MatVecSolver:
     def __init__(self,xvec= None):
 
         if MPI.COMM_WORLD.Get_rank() == MPI.COMM_WORLD.Get_size() - 1:
+            self.solverObject = Root(MPI.COMM_WORLD)
             if xvec is None:
                 #obtain x here
                 xpath = "input_x"
@@ -19,11 +20,9 @@ class MatVecSolver:
             # mat = np.random.rand(128,128)
             # self.solverObject = Root(MPI.COMM_WORLD,x=xvec,mat=mat)
 
-            self.solverObject = Root(MPI.COMM_WORLD,x=xvec,mat=None)
-
             #to reinitialize the matrix you can do for instance:
             # self.solverObject.initializeMat(np.random.rand(128,128))
-            # self.solverObject.initializeX(xvec)
+            self.solverObject.initializeX(xvec)
 
         else:
             self.solverObject = NonRoot(MPI.COMM_WORLD)

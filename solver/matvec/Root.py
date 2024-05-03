@@ -10,7 +10,7 @@ else:
 from src.core.RootMCA import RootMCA
 
 class Root:
-    def __init__(self,comm,x,mat=None):
+    def __init__(self,comm,x=None,mat=None):
         self.y_mem_result = None
         self.y_benchmark_result = None
         self.error = None
@@ -102,13 +102,14 @@ class Root:
             self.virtualizer[i]["y"] = np.zeros(end_vRow-start_vRow,dtype=np.float64)
 
     def initializeX(self,x):
-        self.x = x.reshape(x.shape[0], 1)[:self.origMatCols]
-        self.x,self.x_min,self.x_max = self.mca.scaleMatrix(self.x)
-        for i in range(self.maxVRows):
-            for j in range(self.maxVCols):
-                sc = self.virtualizer[i, j]["rc_limits"][1][0]
-                ec = self.virtualizer[i, j]["rc_limits"][1][1]
-                self.virtualizer[i, j]["x"] = np.copy(self.x.reshape(self.x.shape[0], 1)[sc:ec])
+        if x is not None:
+            self.x = x.reshape(x.shape[0], 1)[:self.origMatCols]
+            self.x,self.x_min,self.x_max = self.mca.scaleMatrix(self.x)
+            for i in range(self.maxVRows):
+                for j in range(self.maxVCols):
+                    sc = self.virtualizer[i, j]["rc_limits"][1][0]
+                    ec = self.virtualizer[i, j]["rc_limits"][1][1]
+                    self.virtualizer[i, j]["x"] = np.copy(self.x.reshape(self.x.shape[0], 1)[sc:ec])
 
     def virtualParallelMatVec(self,i,j):
         #set the matrix
@@ -160,9 +161,9 @@ class Root:
     def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0):
 
         self.parallelMatVec(type="benchmark")
-
-        self.error = self.y_mem_result - self.y_benchmark_result
-        print("error", self.error)
+        if self.y_mem_result is not None:
+            self.error = self.y_mem_result - self.y_benchmark_result
+            print("error", self.error)
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()
