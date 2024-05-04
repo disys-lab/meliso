@@ -41,6 +41,30 @@ def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,prob
 
     return x,curr_norm_val,probabilities
 
+def globalBlockCoordinateDescent(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm,n):
+    '''
+    This is the classical Block Randomized Kaczmarz. Theorem 4.1 of https://arxiv.org/pdf/1902.09946
+    '''
+    row_size = er - sr
+    weighted_projection_sum = np.zeros((n, 1))
+    normsum = 0
+    for i in range(row_size):
+        w_bars_i = w_bars[i][0]  # .reshape((1,1))
+        a_i = scaled_A[i].reshape((n, 1))
+        a_i_norm2 = np.power(np.linalg.norm(a_i),2)
+        normsum = normsum + a_i_norm2
+        res = (y[i] - b_s[i]) #/ a_i_norm2
+        # print(res)
+        weighted_projection_sum = weighted_projection_sum + (res) * a_i
+
+        #weighted_res_sum = weighted_res_sum + w_bars_i * (res) * (res)
+    # print(weighted_res_sum)
+    alpha = 1e-2
+    x_update = alpha * weighted_projection_sum/normsum
+    x_s = x_s - x_update.reshape(x_s.shape)
+    return x_s, alpha
+
+
 def globalBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm,n):
     '''
     This is the classical Block Randomized Kaczmarz. Theorem 4.1 of https://arxiv.org/pdf/1902.09946
@@ -142,9 +166,9 @@ def correctY(n,y,a_min,a_max,a_row_sum,x_min,x_max,x_sum):
 def rootSolve():
 
     mv = MatVecSolver()
-    mv.solverObject.initializeMat(np.random.rand(128, 128))
+    #mv.solverObject.initializeMat(np.random.rand(128, 128))
     # #mv.solverObject.initializeMat(2*np.random.rand(128, 128))
-    mv.solverObject.initializeX(np.loadtxt(fname="input_x", delimiter=','))
+    #mv.solverObject.initializeX(np.loadtxt(fname="input_x", delimiter=','))
 
     real_x_true = np.copy(mv.solverObject.x)
 
@@ -222,7 +246,7 @@ def rootSolve():
 
         scaled_A_s = scaled_A[sr:er, :]
 
-        x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
+        x_s, alpha = globalBlockCoordinateDescent(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
 
 
 
