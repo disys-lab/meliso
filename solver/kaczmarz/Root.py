@@ -57,9 +57,9 @@ def globalBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_nor
 
         #weighted_res_sum = weighted_res_sum + w_bars_i * (res) * (res)
     # print(weighted_res_sum)
-    alpha = 1.0/(er-sr)
+    alpha = 1/(er-sr)
     x_update = alpha * weighted_projection_sum
-    x_s = x_s - x_update.reshape(x_s.shape)
+    x_s = x_s + x_update.reshape(x_s.shape)
     return x_s, alpha
 
 def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm,n):
@@ -86,9 +86,9 @@ def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b
 
     alpha_num = weighted_res_sum
     alpha_denom = np.power(np.linalg.norm(weighted_projection_sum),2)
-    alpha = 1.0 * alpha_num / alpha_denom
+    alpha = 1e-4 * alpha_num / alpha_denom
     x_update = alpha*weighted_projection_sum
-    x_s = x_s - x_update.reshape(x_s.shape)
+    x_s = x_s + x_update.reshape(x_s.shape)
 
     # print(x_s.shape,weighted_projection_sum.shape,n)
     # print(np.max(scaled_A))
@@ -142,9 +142,9 @@ def correctY(n,y,a_min,a_max,a_row_sum,x_min,x_max,x_sum):
 def rootSolve():
 
     mv = MatVecSolver()
-    #mv.solverObject.initializeMat(np.random.rand(128, 128))
+    mv.solverObject.initializeMat(np.random.rand(128, 128))
     # #mv.solverObject.initializeMat(2*np.random.rand(128, 128))
-    #mv.solverObject.initializeX(np.loadtxt(fname="input_x", delimiter=','))
+    mv.solverObject.initializeX(np.loadtxt(fname="input_x", delimiter=','))
 
     real_x_true = np.copy(mv.solverObject.x)
 
@@ -222,7 +222,7 @@ def rootSolve():
 
         scaled_A_s = scaled_A[sr:er, :]
 
-        x_s, alpha = globalBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
+        x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
 
 
 
