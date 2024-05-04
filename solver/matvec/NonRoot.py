@@ -26,7 +26,7 @@ class NonRoot:
             #print("RANK{}: has exited".format(self.mca.rank), data)
             return False
 
-    def parallelMatVec(self):
+    def parallelMatVec(self,correction):
         if self.virtualizationOn:
             while self.awaitInstructions():
                 self.y = self.mca.parallelMatVec()
@@ -38,12 +38,12 @@ class NonRoot:
     def benchmarkMatVec(self):
        pass
 
-    def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0):
+    def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0,correction= False):
         #print("RANK{}: benchmarking started".format(self.mca.rank))
         self.mca.meliso_obj.setHardwareOn(hardwareOn)
         self.mca.meliso_obj.setScalingOn(scalingOn)
         #self.mca.initializeMCA()
-        self.parallelMatVec()
+        self.parallelMatVec(correction)
         #print("RANK{}: benchmarking complete".format(self.mca.rank))
 
     def acquireMCAStats(self):

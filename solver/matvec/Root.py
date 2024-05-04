@@ -35,7 +35,7 @@ class Root:
         self.maxVRows = None #math.ceil(float(self.origMatRows) / self.mcaGridRowCap)
         self.maxVCols = None #math.ceil(float(self.origMatCols) / self.mcaGridColCap)
 
-        # can implement a variety of x vector initializations here.
+
         self.x = None  #
         self.x_min = None
         self.x_max = None
@@ -47,10 +47,13 @@ class Root:
         self.maxVCols = None
 
         self.initializeMat(mat)
+
+        # can implement a variety of x vector initializations here.
         self.initializeX(x)
 
     def initializeMat(self,mat):
         self.mca.initializeMatrix(mat)
+
         self.origMatRows = self.mca.origMatRows
         self.origMatCols = self.mca.origMatCols
 
@@ -73,6 +76,11 @@ class Root:
         if self.virtualizationOn:
             self.initializeVirtualizer()
 
+    def correctY(self, n, y, a_min, a_max, a_row_sum, x_min, x_max, x_sum):
+        correctedY = np.copy(y)
+        for i in range(y.shape[0]):
+            correctedY[i] = correctedY[i] * (a_max * x_max) + a_min * x_sum + x_min * a_row_sum[i] - n * a_min * x_min
+        return correctedY
 
     def initializeVirtualizer(self):
         # do all matrix chunking and preprocessing here
@@ -129,7 +137,7 @@ class Root:
 
         self.virtualizer[i]["y"] = self.virtualizer[i]["y"] + y
 
-    def parallelMatVec(self,type="mca"):
+    def parallelMatVec(self,type="mca",correction=False):
         if self.virtualizationOn:
             print(self.maxVRows,self.maxVCols)
             y = np.zeros(self.origMatRows, dtype=np.float64)
@@ -146,6 +154,17 @@ class Root:
         else:
             self.mca.setX(self.x)
             self.y = self.mca.parallelMatVec()
+        print("Correction:{}".format(correction))
+        if correction:
+
+            self.y = self.correctY(self.origMatCols,
+                          self.y,
+                          self.mca.mat_min,
+                          self.mca.mat_max,
+                          self.mca.mat_row_sum,
+                          self.x_min,
+                          self.x_max,
+                          self.x_sum)
 
         if type == "benchmark":
             self.y_benchmark_result = np.copy(self.y)
@@ -160,7 +179,7 @@ class Root:
         self.error = self.y_mem_result - self.y_benchmark_result
         print("error", self.error)
 
-    def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0):
+    def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction= False):
 
         self.parallelMatVec(type="benchmark")
         if self.y_mem_result is not None:

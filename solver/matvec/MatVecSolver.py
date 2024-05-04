@@ -13,7 +13,7 @@ class MatVecSolver:
             if xvec is None:
                 #obtain x here
                 xpath = "input_x"
-                xvec = np.loadtxt(fname=xpath, delimiter=',')
+                xvec = 2.0*np.loadtxt(fname=xpath, delimiter=',')
 
             # you can set a raw unprocessed matrix here or have the RootMCA read directly from config file
             # for instance you can do:
@@ -21,20 +21,20 @@ class MatVecSolver:
             # self.solverObject = Root(MPI.COMM_WORLD,x=xvec,mat=mat)
 
             #to reinitialize the matrix you can do for instance:
-            # self.solverObject.initializeMat(np.random.rand(128,128))
+            self.solverObject.initializeMat(np.random.rand(128,128))
             self.solverObject.initializeX(xvec)
 
         else:
             self.solverObject = NonRoot(MPI.COMM_WORLD)
 
-    def matVec(self):
-        self.solverObject.parallelMatVec()
+    def matVec(self,correction=False):
+        self.solverObject.parallelMatVec(correction=correction)
 
     def centralizedBenchmarkMatVec(self):
         self.solverObject.benchmarkMatVec()
 
-    def parallelizedBenchmarkMatVec(self, hardwareOn=0, scalingOn=0):
-        self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn)
+    def parallelizedBenchmarkMatVec(self, hardwareOn=0, scalingOn=0,correction=False):
+        self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn,correction=correction)
 
     def acquireMCAStats(self):
         self.solverObject.acquireMCAStats()

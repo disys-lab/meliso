@@ -10,12 +10,14 @@ import numpy as np
 
 from solver.matvec.MatVecSolver import MatVecSolver
 
+correction=False
+
 mv = MatVecSolver()
 
-mv.matVec()
+mv.matVec(correction=correction)
 
 mv.finalize()
 
-mv.parallelizedBenchmarkMatVec(0,0)
+mv.parallelizedBenchmarkMatVec(0,0,correction=correction)
 
 mv.finalize()
