@@ -41,6 +41,27 @@ def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,prob
 
     return x,curr_norm_val,probabilities
 
+def globalBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm,n):
+    '''
+    This is the classical Block Randomized Kaczmarz. Theorem 4.1 of https://arxiv.org/pdf/1902.09946
+    '''
+    row_size = er - sr
+    weighted_projection_sum = np.zeros((n, 1))
+    for i in range(row_size):
+        w_bars_i = w_bars[i][0]  # .reshape((1,1))
+        a_i = scaled_A[i].reshape((n, 1))
+        a_i_norm2 = np.power(np.linalg.norm(a_i),2)
+        res = (y[i] - b_s[i]) / a_i_norm2
+        # print(res)
+        weighted_projection_sum = weighted_projection_sum + (res) * a_i
+
+        #weighted_res_sum = weighted_res_sum + w_bars_i * (res) * (res)
+    # print(weighted_res_sum)
+    alpha = 1.0/(er-sr)
+    x_update = alpha * weighted_projection_sum
+    x_s = x_s - x_update.reshape(x_s.shape)
+    return x_s, alpha
+
 def globalFastBlockRandomizedKaczmarz(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm,n):
 
     '''
@@ -201,11 +222,11 @@ def rootSolve():
 
         scaled_A_s = scaled_A[sr:er, :]
 
-        x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
+        x_s, alpha = globalBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
 
 
 
-        x = x_s.reshape((n, 1))
+        x = np.copy(x_s.reshape((n, 1)))
 
         #x = x.reshape((n, 1)) + x_s.reshape((n, 1))
 
