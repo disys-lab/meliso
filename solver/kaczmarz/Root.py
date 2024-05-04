@@ -4,9 +4,11 @@ import numpy as np
 '''
 Update as of 5/3/24: This code works but doesnt really converge/has weak convergence.
 For the bcsstk02 matrix, the convergence is very hard especially
-Maybe the 0,1 scaling of both A and x is not working well.
+Maybe the 0,1 scaling of both A is not working well.
 This can cause the condition number of the matrix to really shoot up, causing poor convergence
 One idea could be to impose hard constraints regarding potential values that each matrix element could possibly take.
+Update as of 5/4/24: It is the condition no of the matrix, post scaling that makes it super hard to solve
+A random matrix is also giving a condition no of 28k post 0-1 scaling.
 '''
 
 def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,probabilities):
@@ -59,7 +61,7 @@ def globalBlockCoordinateDescent(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm
 
         #weighted_res_sum = weighted_res_sum + w_bars_i * (res) * (res)
     # print(weighted_res_sum)
-    alpha = 1e-2
+    alpha = 1e-1
     x_update = alpha * weighted_projection_sum/normsum
     x_s = x_s - x_update.reshape(x_s.shape)
     return x_s, alpha
@@ -160,13 +162,14 @@ def correctY(n,y,a_min,a_max,a_row_sum,x_min,x_max,x_sum):
     correctedY = np.copy(y)
     for i in range(y.shape[0]):
         correctedY[i] = correctedY[i]*(a_max*x_max) + a_min*x_sum + x_min*a_row_sum[i] - n*a_min*x_min
+        #correctedY[i] = correctedY[i] * (1 * x_max) + x_min * a_row_sum[i]
 
     return correctedY
 
 def rootSolve():
 
     mv = MatVecSolver()
-    #mv.solverObject.initializeMat(np.random.rand(128, 128))
+    #mv.solverObject.initializeMat(np.random.rand(128, 64))
     # #mv.solverObject.initializeMat(2*np.random.rand(128, 128))
     #mv.solverObject.initializeX(np.loadtxt(fname="input_x", delimiter=','))
 
@@ -188,6 +191,8 @@ def rootSolve():
                            mv.solverObject.virtualizer,
                            mv.solverObject.maxVRows,
                            mv.solverObject.mcaGridRowCap)
+
+    cond_no =np.linalg.cond(scaled_A)
 
     mv.parallelizedBenchmarkMatVec(0, 0)
 
@@ -246,6 +251,8 @@ def rootSolve():
 
         scaled_A_s = scaled_A[sr:er, :]
 
+        #x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s, er, sr, mv.solverObject.mcaGridRowCap, b_norm, n)
+        #x_s, alpha = globalBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s, er, sr,mv.solverObject.mcaGridRowCap, b_norm, n)
         x_s, alpha = globalBlockCoordinateDescent(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
 
 
@@ -267,6 +274,7 @@ def rootSolve():
         # print(np.linalg.norm(real_x_true))
         print(alpha_list)
         print(norm_val)
+        print(cond_no)
         #use to implement other aspects of Kaczmarz
 
         #a new A matrix can be re-initialized using:
