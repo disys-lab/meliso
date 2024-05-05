@@ -43,9 +43,9 @@ def updateProbabilities(row,x,x_list,curr_norm_val,norm_val,trials,failures,prob
 
     return x,curr_norm_val,probabilities
 
-def globalBlockCoordinateDescent(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm,n):
+def globalBatchStochasticGradientDescent(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm,n):
     '''
-    This is the classical Block Randomized Kaczmarz. Theorem 4.1 of https://arxiv.org/pdf/1902.09946
+    This is the (BSGD (Batch Stochastic Gradient Descent):) Section 4 of https://arxiv.org/pdf/1902.09946
     '''
     row_size = er - sr
     weighted_projection_sum = np.zeros((n, 1))
@@ -197,7 +197,7 @@ def rootSolve():
     mv.parallelizedBenchmarkMatVec(0, 0)
 
     mv.finalize()
-    b= mv.solverObject.y_benchmark_result
+    #b= mv.solverObject.y_benchmark_result
     # b = correctY(mv.solverObject.maxVCols,
     #          mv.solverObject.y_benchmark_result,
     #          a_min,
@@ -234,12 +234,12 @@ def rootSolve():
         y[sr:er] = np.copy(mv.solverObject.virtualizer[i]["y"])
         mv.solverObject.virtualizer[i]["y"] = np.zeros(er - sr, dtype=np.float64)
 
-        # #TODO: Obtain true y based on rescaling back output
-        # y = correctY(mv.solverObject.maxVCols,
+        # # #TODO: Obtain true y based on rescaling back output
+        # y = mv.solverObject.addCorrectionY(mv.solverObject.maxVCols,
         #              y,
-        #              a_min,
-        #              a_max,
-        #              a_row_sum,
+        #              mv.solverObject.mca.mat_min, #a_min,
+        #              mv.solverObject.mca.mat_max,
+        #              mv.solverObject.mca.mat_row_sum,
         #              mv.solverObject.x_min,
         #              mv.solverObject.x_max,
         #              mv.solverObject.x_sum)
@@ -254,13 +254,9 @@ def rootSolve():
 
         #x_s, alpha = globalFastBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s, er, sr, mv.solverObject.mcaGridRowCap, b_norm, n)
         #x_s, alpha = globalBlockRandomizedKaczmarz(y, x, b_s, w_bars_s, scaled_A_s, er, sr,mv.solverObject.mcaGridRowCap, b_norm, n)
-        x_s, alpha = globalBlockCoordinateDescent(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
-
-
+        x_s, alpha = globalBatchStochasticGradientDescent(y, x, b_s, w_bars_s, scaled_A_s,er,sr, mv.solverObject.mcaGridRowCap, b_norm,n)
 
         x = np.copy(x_s.reshape((n, 1)))
-
-        #x = x.reshape((n, 1)) + x_s.reshape((n, 1))
 
         curr_norm_val = np.linalg.norm(x - real_x_true) / np.linalg.norm(real_x_true)
 
@@ -270,9 +266,6 @@ def rootSolve():
         x_list.append(x)
         norm_val.append(curr_norm_val)
         alpha_list.append(alpha)
-        # print(x)
-        # print(np.linalg.norm(x - real_x_true))
-        # print(np.linalg.norm(real_x_true))
         print(alpha_list)
         print(norm_val)
         print(cond_no)

@@ -76,11 +76,17 @@ class Root:
         if self.virtualizationOn:
             self.initializeVirtualizer()
 
-    def correctY(self, n, y, a_min, a_max, a_row_sum, x_min, x_max, x_sum):
-        correctedY = np.copy(y)
+    def addCorrectionY(self, n, y, a_min, a_max, a_row_sum, x_min, x_max, x_sum):
+        Y = np.copy(y)
         for i in range(y.shape[0]):
-            correctedY[i] = correctedY[i] * (a_max * x_max) + a_min * x_sum + x_min * a_row_sum[i] - n * a_min * x_min
-        return correctedY
+            Y[i] = Y[i] * (a_max * x_max) + a_min * x_sum + x_min * a_row_sum[i] - n * a_min * x_min
+        return Y
+
+    def removeCorrectionY(self, n, y, a_min, a_max, a_row_sum, x_min, x_max, x_sum):
+        Y = np.copy(y)
+        for i in range(y.shape[0]):
+            Y[i] = (Y[i] - a_min * x_sum - x_min * a_row_sum[i] + n * a_min * x_min) / (a_max * x_max)
+        return Y
 
     def initializeVirtualizer(self):
         # do all matrix chunking and preprocessing here
@@ -154,10 +160,9 @@ class Root:
         else:
             self.mca.setX(self.x)
             self.y = self.mca.parallelMatVec()
-        print("Correction:{}".format(correction))
+        #print("Correction:{}".format(correction))
         if correction:
-
-            self.y = self.correctY(self.origMatCols,
+            self.y = self.addCorrectionY(self.origMatCols,
                           self.y,
                           self.mca.mat_min,
                           self.mca.mat_max,
