@@ -26,7 +26,7 @@ class NonRoot:
             #print("RANK{}: has exited".format(self.mca.rank), data)
             return False
 
-    def parallelMatVec(self,correction):
+    def parallelMatVec(self,correction=False):
         if self.virtualizationOn:
             while self.awaitInstructions():
                 self.y = self.mca.parallelMatVec()

@@ -61,7 +61,7 @@ def globalBlockCoordinateDescent(y,x_s,b_s,w_bars,scaled_A,er,sr,row_size,b_norm
 
         #weighted_res_sum = weighted_res_sum + w_bars_i * (res) * (res)
     # print(weighted_res_sum)
-    alpha = 1e-1
+    alpha = 1
     x_update = alpha * weighted_projection_sum/normsum
     x_s = x_s - x_update.reshape(x_s.shape)
     return x_s, alpha
@@ -175,9 +175,9 @@ def rootSolve():
 
     real_x_true = np.copy(mv.solverObject.x)
 
-    a_min = mv.solverObject.mca.mat_min
-    a_max = mv.solverObject.mca.mat_max
-    a_row_sum = mv.solverObject.mca.mat_row_sum
+    # a_min = mv.solverObject.mca.mat_min
+    # a_max = mv.solverObject.mca.mat_max
+    # a_row_sum = mv.solverObject.mca.mat_row_sum
 
     scaled_A, \
     scaled_A_frobenius, \
@@ -197,14 +197,15 @@ def rootSolve():
     mv.parallelizedBenchmarkMatVec(0, 0)
 
     mv.finalize()
-    b = correctY(mv.solverObject.maxVCols,
-             mv.solverObject.y_benchmark_result,
-             a_min,
-             a_max,
-             a_row_sum,
-             mv.solverObject.x_min,
-             mv.solverObject.x_max,
-             mv.solverObject.x_sum)
+    b= mv.solverObject.y_benchmark_result
+    # b = correctY(mv.solverObject.maxVCols,
+    #          mv.solverObject.y_benchmark_result,
+    #          a_min,
+    #          a_max,
+    #          a_row_sum,
+    #          mv.solverObject.x_min,
+    #          mv.solverObject.x_max,
+    #          mv.solverObject.x_sum)
 
     #print(b, a_min, a_max, a_row_sum, mv.solverObject.x_min, mv.solverObject.x_max, mv.solverObject.x_sum, )
 
@@ -233,15 +234,15 @@ def rootSolve():
         y[sr:er] = np.copy(mv.solverObject.virtualizer[i]["y"])
         mv.solverObject.virtualizer[i]["y"] = np.zeros(er - sr, dtype=np.float64)
 
-        #TODO: Obtain true y based on rescaling back output
-        y = correctY(mv.solverObject.maxVCols,
-                     y,
-                     a_min,
-                     a_max,
-                     a_row_sum,
-                     mv.solverObject.x_min,
-                     mv.solverObject.x_max,
-                     mv.solverObject.x_sum)
+        # #TODO: Obtain true y based on rescaling back output
+        # y = correctY(mv.solverObject.maxVCols,
+        #              y,
+        #              a_min,
+        #              a_max,
+        #              a_row_sum,
+        #              mv.solverObject.x_min,
+        #              mv.solverObject.x_max,
+        #              mv.solverObject.x_sum)
 
         #print(b, a_min, a_max, a_row_sum, mv.solverObject.x_min, mv.solverObject.x_max, mv.solverObject.x_sum, )
 

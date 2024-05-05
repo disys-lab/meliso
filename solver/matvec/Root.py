@@ -181,7 +181,7 @@ class Root:
 
     def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction= False):
 
-        self.parallelMatVec(type="benchmark")
+        self.parallelMatVec(type="benchmark", correction=correction)
         if self.y_mem_result is not None:
             self.error = self.y_mem_result - self.y_benchmark_result
             print("error", self.error)
