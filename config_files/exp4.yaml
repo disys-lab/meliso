@@ -1,5 +1,6 @@
 exp_params:
-  turnOnHardware: 0
+  turnOnHardware: 1
+  turnOnScaling: 1
   matrix_name: "ash958"
   matrix_file: "matrices/ash958.mtx"
   distributed:

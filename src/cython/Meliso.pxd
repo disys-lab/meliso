@@ -17,6 +17,7 @@ cdef extern from "Meliso.h" namespace "meliso":
         double totalSubArrayArea, totalNeuronAreaIH,heightNeuronIH, widthNeuronIH, leakageNeuronIH;
 
         double *y;
+        double *actualWeights;
         double *delta;
         double *y_min;
         double *conductanceProperties;
@@ -29,9 +30,12 @@ cdef extern from "Meliso.h" namespace "meliso":
 
         void setHardwareOn(int)
         void setScalingOn(int)
+        void setInterpolants(int)
         void loadInput(double *)
         void initializeWeights()
         void setWeights(double *)
+        void setWeightsIncremental(double *,double)
+        void getWeights()
         void matVec()
         void getResults()
         void setConductanceProperties(double,double,double,double,double,double)

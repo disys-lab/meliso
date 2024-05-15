@@ -23,6 +23,7 @@ class NonRootMCA(BaseMCA):
         self.MIN_TOL = 0.0
 
         self.device_type = 1
+        self.interpolants = 3
 
         if "DT" in os.environ.keys():
             self.device_type = int(os.environ["DT"])
@@ -49,11 +50,14 @@ class NonRootMCA(BaseMCA):
         else:
             self.turnOnScaling = SC
 
-        
 
         self.meliso_obj = meliso.MelisoPy(self.device_type, self.cellRows, self.cellCols, self.MAX_TOL, self.MIN_TOL, self.turnOnHardware,self.turnOnScaling)
 
+        if "interpolants" in self.exp_config["exp_params"].keys():
+            self.interpolants = self.exp_config["exp_params"]["interpolants"]
+            print("setting interpolants to {}".format(self.interpolants))
 
+        self.meliso_obj.setInterpolants(self.interpolants)
 
         if "device_config" not in self.exp_config.keys():
             raise Exception("ExperimentConfigFileError: Device config not specified in %s for MCA rank %s".format(expConfigFile,self.rank))

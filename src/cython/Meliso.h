@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include <iostream>
 #include<map>
 #include <vector>
@@ -64,9 +65,16 @@ public:
     double *y; //Ax = y, y must be close to b
     double *delta; //rhs of Ax=b
     double *y_adj_min; //residual b-Ax
+    double* actualWeights;
+
+    double *f;
+    double *d;
+    double *t;
 
     double *real_delta; //rhs of Ax=b
     double *real_y_adj_min; //residual b-Ax
+
+    int p;
 
     double *conductanceProperties,*writeProperties,*deviceVariation;
 
@@ -79,6 +87,7 @@ public:
 
     bool scalingAdjusted;
     bool considerScaling;
+    bool simpleScaling;
 
     Meliso();
     Meliso(int,int,int,double,double,int,int);
@@ -87,14 +96,20 @@ public:
 
     void setHardwareOn(int);
     void setScalingOn(int);
+    void setInterpolants(int);
 
     void loadInput(double *);
     void initializeWeights();
     void setWeights(double *);
+    void setWeightsIncremental(double *,double);
+    void getWeights();
     void matVec();
     void getResults();
 
     void adjustScalingLimits();
+    void adjustNewtonDDScaling();
+    double computeInterpolants(int, int, int, double *, double *, double *,int,int);
+    double evaluatePolynomial(int,double, double *, double *,int);
     void getScalingLimits(double*, double*, double);
 
     void setConductanceProperties(double,double,double,double,double,double);

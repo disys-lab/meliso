@@ -58,8 +58,28 @@ cdef class MelisoPy:
     def setScalingOn(self,turnOnScaling):
         self.melisoObj.setScalingOn(turnOnScaling)
 
+    def setInterpolants(self,interpolants):
+        self.melisoObj.setInterpolants(interpolants)
+
     def initializeWeights(self):
         self.melisoObj.initializeWeights()
+
+    def getWeights(self):
+        self.melisoObj.getWeights()
+        weights = np.zeros((self.m,self.n),dtype=float)
+        for i in xrange(self.m):
+            for j in xrange(self.n):
+                weights[i][j] = self.melisoObj.actualWeights[i*self.n+j]
+
+        return weights
+
+    def setWeightsIncremental(self,np_A_matrix,precision):
+        ctr = 0
+        for i in xrange(self.m):
+            for j in xrange(self.n):
+                self.A_matrix[ctr] = np_A_matrix[i][j]
+                ctr = ctr +1
+        self.melisoObj.setWeightsIncremental(self.A_matrix,precision)
 
     def setWeights(self,np_A_matrix):
         ctr = 0
