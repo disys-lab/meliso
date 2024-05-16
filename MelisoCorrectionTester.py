@@ -157,76 +157,480 @@ def setWeightsIncremental(meliso_obj,scaled_A,res_tol,precision,itr_limit):
     # print(actualWeights)
     # print(scaled_A)
 
-def correction(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_limit):
+def correctionADMMNonConvex(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_limit):
     rows = A.shape[0]
     cols = A.shape[1]
+
+    lbda = np.zeros((rows, 1), dtype=float).flatten()
+
+    xt = x.reshape((1, cols))
+    X = np.tile(xt, (rows, 1))
+
+    A_tilde = np.copy(A)
+    X_tilde = np.copy(X)
+
+    eta = 1e-4
+    rho = 0.2
+
+    y_tilde = x.reshape((rows,1)).flatten()
+    k=0
+
+    U_tilde = np.empty((rows, 1), dtype=float)
+
+    V_tilde = np.empty((rows, 1), dtype=float)
+
+    y = np.zeros((rows, 1), dtype=float)
+
+    while k<itr_limit:
+
+        for i in range(rows):
+            ait = A[i, :].flatten()
+            ui_tilde = matVec(meliso_obj, ait, RESULT_MULT).flatten()
+            U_tilde[i] = ui_tilde[i]
+
+            proxX = V_tilde[i] - y_tilde[i] - U_tilde[i] + np.dot(A[i, :], x) - precision * precision
+            gradX = X_tilde[i, :] - X[i, :] - precision + (lbda[i] + rho * proxX) * (A_tilde[i, :] - A[i, :])
+            for j in range(cols):
+                xtval = X_tilde[i, j] + eta * gradX[j]
+                if xtval >0:
+                    X_tilde[i, j] = xtval
+                else:
+                    X_tilde[i, j] = 0
+
+
+
+        X_j, X_res = setWeightsIncremental(meliso_obj, X_tilde, res_tol, precision, 1)
+
+        X_tilde = meliso_obj.getWeights()
+
+        for i in range(rows):
+            xit = X_tilde[i, :].flatten()
+            vi_tilde = matVec(meliso_obj, xit, RESULT_MULT)
+            V_tilde[i] = vi_tilde[i]
+
+            proxA = V_tilde[i] - y_tilde[i] - U_tilde[i] +np.dot(A[i,:],x) - precision*precision
+            gradA = A_tilde[i,:] - A[i,:] - precision + (lbda[i]+ rho*proxA)*(X_tilde[i, :] - x.flatten())
+            A_tilde[i, :] = A_tilde[i, :] + eta * gradA
+
+            for j in range(cols):
+                atval = A_tilde[i, j] + eta * gradA[j]
+                if atval >0:
+                    A_tilde[i, j] = atval
+                else:
+                    A_tilde[i, j] = 0
+
+        A_j, A_res = setWeightsIncremental(meliso_obj, A_tilde, res_tol, precision, 1)
+
+        A_tilde = meliso_obj.getWeights()
+
+        y_tilde = matVec(meliso_obj, x, RESULT_MULT).flatten()
+
+
+        proxLSum = 0
+        for i in range(rows):
+            proxL = V_tilde[i] - y_tilde[i] - U_tilde[i] + np.dot(A[i, :], x) - precision * precision
+            lbda[i] = lbda[i] + rho*(proxL)
+            proxLSum = proxLSum+proxL
+            y[i] = y_tilde[i] - V_tilde[i] + U_tilde[i]
+
+        k = k+1
+        print(k,np.linalg.norm(proxLSum),y.flatten())
+    return -1*y
+
+def correctionADMM(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_limit):
+    rows = A.shape[0]
+    cols = A.shape[1]
+
+    lbda = np.zeros((rows, 1), dtype=float).flatten()
+
+    xt = x.reshape((1, cols))
+    X = np.tile(xt, (rows, 1))
+
+    A_tilde = np.copy(A)
+    X_tilde = np.copy(X)
+
+    eta = 1e-2
+    rho = 10
+
+    y_tilde = None
+    j=0
+
+    y = np.zeros((rows, 1), dtype=float)
+
+    V_tilde = np.empty((rows, 1), dtype=float)
+
+    U_tilde = np.empty((rows, 1), dtype=float)
+
+    while j<itr_limit:
+
+        X_j, X_res = setWeightsIncremental(meliso_obj, X_tilde, res_tol, precision, 1)
+
+        X_tilde = meliso_obj.getWeights()
+
+        for i in range(rows):
+            ait = A[i, :].flatten()
+            ui_tilde = matVec(meliso_obj, ait, RESULT_MULT).flatten()
+            U_tilde[i] = ui_tilde[i]
+
+        for i in range(rows):
+            gradX = X_tilde[i, :] - X[i, :] - precision + (-lbda[i] + rho * U_tilde[i]) * A[i,:]
+            X_tilde[i, :] = X_tilde[i, :] + eta * gradX
+
+        A_j, A_res = setWeightsIncremental(meliso_obj, A_tilde, res_tol, precision, 1)
+
+        A_tilde = meliso_obj.getWeights()
+
+        y_tilde = matVec(meliso_obj, x, RESULT_MULT).flatten()
+
+        for i in range(rows):
+
+            gradA = A_tilde[i, :] - A[i, :] - precision + (lbda[i] + rho * y_tilde[i]) * x.flatten()
+            A_tilde[i, :] = A_tilde[i,:] + eta*gradA
+
+            lbda[i] = lbda[i] + rho * (y_tilde[i] - U_tilde[i])
+            print(gradA.shape, x.shape)
+
+        # for i in range(rows):
+        #     xit = X_tilde[i, :].flatten()
+        #     vi_tilde = matVec(meliso_obj, xit, RESULT_MULT)
+        #     V_tilde[i] = vi_tilde[i]
+        #
+        #     y[i] = y_tilde[i] - V_tilde[i] + U_tilde[i]
+
+        j = j+1
+        print(j, y_tilde)
+    return -1* y_tilde
+
+def correctionADMMDenoising(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_limit,tolerance,y_benchmark,benchmark_norm):
+    # l_dn = 0.001
+    # rho = 0.001
+    # ifac = 2
+    # eta = 1e-3
+
+    # l_dn = 0.001
+    # rho = 0.001
+    # ifac = 4
+    # eta = 1e-3
+
+    l_dn = 0.01
+    rho = 0.01
+    ifac = 5
+    eta = 1e-3
+
+    ILIM = itr_limit / (ifac)
+    OLIM = ifac
+
+    alpha_x = 1
+    alpha_a = 1
+
+    rows = A.shape[0]
+    cols = A.shape[1]
+
+    L = np.eye(rows)
+    for i in range(rows - 1):
+        L[i, i + 1] = -1
+
+    lbda = np.zeros((rows, 1), dtype=float).flatten()
+
+    LTL = L.T @ L
 
     xt = x.reshape((1,cols))
     X = np.tile(xt,(rows,1))
 
-    X_j,X_res = setWeightsIncremental(meliso_obj, X, res_tol, precision, itr_limit)
+    y_a = np.zeros((rows, 1), dtype=float)
 
-    X_tilde = meliso_obj.getWeights()
+    y_x = np.zeros((rows, 1), dtype=float)
 
-    y = np.zeros((rows, 1), dtype=float)
+    U_tilde = np.empty((rows, 1), dtype=float)
 
-    U_tilde = np.empty((rows,1),dtype=float)
+    V_tilde_a = np.empty((rows, 1), dtype=float)
 
-    for i in range(rows):
-        ait = A[i,:].flatten()
-        ui_tilde = matVec(meliso_obj, ait, RESULT_MULT).flatten()
+    V_tilde_x = np.empty((rows, 1), dtype=float)
+
+    A_tilde = np.copy(A)
+    X_tilde = np.copy(X)
+    y_corr = 0
+    X_itrs = 0
+    A_itrs = 0
+    A_res = 0
+    X_res = 0
+
+    y_corr_previous= np.copy(y_a)
+    y_corr_norm_list = []
+    dual_norm_diff_list = []
+    benchmark_err_norm_list = []
+
+    for itr in range(OLIM):
+
+        X_j, X_res = setWeightsIncremental(meliso_obj, X_tilde, res_tol, precision, alpha_x * ILIM)
+
+        X_itrs = X_itrs + X_j
+
+        X_tilde = meliso_obj.getWeights()
+
+        for i in range(rows):
+            ai = A[i, :].flatten()
+            ui_tilde = matVec(meliso_obj, ai, RESULT_MULT).flatten()
+            ui_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, ui_tilde)
+            U_tilde[i] = ui_tilde[i]
+
+        for i in range(rows):
+            ait = A_tilde[i, :].flatten()
+            vi_tilde = matVec(meliso_obj, ait, RESULT_MULT)
+            vi_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, vi_tilde)
+            V_tilde_x[i] = vi_tilde[i]
+
+        # for i in range(rows):
+        r = np.random.randint(low=0, high=rows - 1)
+        gradX = 2 * X_tilde[r, :] * (X_tilde[r, :] - X[r, :]) - (lbda[r] + rho * (y_x[r] - y_a[r])) * (
+                    A_tilde[r, :] - A[r, :])  # (-lbda[i] + rho * U_tilde[i]) * A[i,:]
+        X_tilde[r, :] = X_tilde[r, :] + eta * gradX
+
+        # Optimize for A
+        A_j, A_res = setWeightsIncremental(meliso_obj, A_tilde, res_tol, precision, alpha_a * ILIM)
+
+        A_itrs = A_itrs + A_j
+
+        A_tilde = meliso_obj.getWeights()
+
+        for i in range(rows):
+            xit = X_tilde[i,:].flatten()
+            vi_tilde = matVec(meliso_obj,xit,RESULT_MULT)
+            vi_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, vi_tilde)
+            V_tilde_a[i] = vi_tilde[i]
+
+        gradA = 2 * A_tilde[r, :] * (A_tilde[r, :] - A[r, :]) + (lbda[r] + rho * (y_x[r] - y_a[r])) * (
+                    X_tilde[r, :] - X[r, :])  # (-lbda[i] + rho * U_tilde[i]) * A[i,:]
+        A_tilde[r, :] = A_tilde[r, :] + eta * gradA
+
+        y_tilde = matVec(meliso_obj,x,RESULT_MULT)
+
+        y_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_tilde)
+
+
+        for i in range(rows):
+            y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i] #+ (DAX_tilde[i] + DXA_tilde[i])/2.0
+            y_x[i] = U_tilde[i] - V_tilde_x[i] + y_tilde[i]
+
+            #print(y_a[i]+y_x[i],y_tilde[i],V_tilde_a[i],V_tilde_x[i],U_tilde[i])
+
+        y_a = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_a)
+        y_x = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_x)
+
+        for i in range(rows):
+            lbda[i] = lbda[i] + rho * (y_x[i].flatten() - y_a[i].flatten())
+
+        y_corr = 0.5*(y_a+y_x)
+
+        y_corr = np.linalg.solve(np.eye(rows)+lbda*LTL, y_corr)
+        dual_norm_diff = np.linalg.norm(y_a-y_x,ord=np.inf)
+        dual_norm_diff_list.append(dual_norm_diff)
+
+        y_nrm = np.linalg.norm(y_corr - y_corr_previous,ord=np.inf)
+        y_corr_norm_list.append(y_nrm)
+        y_corr_previous = np.copy(y_corr)
+
+        benchmark_diff_norm = np.linalg.norm(y_corr.flatten() - y_benchmark.flatten())
+
+        benchmark_err_norm_list.append(benchmark_diff_norm)
+
+        # if benchmark_diff_norm <= benchmark_norm:
+        #     break
+
+        if dual_norm_diff <= tolerance and y_nrm <= tolerance:
+            break
+
+    #print(y_corr_norm_list)
+    print(dual_norm_diff_list)
+    print(benchmark_err_norm_list)
+    return y_corr,[X_itrs,0,0],A_itrs,X_res,A_res
+
+def correctionADMMRandomDenoising(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_limit,tolerance):
+    l_dn = 0.1
+    rho = 0.1
+    ifac = 100
+    eta = 1e-3
+
+    rows = A.shape[0]
+    cols = A.shape[1]
+
+    L = np.eye(rows)
+    # for i in range(rows - 1):
+    #     L[i, i + 1] = -1
+
+    lbda = np.zeros((rows, 1), dtype=float).flatten()
+
+    LTL = L.T @ L
+
+    xt = x.reshape((1,cols))
+    X = np.tile(xt,(rows,1))
+
+    y_a = np.zeros((rows, 1), dtype=float)
+
+    y_x = np.zeros((rows, 1), dtype=float)
+
+    U_tilde = np.empty((rows, 1), dtype=float)
+
+    V_tilde_a = np.empty((rows, 1), dtype=float)
+
+    V_tilde_x = np.empty((rows, 1), dtype=float)
+
+    ILIM= itr_limit/(ifac)
+    OLIM=ifac
+
+    A_tilde = np.copy(A)
+    X_tilde = np.copy(X)
+    y_corr = 0
+    X_itrs = 0
+    A_itrs = 0
+    A_res = 0
+    X_res = 0
+
+    y_corr_previous= np.copy(y_a)
+    y_corr_norm_list = []
+    dual_norm_diff_list = []
+
+    for itr in range(OLIM):
+
+        i = np.random.randint(low=0,high=rows-1)
+
+        X_j,X_res = setWeightsIncremental(meliso_obj, X_tilde, res_tol, precision, ILIM)
+
+        X_itrs = X_itrs + X_j
+
+        X_tilde = meliso_obj.getWeights()
+
+        ai = A[i,:].flatten()
+        ui_tilde = matVec(meliso_obj, ai, RESULT_MULT).flatten()
+        #ui_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, ui_tilde)
         U_tilde[i] = ui_tilde[i]
 
-    A_j,A_res = setWeightsIncremental(meliso_obj, A, res_tol, precision, itr_limit)
+        ait = A_tilde[i,:].flatten()
+        vi_tilde = matVec(meliso_obj,ait,RESULT_MULT)
+        vi_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, vi_tilde)
+        V_tilde_x[i] = vi_tilde[i]
 
-    A_tilde = meliso_obj.getWeights()
+        gradX = 2*(X_tilde[i, :] - X[i, :] - precision) - (lbda[i] +rho*(y_x[i] - y_a[i]))*(A_tilde[i,:] - A[i,:]) #(-lbda[i] + rho * U_tilde[i]) * A[i,:]
+        X_tilde[i, :] = X_tilde[i, :] + eta * gradX
 
+        A_j,A_res = setWeightsIncremental(meliso_obj, A_tilde, res_tol, precision, ILIM)
 
+        A_itrs = A_itrs +A_j
 
-    V_tilde = np.empty((rows, 1), dtype=float)
+        A_tilde = meliso_obj.getWeights()
 
-    for i in range(rows):
         xit = X_tilde[i,:].flatten()
         vi_tilde = matVec(meliso_obj,xit,RESULT_MULT)
-        V_tilde[i] = vi_tilde[i]
+        vi_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, vi_tilde)
+        V_tilde_a[i] = vi_tilde[i]
 
-    y_tilde = matVec(meliso_obj,x,RESULT_MULT)
+        y_tilde = matVec(meliso_obj,x,RESULT_MULT)
 
-    DA_tilde = A_tilde - A
+        y_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_tilde)
 
-    DX_tilde = X_tilde - X
+        gradA = 2*(A_tilde[i, :] - A[i, :] - precision) + (lbda[i] +rho*(y_x[i] - y_a[i]))*(X_tilde[i,:] - X[i,:]) #(-lbda[i] + rho * U_tilde[i]) * A[i,:]
+        A_tilde[i, :] = A_tilde[i, :] + eta * gradA
 
-    DAX_tilde = np.empty((rows, 1), dtype=float)
+        y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i]
 
-    DXA_tilde = np.empty((rows, 1), dtype=float)
 
-    DAX_j = 0
-    DXA_j = 0
+        y_x[i] = U_tilde[i] - V_tilde_x[i] + y_tilde[i]
 
-    # DAX_j,DAX_res = setWeightsIncremental(meliso_obj, DA_tilde, res_tol, precision, 0.2*itr_limit)
-    #
-    #
-    #
-    # for i in range(rows):
-    #     dxit = DX_tilde[i,:].flatten()
-    #     dax_tilde = matVec(meliso_obj,dxit,RESULT_MULT)
-    #     DAX_tilde[i] = dax_tilde[i]
-    #
-    # DXA_j, DXA_res = setWeightsIncremental(meliso_obj, DX_tilde, res_tol, precision, 0.2*itr_limit)
-    #
-    #
-    #
-    # for i in range(rows):
-    #     dait = DA_tilde[i,:].flatten()
-    #     dxa_tilde = matVec(meliso_obj,dait,RESULT_MULT)
-    #     DXA_tilde[i] = dxa_tilde[i]
+        y_a = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_a)
+        y_x = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_x)
 
-    for i in range(rows):
-        y[i] = y_tilde[i] - V_tilde[i] + U_tilde[i] #+ (DAX_tilde[i] + DXA_tilde[i])/2.0
+        lbda[i] = lbda[i] + rho * (y_x[i] - y_a[i])
 
-        print(y[i],y_tilde[i],V_tilde[i],U_tilde[i],DAX_tilde[i],DXA_tilde[i])
+        y_corr = 0.5*(y_a+y_x)
+        y_corr = np.linalg.solve(np.eye(rows)+lbda*LTL, y_corr)
+        dual_norm_diff = np.linalg.norm(y_a-y_x)
+        dual_norm_diff_list.append(dual_norm_diff)
 
-    return y,[X_j,DAX_j,DXA_j],A_j,X_res,A_res
+        nrm = np.linalg.norm(y_corr - y_corr_previous)
+        y_corr_norm_list.append(nrm)
+        y_corr_previous = np.copy(y_corr)
+        if dual_norm_diff <= tolerance:
+            break
+
+
+    print(y_corr_norm_list)
+    print(dual_norm_diff_list)
+    return y_corr,[X_itrs,0,0],A_itrs,X_res,A_res
+
+def correction(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_limit):
+    rows = A.shape[0]
+    cols = A.shape[1]
+
+    l_dn = 0.001
+    L = np.eye(rows)
+    for i in range(rows - 1):
+        L[i, i + 1] = -1
+
+    LTL = L.T @ L
+
+    xt = x.reshape((1,cols))
+    X = np.tile(xt,(rows,1))
+
+    y_a = np.zeros((rows, 1), dtype=float)
+
+    y_x = np.zeros((rows, 1), dtype=float)
+
+    U_tilde = np.empty((rows, 1), dtype=float)
+
+    V_tilde_a = np.empty((rows, 1), dtype=float)
+
+    V_tilde_x = np.empty((rows, 1), dtype=float)
+
+    ILIM= itr_limit/1
+    OLIM=1
+
+    A_tilde = np.copy(A)
+    y_corr = 0
+    X_j = 0
+    A_j = 0
+    A_res = 0
+    X_res = 0
+
+    for itr in range(OLIM):
+
+        X_j,X_res = setWeightsIncremental(meliso_obj, X, res_tol, precision, ILIM)
+
+        X_tilde = meliso_obj.getWeights()
+
+        for i in range(rows):
+            ai = A[i,:].flatten()
+            ui_tilde = matVec(meliso_obj, ai, RESULT_MULT).flatten()
+            ui_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, ui_tilde)
+            U_tilde[i] = ui_tilde[i]
+
+        for i in range(rows):
+            ait = A_tilde[i,:].flatten()
+            vi_tilde = matVec(meliso_obj,ait,RESULT_MULT)
+            vi_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, vi_tilde)
+            V_tilde_x[i] = vi_tilde[i]
+
+        A_j,A_res = setWeightsIncremental(meliso_obj, A, res_tol, precision, ILIM)
+
+        A_tilde = meliso_obj.getWeights()
+
+        for i in range(rows):
+            xit = X_tilde[i,:].flatten()
+            vi_tilde = matVec(meliso_obj,xit,RESULT_MULT)
+            vi_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, vi_tilde)
+            V_tilde_a[i] = vi_tilde[i]
+
+        y_tilde = matVec(meliso_obj,x,RESULT_MULT)
+
+        y_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_tilde)
+
+        for i in range(rows):
+            y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i] #+ (DAX_tilde[i] + DXA_tilde[i])/2.0
+            y_x[i] = U_tilde[i] - V_tilde_x[i] + y_tilde[i]
+            print(y_a[i]+y_x[i],y_tilde[i],V_tilde_a[i],V_tilde_x[i],U_tilde[i])
+
+        y_corr = np.linalg.solve(np.eye(rows)+lbda*LTL, 0.5*(y_a+y_x))
+
+    return y_corr,[OLIM*X_j,0,0],OLIM*A_j,X_res,A_res
 
 MAX_TOL = 1.0
 MIN_TOL = 0
@@ -247,19 +651,22 @@ if not isinstance(scaled_A, np.ndarray):
 
 print(scaled_A)
 
+
 dim = scaled_A.shape[1]
 
 turnOnHardware = 1
 turnOnScaling = 0
 #RESULT_MULT=1
 RESULT_MULT= turnOnHardware+1
-RES_TOL=1e-6
 PRECISION=1e-6
-ITR_LIMIT=600
+RES_TOL= dim*dim*PRECISION*PRECISION
+ITR_LIMIT=800
+ITR_TOL=dim*1e-2
 
-rsmb = 1e-4
-pmb=1e-4
-ilmb=3
+
+rsmb = 1
+pmb=1
+ilmb=0.5
 
 #best performance so far on device0
 #numbitinput=10
@@ -292,22 +699,22 @@ x_raw = np.loadtxt(fname='input_x',delimiter=',')
 x = x_raw.reshape(x_raw.shape[0],1)[:dim]
 x_ref= np.copy(x)
 
+real_Ax = np.dot(scaled_A,x).reshape((1,dim)).flatten()
+
 meliso_obj.initializeWeights()
 scaled_A_j,scaled_A_res = setWeightsIncremental(meliso_obj,scaled_A,rsmb*RES_TOL,pmb*PRECISION,ilmb*ITR_LIMIT)
 meliso_obj.loadInput(x)
 meliso_obj.matVec()
 y_benchmark_mem_result = RESULT_MULT*meliso_obj.getResults()
 
+y_benchmark_mem_result = y_benchmark_mem_result.reshape((1,dim)).flatten()
+benchmark_norm = np.linalg.norm(real_Ax-y_benchmark_mem_result,ord=np.inf)
 
 meliso_obj.initializeWeights()
-y_rescaled_mem_result,X_j,A_j,X_res,A_res = correction(meliso_obj, scaled_A, x, RESULT_MULT,RES_TOL,PRECISION,ITR_LIMIT)
-# y0_rescaled_mem_result, X0_j, A0_j = correction(meliso_obj, scaled_A, 0 * x, RESULT_MULT, RES_TOL, PRECISION,
-#                                                     ITR_LIMIT)
-# y0_rescaled_mem_result, X0_j, A0_j = correction(meliso_obj, scaled_A, 0 * x, RESULT_MULT, RES_TOL, PRECISION,
-#                                                     ITR_LIMIT)
+#y_rescaled_mem_result,X_j,A_j,X_res,A_res = correction(meliso_obj, scaled_A, x, RESULT_MULT,RES_TOL,PRECISION,ITR_LIMIT)
+y_rescaled_mem_result,X_j,A_j,X_res,A_res = correctionADMMDenoising(meliso_obj, scaled_A, x, RESULT_MULT,RES_TOL,PRECISION,ITR_LIMIT,ITR_TOL,y_benchmark_mem_result,benchmark_norm)
 
-# y_rescaled_mem_result = (y_rescaled_mem_result.reshape((1,dim)) -y0_rescaled_mem_result.reshape((1,dim)))/2
-y_rescaled_mem_result = y_rescaled_mem_result.reshape((1,dim))
+y_rescaled_mem_result = y_rescaled_mem_result.reshape((1,dim)).flatten()
 if INTERPOLATE:
     y0_rescaled_mem_result, X0_j, A0_j,X0_res,A0_res = correction(meliso_obj, scaled_A, 0 * x, RESULT_MULT, RES_TOL, PRECISION,
                                                     ITR_LIMIT)
@@ -351,21 +758,50 @@ if INTERPOLATE:
 # print(y0_rescaled_mem_result.flatten())
 # print(y_rescaled_mem_result.flatten())
 
-real_Ax = np.dot(scaled_A,x).reshape((1,dim))
-y_benchmark_mem_result = y_benchmark_mem_result.reshape((1,dim))
+
+
 print("y_benchmark:",y_benchmark_mem_result.reshape((1,dim)))
 print("y_correction:",y_rescaled_mem_result.reshape((1,dim)))
 print("real_Ax:",real_Ax.reshape((1,dim)))
-benchmark_norm = np.linalg.norm(real_Ax-y_benchmark_mem_result)
-correction_norm = np.linalg.norm(real_Ax-y_rescaled_mem_result)
+
+correction_norm = np.linalg.norm(real_Ax-y_rescaled_mem_result,ord=np.inf)
 print("benchmark_norm",benchmark_norm)
 print("correction_norm",correction_norm)
 print(real_Ax-y_rescaled_mem_result)
 print(real_Ax-y_benchmark_mem_result)
-print("X_j:{},A_j:{},scaled_A_j:{}".format(X_j,A_j,scaled_A_j))
+print("X_j:{},A_j:{},X_j+A_j:{},scaled_A_j:{}".format(X_j,A_j,X_j[0]+A_j,scaled_A_j))
 print("X_res:{},A_res:{},scaled_A_res:{}".format(X_res,A_res,scaled_A_res))
 # cols=rows=dim
 # xt = x.reshape((1, cols))
 # scaled_A = np.tile(xt,(rows,1))
 
 #meliso_obj.initializeWeights()
+
+# DA_tilde = A_tilde - A
+#
+#     DX_tilde = X_tilde - X
+#
+#     DAX_tilde = np.empty((rows, 1), dtype=float)
+#
+#     DXA_tilde = np.empty((rows, 1), dtype=float)
+#
+#     DAX_j = 0
+#     DXA_j = 0
+
+    # DAX_j,DAX_res = setWeightsIncremental(meliso_obj, DA_tilde, res_tol, precision, 0.2*itr_limit)
+    #
+    #
+    #
+    # for i in range(rows):
+    #     dxit = DX_tilde[i,:].flatten()
+    #     dax_tilde = matVec(meliso_obj,dxit,RESULT_MULT)
+    #     DAX_tilde[i] = dax_tilde[i]
+    #
+    # DXA_j, DXA_res = setWeightsIncremental(meliso_obj, DX_tilde, res_tol, precision, 0.2*itr_limit)
+    #
+    #
+    #
+    # for i in range(rows):
+    #     dait = DA_tilde[i,:].flatten()
+    #     dxa_tilde = matVec(meliso_obj,dait,RESULT_MULT)
+    #     DXA_tilde[i] = dxa_tilde[i]
