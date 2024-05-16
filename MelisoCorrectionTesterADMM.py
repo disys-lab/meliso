@@ -16,18 +16,6 @@ For more information read src/cython/Meliso.cpp
 Second and third arguments are rows and columns of weight matrix
 '''
 
-# p=4
-# f = np.zeros((1,4)).flatten()
-# d = np.array([12.0,13.0,14.0,16.0])
-# t = np.array([5.0,6.0,9.0,11.0])
-#
-# computeInterpolants(p-1,0,p-1,f,d,t,1)
-#
-# value = 7.0
-#
-# res = evaluatePolynomial(p-1,value,f,t)
-#
-# print(res)
 
 def matVec(meliso_obj,x,RESULT_MULT):
     meliso_obj.loadInput(x)
@@ -56,24 +44,7 @@ def setWeightsIncremental(meliso_obj,scaled_A,res_tol,precision,itr_limit):
     # print(actualWeights)
     # print(scaled_A)
 
-def correctionADMMDenoising(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_limit,tolerance,y_benchmark,benchmark_norm):
-    # l_dn = 0.001
-    # rho = 0.001
-    # ifac = 2
-    # eta = 1e-3
-
-    # l_dn = 0.001
-    # rho = 0.001
-    # ifac = 4
-    # eta = 1e-3
-
-    l_dn = 0.001
-    rho = 0.001
-    ifac = 1
-    eta = 1e-3
-
-    ILIM = itr_limit / (ifac)
-    OLIM = ifac
+def correctionADMMDenoising(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_limit,tolerance,y_benchmark,benchmark_norm, ADMM,l_dn,rho,eta,OLIM,ILIM):
 
     alpha_x = ILIM
     alpha_a = ILIM
@@ -139,11 +110,13 @@ def correctionADMMDenoising(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_lim
             vi_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, vi_tilde)
             V_tilde_x[i] = vi_tilde[i]
 
-        # for i in range(rows):
+        # # for i in range(rows):
         r_list = np.random.randint(low=0, high=rows - 1,size=samples)
-        for r in r_list:
-            gradX = 2 * np.dot(X_tilde[r, :] ,(X_tilde[r, :] - X[r, :])) - (lbda[r] + rho * (y_x[r] - y_a[r])) * (A_tilde[r, :] - A[r, :])  # (-lbda[i] + rho * U_tilde[i]) * A[i,:]
-            X_tilde[r, :] = X_tilde[r, :] + eta * gradX
+        if ADMM:
+            for r in r_list:
+                gradX = 2 * np.dot(X_tilde[r, :] ,(X_tilde[r, :] - X[r, :]))
+                gradX = gradX - (lbda[r] + rho * (y_x[r] - y_a[r])) * (A_tilde[r, :] - A[r, :])
+                X_tilde[r, :] = X_tilde[r, :] + eta * gradX
 
         meliso_obj.initializeWeights()
         # Optimize for A
@@ -159,14 +132,15 @@ def correctionADMMDenoising(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_lim
             vi_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, vi_tilde)
             V_tilde_a[i] = vi_tilde[i]
 
-        for r in r_list:
-            gradA = 2 * np.dot(A_tilde[r, :], (A_tilde[r, :] - A[r, :])) + (lbda[r] + rho * (y_x[r] - y_a[r])) * (X_tilde[r, :] - X[r, :])  # (-lbda[i] + rho * U_tilde[i]) * A[i,:]
-            A_tilde[r, :] = A_tilde[r, :] + eta * gradA
+        if ADMM:
+            for r in r_list:
+                gradA = 2 * np.dot(A_tilde[r, :], (A_tilde[r, :] - A[r, :]))
+                gradA = gradA + (lbda[r] + rho * (y_x[r] - y_a[r])) * (X_tilde[r, :] - X[r, :])
+                A_tilde[r, :] = A_tilde[r, :] + eta * gradA
 
         y_tilde = matVec(meliso_obj,x,RESULT_MULT)
 
         y_tilde = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_tilde)
-
 
         for i in range(rows):
             y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i] #+ (DAX_tilde[i] + DXA_tilde[i])/2.0
@@ -177,8 +151,9 @@ def correctionADMMDenoising(meliso_obj,A,x,RESULT_MULT,res_tol,precision,itr_lim
         y_a = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_a)
         y_x = np.linalg.solve(np.eye(rows) + l_dn * LTL, y_x)
 
-        for i in range(rows):
-            lbda[i] = lbda[i] + rho * (y_x[i].flatten() - y_a[i].flatten())
+        if ADMM:
+            for i in range(rows):
+                lbda[i] = lbda[i] + rho * (y_x[i].flatten() - y_a[i].flatten())
 
         y_corr = 0.5*(y_a+y_x)
 
@@ -230,42 +205,29 @@ dim = scaled_A.shape[1]
 turnOnHardware = 1
 turnOnScaling = 0
 #RESULT_MULT=1
+
+
 RESULT_MULT= turnOnHardware+1
 PRECISION=1e-3
 RES_TOL= dim*dim*PRECISION*PRECISION
 ITR_LIMIT=300
 ITR_TOL=dim*1e-2
 
+l_dn = 0.001
+rho = 0.001
+ifac = 1
+eta = 1e-3
+
+ILIM = ITR_LIMIT/ifac
+OLIM = ifac
 
 rsmb = RES_TOL
 pmb=PRECISION
 ilmb=1200
 
-#best performance so far on device0
-#numbitinput=10
-#numbitpartialsum=10
-# RES_TOL=1e-6
-# PRECISION=1e-6
-# ITR_LIMIT=20
-#
-# rsmb = 1
-# pmb=1
-# ilmb=2
-
 INTERPOLATE=False
 meliso_obj = meliso.MelisoPy(1,dim,dim,MAX_TOL,MIN_TOL,turnOnHardware,turnOnScaling)
-# #Epiram
-# meliso_obj.setConductanceProperties(1.2345679012345678e-05, 2.4592986080369874e-07,1.2345679012345678e-05, 2.4592986080369874e-07,2.4592986080369874e-07,2.4592986080369874e-07)
-# meliso_obj.setWriteProperties(5.0, -3.0, 5e-6,5e-6,256,256)
-# meliso_obj.setDeviceVariation(0.5,-0.5,0,0.02)
 
-# if INTERPOLATE:
-#     f,t = preprocess(meliso_obj,p,dim,dim,RESULT_MULT,RES_TOL,PRECISION,ITR_LIMIT)
-#
-# print(f,t)
-
-#obtain an A matrix with values between 0,1
-#I have observed that having matrix between 0,1 gives the best results
 
 
 x_raw = np.loadtxt(fname='input_x',delimiter=',')
@@ -285,7 +247,22 @@ benchmark_norm = np.linalg.norm(real_Ax-y_benchmark_mem_result,ord=np.inf)
 
 meliso_obj.initializeWeights()
 #y_rescaled_mem_result,X_j,A_j,X_res,A_res = correction(meliso_obj, scaled_A, x, RESULT_MULT,RES_TOL,PRECISION,ITR_LIMIT)
-y_rescaled_mem_result,X_j,A_j,X_res,A_res = correctionADMMDenoising(meliso_obj, scaled_A, x, RESULT_MULT,RES_TOL,PRECISION,ITR_LIMIT,ITR_TOL,y_benchmark_mem_result,benchmark_norm)
+y_rescaled_mem_result,X_j,A_j,X_res,A_res = correctionADMMDenoising(meliso_obj,
+                                                                    scaled_A,
+                                                                    x,
+                                                                    RESULT_MULT,
+                                                                    RES_TOL,
+                                                                    PRECISION,
+                                                                    ITR_LIMIT,
+                                                                    ITR_TOL,
+                                                                    y_benchmark_mem_result,
+                                                                    benchmark_norm,
+                                                                    ADMM=False,
+                                                                    l_dn = l_dn,
+                                                                    rho=rho,
+                                                                    eta=eta,
+                                                                    OLIM=OLIM,
+                                                                    ILIM=ILIM)
 
 y_rescaled_mem_result = y_rescaled_mem_result.reshape((1,dim)).flatten()
 if INTERPOLATE:
@@ -324,9 +301,6 @@ if INTERPOLATE:
             print("i:{},xsum:{},dai:{},dxi:{},corr:{},Ot1:{},y0:{},res:{},res0:{}".format(i,xsum,dai,dxi,corr,Ot1[i][0],y0[i], res, res0))
 
 
-
-
-
 print("y_benchmark:",y_benchmark_mem_result.reshape((1,dim)))
 print("y_correction:",y_rescaled_mem_result.reshape((1,dim)))
 print("real_Ax:",real_Ax.reshape((1,dim)))
@@ -338,3 +312,60 @@ print(real_Ax-y_rescaled_mem_result)
 print(real_Ax-y_benchmark_mem_result)
 print("X_j:{},A_j:{},X_j+A_j:{},scaled_A_j:{}".format(X_j,A_j,X_j[0]+A_j,scaled_A_j))
 print("X_res:{},A_res:{},scaled_A_res:{}".format(X_res,A_res,scaled_A_res))
+
+# #Epiram
+# meliso_obj.setConductanceProperties(1.2345679012345678e-05, 2.4592986080369874e-07,1.2345679012345678e-05, 2.4592986080369874e-07,2.4592986080369874e-07,2.4592986080369874e-07)
+# meliso_obj.setWriteProperties(5.0, -3.0, 5e-6,5e-6,256,256)
+# meliso_obj.setDeviceVariation(0.5,-0.5,0,0.02)
+
+# if INTERPOLATE:
+#     f,t = preprocess(meliso_obj,p,dim,dim,RESULT_MULT,RES_TOL,PRECISION,ITR_LIMIT)
+#
+# print(f,t)
+
+#obtain an A matrix with values between 0,1
+#I have observed that having matrix between 0,1 gives the best results
+
+
+#best performance so far on device0
+#numbitinput=10
+#numbitpartialsum=10
+# RES_TOL=1e-6
+# PRECISION=1e-6
+# ITR_LIMIT=20
+#
+# rsmb = 1
+# pmb=1
+# ilmb=2
+
+
+# p=4
+# f = np.zeros((1,4)).flatten()
+# d = np.array([12.0,13.0,14.0,16.0])
+# t = np.array([5.0,6.0,9.0,11.0])
+#
+# computeInterpolants(p-1,0,p-1,f,d,t,1)
+#
+# value = 7.0
+#
+# res = evaluatePolynomial(p-1,value,f,t)
+#
+# print(res)
+
+# l_dn = 0.001
+    # rho = 0.001
+    # ifac = 2
+    # eta = 1e-3
+
+    # l_dn = 0.001
+    # rho = 0.001
+    # ifac = 4
+    # eta = 1e-3
+
+    # l_dn = 0.001
+    # rho = 0.001
+    # #ifac = 1
+    # eta = 1e-3
+
+    # ILIM = itr_limit / (ifac)
+    # OLIM = ifac
