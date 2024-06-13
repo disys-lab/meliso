@@ -3,7 +3,7 @@ exp_params:
   turnOnScaling: 0
   interpolants: 3
   matrix_name: "bcsstk02"
-  matrix_file: "matrices/bcsstk02.mtx"
+  matrix_file: "inputs/matrices/bcsstk02.mtx"
   distributed:
     decomposition_dir: "/tmp/"
     mca_rows: 1
@@ -11,7 +11,7 @@ exp_params:
 
 device_config:
   root: "config_files/"
-  cell_rows: 66
-  cell_cols: 66
+  cell_rows: 64
+  cell_cols: 64
   assignment:
     device1_EpiRAM.yaml: [[-1]]
