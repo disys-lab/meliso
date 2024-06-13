@@ -12,7 +12,8 @@ class MatVecSolver:
             self.solverObject = Root(MPI.COMM_WORLD)
             if xvec is None:
                 #obtain x here
-                xpath = "input_x.txt"
+                # xpath = "input_x.txt"
+                xpath = os.environ["XVEC_PATH"]
                 xvec = np.loadtxt(fname=xpath, delimiter=',')
 
             # you can set a raw unprocessed matrix here or have the RootMCA read directly from config file
