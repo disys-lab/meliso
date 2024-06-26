@@ -33,12 +33,11 @@ MIN_TOL = 1e-6
 DIM = 32
 RANDOM_SEED = 28
 
-# Memristor initialization parameters
-DEVICE_TYPE = 1  # RealDevice
+# Parameters
+DEVICE_TYPE = 1
 TURN_ON_HARDWARE = 1
 TURN_ON_SCALING = 0
 
-# Initialize memristor object
 memristor = meliso.MelisoPy(DEVICE_TYPE, DIM, DIM, MAX_TOL, MIN_TOL, TURN_ON_HARDWARE, TURN_ON_SCALING)
 
 # Matrix and vector initialization
@@ -46,12 +45,16 @@ np.random.seed(RANDOM_SEED)
 A = np.random.randn(DIM, DIM)
 x = np.random.randn(DIM, 1)
 
+# Memristor MVM
 memristor.initializeWeights()
 memristor.setWeights(A)
 memristor.loadInput(x)
 memristor.matVec()
-
 y_mca = memristor.getResults().reshape((1, DIM))
+
+# Real MVM
 y = np.dot(A, x).reshape((1, DIM))
-RMSE = np.sqrt(np.mean(np.power(y_mca - y,2)))
-print(f"RMSE = {RMSE}")
+
+# Difference between Memristor and Ream MVM
+print(f"L2-norm: {np.linalg.norm(y - y_mca)}")
+print(f"Loo-norm: {np.linalg.norm(y - y_mca, ord=np.inf)}")
