@@ -1,0 +1,17 @@
+exp_params:
+  turnOnHardware: 1
+  turnOnScaling: 0
+  interpolants: 3
+  matrix_name: "randn_64"
+  matrix_file: "inputs/matrices/randn_64.mtx"
+  distributed:
+    decomposition_dir: "/tmp/"
+    mca_rows: 1
+    mca_cols: 1
+
+device_config:
+  root: "config_files/"
+  cell_rows: 64
+  cell_cols: 64
+  assignment:
+    device_EpiRAM.yaml: [[-1]]
