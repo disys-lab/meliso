@@ -49,10 +49,16 @@ void Meliso::setWeights(double *A_matrix){
     //if(!scalingAdjusted){
     if (considerScaling && !scalingAdjusted){
         if(simpleScaling){
+            printf("considerScaling: %s\t", considerScaling)
+            printf("scalingAdjusted: %s\t", scalingAdjusted)
             adjustScalingLimits();
         }
         else{
+            printf("considerScaling: %s\t", considerScaling)
+            printf("scalingAdjusted: %s\t", scalingAdjusted)
             adjustNewtonDDScaling();
+            // adjustScalingLimits();
+
         }
     }
 
