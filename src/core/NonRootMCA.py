@@ -180,16 +180,27 @@ class NonRootMCA(BaseMCA):
         self.meliso_obj.setConductanceProperties(maxConductance, minConductance, avgMaxConductance, avgMinConductance,
                                                  conductance, conductancePrev)
 
-    def localMatVec(self, x):
+    def denoiseLeastSquare(w, lbda=1e-6):
+        rows, _ = w.shape[0], w.shape[1]
+        I = np.eye(rows)
+        L = np.eye(rows)
+        for i in range(rows - 1):
+            L[i, i + 1] = -1
+        y = np.linalg.inv(I + lbda * L @ L.T) @ w
+        print("Applying least-square denoising...")
+        return y
+
+    def localMatVec(self, x, RESULT_MULT=2.0):
         self.localx = np.copy(x)
         self.meliso_obj.loadInput(x)
         self.meliso_obj.matVec()
-        self.y = self.meliso_obj.getResults()
-
+        self.y = RESULT_MULT * self.meliso_obj.getResults()
+    
     def parallelMatVec(self):
         x = np.empty(self.locCols, dtype=np.float64)
         self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
         self.localMatVec(x)
+        self.y = self.denoiseLeastSquare(self.y)
         self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK)
         #print("RANK{}: sent y".format(self.rank))
         return self.y
