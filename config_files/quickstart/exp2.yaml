@@ -10,7 +10,7 @@ exp_params:
     mca_cols: 3
 
 device_config:
-  root: "config_files/quickstart"
+  root: "config_files/"
   cell_rows: 32
   cell_cols: 32
   assignment:
