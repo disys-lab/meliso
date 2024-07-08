@@ -29,7 +29,6 @@ void Meliso::setWeightsIncremental(double *A_matrix,double precision){
                 }
             }
     WriteWeights();
-
 }
 
 //void Meliso::setWeightsIterative(double *A_matrix, double precision){
