@@ -21,6 +21,10 @@ class NonRootMCA(BaseMCA):
 
         self.MAX_TOL = 1.0
         self.MIN_TOL = 0.0
+        
+        self.PRECISION = 1e-6
+        self.ITER_LIMIT = 1000
+        self.RESIDUALS_TOL = 1e-6
 
         self.device_type = 1
         self.interpolants = 3
@@ -96,12 +100,38 @@ class NonRootMCA(BaseMCA):
         self.locCols = self.A.shape[1]
 
     def initializeMCA(self):
-        #print("before initialize weights")
         self.meliso_obj.initializeWeights()
-        self.setWeights(self.A)
+        
+        try:
+            methods = int(os.getenv("WEIGHT_INIT_METHOD"))
+        except (TypeError, ValueError):
+            raise ValueError("WeightInitMethodError: WEIGHT_INIT_METHOD must be an integer.")
+            
+        if methods == 0:
+            self.setWeightsIncremental(self.A)
+        elif methods == 1:
+            self.setWeights(self.A)
+        else:
+            raise ValueError(f"WeightInitMethodError: Only accept 0 (IncrementalInit) or 1 (SingleInit), got {methods}.")
+
 
     def setWeights(self,A):
         self.meliso_obj.setWeights(A)
+
+    def setWeightsIncremental(self, A):
+        j = 0
+        residuals = 0
+        while j < self.ITER_LIMIT:
+            self.meliso_obj.setWeightsIncremental(A, self.PRECISION)
+            actualWeights = self.meliso_obj.getWeights()
+
+            current_residuals = np.linalg.norm(actualWeights - A)
+            if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
+                break
+            residuals = current_residuals
+            j += 1
+        print(f"No. iterations: {j}. Current residuals: {residuals}")
+
 
     def parseRankList(self, rank_list):
         for ranks in rank_list:
@@ -180,7 +210,7 @@ class NonRootMCA(BaseMCA):
         self.meliso_obj.setConductanceProperties(maxConductance, minConductance, avgMaxConductance, avgMinConductance,
                                                  conductance, conductancePrev)
 
-    def denoiseLeastSquare(w, lbda=1e-6):
+    def denoiseLeastSquare(self, w, lbda=1e-6):
         rows, _ = w.shape[0], w.shape[1]
         I = np.eye(rows)
         L = np.eye(rows)
@@ -195,12 +225,13 @@ class NonRootMCA(BaseMCA):
         self.meliso_obj.loadInput(x)
         self.meliso_obj.matVec()
         self.y = RESULT_MULT * self.meliso_obj.getResults()
+        print("Computing matrix-vector multiplication...")
     
     def parallelMatVec(self):
         x = np.empty(self.locCols, dtype=np.float64)
         self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
         self.localMatVec(x)
-        self.y = self.denoiseLeastSquare(self.y)
+        # self.y = self.denoiseLeastSquare(self.y)
         self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK)
         #print("RANK{}: sent y".format(self.rank))
         return self.y
