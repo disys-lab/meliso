@@ -211,21 +211,21 @@ class NonRootMCA(BaseMCA):
                                                  conductance, conductancePrev)
 
     def denoiseLeastSquare(self, w, lbda=1e-6):
+        print("Applying least-square denoising...")
         rows, _ = w.shape[0], w.shape[1]
         I = np.eye(rows)
         L = np.eye(rows)
         for i in range(rows - 1):
             L[i, i + 1] = -1
         y = np.linalg.inv(I + lbda * L @ L.T) @ w
-        print("Applying least-square denoising...")
         return y
 
     def localMatVec(self, x, RESULT_MULT=2.0):
         self.localx = np.copy(x)
         self.meliso_obj.loadInput(x)
+        print("Computing matrix-vector multiplication...")
         self.meliso_obj.matVec()
         self.y = RESULT_MULT * self.meliso_obj.getResults()
-        print("Computing matrix-vector multiplication...")
     
     def parallelMatVec(self):
         x = np.empty(self.locCols, dtype=np.float64)
