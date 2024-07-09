@@ -21,7 +21,8 @@ class NonRootMCA(BaseMCA):
 
         self.MAX_TOL = 1.0
         self.MIN_TOL = 0.0
-        
+        self.OLIM = 1
+
         self.PRECISION = 1e-6
         self.ITER_LIMIT = 1000
         self.RESIDUALS_TOL = 1e-6
@@ -98,6 +99,10 @@ class NonRootMCA(BaseMCA):
             self.A = np.load(mat_file_path)
         self.locRows = self.A.shape[0]
         self.locCols = self.A.shape[1]
+
+    def acquireLocalX(self,x):
+        xT = x.reshape((1,self.locCols))
+        self.X = np.tile(xT,(self.locRows,1))
 
     def initializeMCA(self):
         self.meliso_obj.initializeWeights()
@@ -211,27 +216,75 @@ class NonRootMCA(BaseMCA):
                                                  conductance, conductancePrev)
 
     def denoiseLeastSquare(self, w, lbda=1e-6):
-        print("Applying least-square denoising...")
         rows, _ = w.shape[0], w.shape[1]
         I = np.eye(rows)
         L = np.eye(rows)
         for i in range(rows - 1):
             L[i, i + 1] = -1
+
+        print("Applying least-square denoising...")
         y = np.linalg.inv(I + lbda * L @ L.T) @ w
         return y
 
     def localMatVec(self, x, RESULT_MULT=2.0):
-        self.localx = np.copy(x)
+        print(f"Computing MVM at Device Rank {self.rank}...")
         self.meliso_obj.loadInput(x)
-        print("Computing matrix-vector multiplication...")
         self.meliso_obj.matVec()
-        self.y = RESULT_MULT * self.meliso_obj.getResults()
-    
+        y = RESULT_MULT * self.meliso_obj.getResults()
+        return y
+
     def parallelMatVec(self):
+        self.y = self.errorCorrection()
+        self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK)
+        return self.y
+    
+    def errorCorrection(self):
         x = np.empty(self.locCols, dtype=np.float64)
         self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
-        self.localMatVec(x)
-        # self.y = self.denoiseLeastSquare(self.y)
-        self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK)
-        #print("RANK{}: sent y".format(self.rank))
-        return self.y
+        self.acquireLocalX(x)
+
+        y_a = np.zeros((self.locRows, 1), dtype=float)
+        y_x = np.zeros((self.locRows, 1), dtype=float)
+        # V_tilde_x = np.empty((self.locRows, 1), dtype=float)
+        
+        # Compute U_tilde = A @ x_tilde:
+        U_tilde = np.empty((self.locRows, 1), dtype=float)
+        X_tilde = np.copy(self.X)
+        self.meliso_obj.initializeWeights()
+        self.setWeightsIncremental(X_tilde)
+        X_tilde = self.meliso_obj.getWeights()
+        for i in range(self.locRows):
+            ai = self.A[i, :].flatten()
+            ui_tilde = self.localMatVec(ai).flatten()
+            ui_tilde = self.denoiseLeastSquare(ui_tilde)
+            U_tilde[i] = ui_tilde[i]
+
+        # for i in range(self.localRows):
+        #     ait = A_tilde[i, :].flatten()
+        #     v_tilde_i = self.localmatVec(ait)
+        #     v_tilde_i = self.denoiseLeastSquare(v_tilde_i)
+        #     V_tilde_x[i] = v_tilde_i[i]
+
+        # Compute V_tilde = A_tilde @ x:
+        A_tilde = np.copy(self.A)
+        V_tilde_a = np.empty((self.locRows, 1), dtype=float)
+        self.meliso_obj.initializeWeights()
+        self.setWeightsIncremental(A_tilde)
+        A_tilde = self.meliso_obj.getWeights()
+        for i in range(self.locRows):
+            xT_i = X_tilde[i,:].flatten()
+            v_tilde_i = self.localMatVec(xT_i)
+            v_tilde_i = self.denoiseLeastSquare(v_tilde_i)
+            V_tilde_a[i] = v_tilde_i[i]
+
+        # Compute y_tilde:
+        y_tilde = self.localMatVec(x)
+        y_tilde = self.denoiseLeastSquare(y_tilde)
+
+        for i in range(self.locRows):
+            y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i]
+            # y_x[i] = U_tilde[i] - V_tilde_x[i] + y_tilde[i]
+
+        # y_corr = 0.5*(y_a+y_x)
+        y_corr = y_a
+        return y_corr
