@@ -29,6 +29,7 @@ void Meliso::setWeightsIncremental(double *A_matrix,double precision){
                 }
             }
     WriteWeights();
+
 }
 
 //void Meliso::setWeightsIterative(double *A_matrix, double precision){
@@ -47,15 +48,10 @@ void Meliso::setWeights(double *A_matrix){
     WriteWeights();
     if (considerScaling && !scalingAdjusted){
         if(simpleScaling){
-            printf("considerScaling: %s\n", considerScaling ? "true" : "false");
-            printf("scalingAdjusted: %s\n", scalingAdjusted ? "true" : "false");
             adjustScalingLimits();
         }
         else{
-            printf("considerScaling: %s\n", considerScaling ? "true" : "false");
-            printf("scalingAdjusted: %s\n", scalingAdjusted ? "true" : "false");
-            // adjustNewtonDDScaling();
-            adjustScalingLimits();
+            adjustNewtonDDScaling();
         }
     }
 
@@ -193,43 +189,43 @@ void Meliso::adjustScalingLimits(){
     scalingAdjusted = true;
 }
 
-// void Meliso::adjustNewtonDDScaling(){
+void Meliso::adjustNewtonDDScaling(){
 
-//     int m = rows;
-//     printf("INFO: Meliso:adjustNewtonDDScaling: adjustNewtonDDScaling interpolants=%d\n",p);
-//     for (int a = 0; a<p; a++){
+    int m = rows;
+    printf("INFO: Meliso:adjustNewtonDDScaling: adjustNewtonDDScaling interpolants=%d\n",p);
+    for (int a = 0; a<p; a++){
 
-//         double value;// = a*double(MAX_TOL)/(p-1);
+        double value;// = a*double(MAX_TOL)/(p-1);
 
-//         initializeWeights();
+        initializeWeights();
 
-//         for (int k = 0; k < param->nHide; k++) {
-//                     for (int j = 0; j < param->nInput; j++){
-//                         value = ((double)rand())/(RAND_MAX)*a/(p-1);
-//                         deltaWeight1[k][j] = value;
-//                         real_A_matrix[k*param->nInput + j] = value;
-//                     }
-//                 }
+        for (int k = 0; k < param->nHide; k++) {
+                    for (int j = 0; j < param->nInput; j++){
+                        value = ((double)rand())/(RAND_MAX)*a/(p-1);
+                        deltaWeight1[k][j] = value;
+                        real_A_matrix[k*param->nInput + j] = value;
+                    }
+                }
 
-//         WriteWeights();
+        WriteWeights();
 
-//         getScalingLimits(delta,real_delta,MAX_TOL);
-//         for (int i=0 ;i <m; i++){
-//             t[i*p+a] = delta[i];
-//             d[i*p+a] = delta[i] - real_delta[i];
-//             printf("INFO: Meliso:adjustNewtonDDScaling :value=%lf t[%d]=%lf, d[%d]=%lf\n",value,i*p+a,i*p+a,t[i*p+a],d[i*p+a]);
-//         }
+        getScalingLimits(delta,real_delta,MAX_TOL);
+        for (int i=0 ;i <m; i++){
+            t[i*p+a] = delta[i];
+            d[i*p+a] = delta[i] - real_delta[i];
+            printf("INFO: Meliso:adjustNewtonDDScaling :value=%lf t[%d]=%lf, d[%d]=%lf\n",value,i*p+a,i*p+a,t[i*p+a],d[i*p+a]);
+        }
 
-//         memset(delta,0,m*sizeof(double));
-//         memset(real_delta,0,m*sizeof(double));
-//     }
+        memset(delta,0,m*sizeof(double));
+        memset(real_delta,0,m*sizeof(double));
+    }
 
-//     for(int i= 0; i<m; i++){
-//         computeInterpolants(p-1,0,p-1,f,d,t,1,i*p);
-//     }
+    for(int i= 0; i<m; i++){
+        computeInterpolants(p-1,0,p-1,f,d,t,1,i*p);
+    }
 
-//     scalingAdjusted = true;
-// }
+    scalingAdjusted = true;
+}
 
 
 double Meliso::computeInterpolants(int n, int start, int end, double *f, double *d, double *t,int store_res,int arr_start){
@@ -470,7 +466,7 @@ void Meliso::setInterpolants(int interpolants){
     memset(t,0,m*sizeof(double));
 
     if(!simpleScaling){
-        // adjustNewtonDDScaling();
+        adjustNewtonDDScaling();
     }
     printf("INFO: Meliso:Constructor: scalingAdjusted=%d \n",scalingAdjusted);
 }
@@ -491,7 +487,7 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
 
 	scalingAdjusted = false;
 	considerScaling = false;
-	simpleScaling = false;
+	simpleScaling = true;
 
     setHardwareOn(turnOnHardware);
     setScalingOn(turnOnScaling);
