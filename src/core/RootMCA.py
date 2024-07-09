@@ -323,3 +323,6 @@ class RootMCA(BaseMCA):
         comm.Gather(mcaStats, self.allMCAStats, root=self.ROOT_PROCESS_RANK)
         
         #self.allMCAStats = allMCAStats
+
+    def globalMatVec(self):
+        return None
