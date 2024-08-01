@@ -14,7 +14,7 @@ ALLOBJ := $(patsubst src/%, $(BUILD_DIR)/%.o, $(OBJ))
 
 $(info    Creating following objects $(ALLOBJ))
 
-CXX := g++
+CXX := -static-libstdc++ g++
 CXXFLAGS := -fopenmp -O3 -std=c++0x -w -fPIC
 
 .PHONY: all clean
