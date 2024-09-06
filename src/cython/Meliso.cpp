@@ -604,8 +604,5 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
     //subArrayIH->writeDynamicEnergy
     //subArrayIH->readDynamicEnergy
 
-
-
-
 }
 }
