@@ -46,6 +46,7 @@ void Meliso::setWeights(double *A_matrix){
                 }
             }
     WriteWeights();
+    //if(!scalingAdjusted){
     if (considerScaling && !scalingAdjusted){
         if(simpleScaling){
             adjustScalingLimits();
@@ -487,7 +488,7 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
 
 	scalingAdjusted = false;
 	considerScaling = false;
-	simpleScaling = true;
+	simpleScaling = false;
 
     setHardwareOn(turnOnHardware);
     setScalingOn(turnOnScaling);
@@ -603,6 +604,9 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
     //subArrayIH->readLatency
     //subArrayIH->writeDynamicEnergy
     //subArrayIH->readDynamicEnergy
+
+
+
 
 }
 }
