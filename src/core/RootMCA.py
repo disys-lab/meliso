@@ -44,7 +44,8 @@ class RootMCA(BaseMCA):
     def initializeMatrix(self,mat):
         if mat is None:
             self.matrix_file = None
-
+            
+            print(self.exp_config["exp_params"])
             if "matrix_file" not in self.exp_config["exp_params"].keys():
                 raise Exception("ExperimentConfigFileError: Matrix file not specified in %s".format(self.expConfigFile))
 
