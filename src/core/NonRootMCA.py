@@ -216,7 +216,7 @@ class NonRootMCA(BaseMCA):
                                                  conductance, conductancePrev)
 
     def denoiseLeastSquare(self, w, lbda=1e-6):
-        rows, _ = w.shape[0], w.shape[1]
+        rows = w.shape[0]
         I = np.eye(rows)
         L = np.eye(rows)
         for i in range(rows - 1):
