@@ -11,6 +11,10 @@ from src.core.RootMCA import RootMCA
 
 class Root:
     def __init__(self,comm,x=None,mat=None):
+
+        self.hardwareOn = None
+        self.scalingOn = None
+        
         self.y_mem_result = None
         self.y_benchmark_result = None
         self.error = None
@@ -175,7 +179,7 @@ class Root:
             self.y_benchmark_result = np.copy(self.y)
             print(self.y_benchmark_result)
         else:
-            self.y_mem_result = np.copy(self.y)
+            self.y_mem_result = (self.hardwareOn + 1) * np.copy(self.y)
             print(self.y_mem_result)
 
     def benchmarkMatVec(self):
@@ -184,7 +188,7 @@ class Root:
         self.error = self.y_mem_result - self.y_benchmark_result
         print("error", self.error)
 
-    def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction= False):
+    def benchmarkMatVecParallel(self, hardwareOn=0,scalingOn=0,correction= False):
 
         self.parallelMatVec(type="benchmark", correction=correction)
         if self.y_mem_result is not None:

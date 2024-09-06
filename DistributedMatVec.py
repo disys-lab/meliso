@@ -12,4 +12,6 @@ mv.finalize()
 
 mv.parallelizedBenchmarkMatVec(0,0,correction=correction)
 
+mv.acquireMCAStats()
+
 mv.finalize()

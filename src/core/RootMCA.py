@@ -41,7 +41,7 @@ class RootMCA(BaseMCA):
         # if set_mat:
         #     self.setMat(self.mat)
     
-    def verifyConfiguration(self):
+    def printConfiguration(self):
         print("Experiment Configuration")
         print(self.exp_config["exp_params"])
 
@@ -50,7 +50,7 @@ class RootMCA(BaseMCA):
         if mat is None:
             self.matrix_file = None
             
-            self.verifyConfiguration()
+            self.printConfiguration()
             if "matrix_file" not in self.exp_config["exp_params"].keys():
                 raise Exception("ExperimentConfigFileError: Matrix file not specified in %s".format(self.expConfigFile))
 
@@ -66,6 +66,9 @@ class RootMCA(BaseMCA):
             self.matCols = mat.shape[1]
 
         self.mat, self.mat_min, self.mat_max, self.mat_row_sum = self.scaleMatrix(self.mat)
+        
+        self.hardwareOn = self.exp_config["exp_params"]["turnOnHardware"]
+        self.scalingOn = self.exp_config["exp_params"]["turnOnScaling"]
 
     def processMatrixFile(self):
         #read the matrix from file
