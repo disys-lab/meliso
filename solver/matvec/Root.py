@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import os,sys
+
 if "MELISO_SRC_PATH" in os.environ.keys():
     if not os.isdir(os.environ["MELISO_SRC_PATH"]):
         raise Exception("Env Var {} MELISO_SRC_PATH is invalid!".format(os.environ["MELISO_SRC_PATH"]))
@@ -179,6 +180,7 @@ class Root:
             self.y_benchmark_result = np.copy(self.y)
             print(self.y_benchmark_result)
         else:
+            self.hardwareOn  = 1
             self.y_mem_result = (self.hardwareOn + 1) * np.copy(self.y)
             print(self.y_mem_result)
 
@@ -188,12 +190,15 @@ class Root:
         self.error = self.y_mem_result - self.y_benchmark_result
         print("error", self.error)
 
-    def benchmarkMatVecParallel(self, hardwareOn=0,scalingOn=0,correction= False):
+    def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction= False):
 
         self.parallelMatVec(type="benchmark", correction=correction)
         if self.y_mem_result is not None:
             self.error = self.y_mem_result - self.y_benchmark_result
-            print("error", self.error)
+            print("Element-wise Error: ", self.error)
+
+            print(f"L2-norm Error: {np.linalg.norm(self.error, order=2)}")
+            print(f"Loo-norm Error: {np.linalg.norm(self.error, order=np.inf)}")
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()
