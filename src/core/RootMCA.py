@@ -329,9 +329,7 @@ class RootMCA(BaseMCA):
 
     def getMCAStats(self):
         mcaStats = np.zeros((self.num_mca_stats,1),dtype=float)
-        comm.Gather(mcaStats, self.allMCAStats, root=self.ROOT_PROCESS_RANK)
+        self.comm.Gather(mcaStats, self.allMCAStats, root=self.ROOT_PROCESS_RANK)
         
-        #self.allMCAStats = allMCAStats
-
     def globalMatVec(self):
         return None
