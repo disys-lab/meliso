@@ -197,8 +197,8 @@ class Root:
             self.error = self.y_mem_result - self.y_benchmark_result
             print("Element-wise Error: ", self.error)
 
-            print(f"L2-norm Error: {np.linalg.norm(self.error, order=2)}")
-            print(f"Loo-norm Error: {np.linalg.norm(self.error, order=np.inf)}")
+            print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
+            print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()
