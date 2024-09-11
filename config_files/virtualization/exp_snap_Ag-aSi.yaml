@@ -6,8 +6,8 @@ exp_params:
   matrix_file: "inputs/matrices/email-Eu-core-temporal_temporal_edges.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 16
-    mca_cols: 16
+    mca_rows: 8
+    mca_cols: 8
 
 device_config:
   root: "config_files/"
