@@ -244,8 +244,6 @@ class NonRootMCA(BaseMCA):
         self.acquireLocalX(x)
 
         y_a = np.zeros((self.locRows, 1), dtype=float)
-        y_x = np.zeros((self.locRows, 1), dtype=float)
-        V_tilde_x = np.zeros((self.locRows, 1), dtype=float)
         
         # Compute U_tilde = A @ x_tilde:
         U_tilde = np.empty((self.locRows, 1), dtype=float)
@@ -261,12 +259,6 @@ class NonRootMCA(BaseMCA):
             ui_tilde = self.localMatVec(ai).flatten()
             ui_tilde = self.denoiseLeastSquare(ui_tilde)
             U_tilde[i] = ui_tilde[i]
-
-        for i in range(self.locRows):
-            ait = A_tilde[i, :].flatten()
-            v_tilde_i = self.localmatVec(ait)
-            v_tilde_i = self.denoiseLeastSquare(v_tilde_i)
-            V_tilde_x[i] = v_tilde_i[i]
 
         # Compute V_tilde = A_tilde @ x:
         V_tilde_a = np.empty((self.locRows, 1), dtype=float)
@@ -285,8 +277,6 @@ class NonRootMCA(BaseMCA):
 
         for i in range(self.locRows):
             y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i]
-            y_x[i] = U_tilde[i] - V_tilde_x[i] + y_tilde[i]
 
-        y_corr = 0.5*(y_a+y_x)
         y_corr = y_a
         return y_corr

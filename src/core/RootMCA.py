@@ -42,7 +42,7 @@ class RootMCA(BaseMCA):
         #     self.setMat(self.mat)
     
     def printConfiguration(self):
-        print("Experiment Configuration")
+        print("\nExperiment Configuration")
         print(self.exp_config["exp_params"])
 
 
