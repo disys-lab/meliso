@@ -16,25 +16,25 @@ class MatVecSolver:
                     xpath = "inputs/vectors/input_x.txt"
                 xvec = np.loadtxt(fname=xpath, delimiter=',')
             self.solverObject.initializeX(xvec)
-            print("Successfully initialize vector x")
+            print("\nSuccessfully initialize input vector...")
 
         else:
             self.solverObject = NonRoot(MPI.COMM_WORLD)
 
     def matVec(self,correction=False):
-        print("Running VMM Operation...")
+        print("\nRunning VMM Operation...")
         self.solverObject.parallelMatVec(correction=correction)
 
     def centralizedBenchmarkMatVec(self):
-        print("Running Centralized VMM Operation...")
+        print("\nRunning Centralized VMM Operation...")
         self.solverObject.benchmarkMatVec()
 
     def parallelizedBenchmarkMatVec(self, hardwareOn=0, scalingOn=0,correction=False):
-        print("Running Parallelized VMM Operation...")
+        print("\nRunning Parallelized VMM Operation...")
         self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn,correction=correction)
 
     def acquireMCAStats(self):
-        print("Acquring MCA Statistics...")
+        print("\nAcquring MCA Statistics...")
         self.solverObject.acquireMCAStats()
 
     def finalize(self):
