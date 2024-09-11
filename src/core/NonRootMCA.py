@@ -147,7 +147,7 @@ class NonRootMCA(BaseMCA):
     def getMCAStats(self):
         recvbuf = None
         self.mcaStats = self.melisoObj.getMCAStats(self.num_mca_stats)
-        comm.Gather(mcaStats, recvbuf, root=self.ROOT_PROCESS_RANK)
+        self.comm.Gather(self.mcaStats, recvbuf, root=self.ROOT_PROCESS_RANK)
 
     def getDeviceConfig(self):
         self.device_config = None
@@ -226,7 +226,7 @@ class NonRootMCA(BaseMCA):
         y = np.linalg.inv(I + lbda * L @ L.T) @ w
         return y
 
-    def localMatVec(self, x, RESULT_MULT=2.0):
+    def localMatVec(self, x, RESULT_MULT=1.0):
         print(f"Computing MVM at Device Rank {self.rank}...")
         self.meliso_obj.loadInput(x)
         self.meliso_obj.matVec()

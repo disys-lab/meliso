@@ -30,8 +30,8 @@ class MatVecSolver:
     def parallelizedBenchmarkMatVec(self, hardwareOn=0, scalingOn=0,correction=False):
         self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn,correction=correction)
 
-    # def acquireMCAStats(self):
-    #     self.solverObject.acquireMCAStats()
+    def acquireMCAStats(self):
+        self.solverObject.acquireMCAStats()
 
     def finalize(self):
         self.solverObject.finalize()
