@@ -253,13 +253,14 @@ class NonRootMCA(BaseMCA):
         self.meliso_obj.initializeWeights()
         self.setWeightsIncremental(X_tilde)
         X_tilde = self.meliso_obj.getWeights()
+        
         for i in range(self.locRows):
             ai = self.A[i, :].flatten()
             ui_tilde = self.localMatVec(ai).flatten()
             ui_tilde = self.denoiseLeastSquare(ui_tilde)
             U_tilde[i] = ui_tilde[i]
 
-        for i in range(self.localRows):
+        for i in range(self.locRows):
             ait = A_tilde[i, :].flatten()
             v_tilde_i = self.localmatVec(ait)
             v_tilde_i = self.denoiseLeastSquare(v_tilde_i)
