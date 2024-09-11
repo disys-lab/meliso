@@ -195,10 +195,10 @@ class Root:
         self.parallelMatVec(type="benchmark", correction=correction)
         if self.y_mem_result is not None:
             self.error = self.y_mem_result - self.y_benchmark_result
-            print("Element-wise Error: ", self.error)
+            print("\nElement-wise Error: \n", self.error)
 
-            print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
-            print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
+            print(f"\nL2-norm Error: {np.linalg.norm(self.error, ord=2)}")
+            print(f"\nLoo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()
