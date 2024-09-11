@@ -250,6 +250,8 @@ class NonRootMCA(BaseMCA):
         # Compute U_tilde = A @ x_tilde:
         U_tilde = np.empty((self.locRows, 1), dtype=float)
         X_tilde = np.copy(self.X)
+        A_tilde = np.copy(self.A)
+
         self.meliso_obj.initializeWeights()
         self.setWeightsIncremental(X_tilde)
         X_tilde = self.meliso_obj.getWeights()
@@ -267,7 +269,6 @@ class NonRootMCA(BaseMCA):
             V_tilde_x[i] = v_tilde_i[i]
 
         # Compute V_tilde = A_tilde @ x:
-        A_tilde = np.copy(self.A)
         V_tilde_a = np.empty((self.locRows, 1), dtype=float)
         self.meliso_obj.initializeWeights()
         self.setWeightsIncremental(A_tilde)
