@@ -16,7 +16,7 @@ git clone https://github.com/paritoshpr/meliso.git
 ```
 cd meliso
 mkdir build
-export PYTHONPATH=$PYTHONPATH:./build
+export PYTHON_PATH=$PYTHON_PATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
 make all
 ```
