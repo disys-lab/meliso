@@ -178,27 +178,27 @@ class Root:
 
         if type == "benchmark":
             self.y_benchmark_result = np.copy(self.y)
-            print(self.y_benchmark_result)
+            print(f"\nBenchmarked Result: \n {self.y_benchmark_result}")
         else:
             self.hardwareOn  = 1
             self.y_mem_result = (self.hardwareOn + 1) * np.copy(self.y)
-            print(self.y_mem_result)
+            print(f"\nMultiplication Result: \n {self.y_benchmark_result}")
 
     def benchmarkMatVec(self):
         y = np.dot(self.mca.mat, self.mca.x)
         self.y_benchmark_result = y[:self.mca.origMatRows]
         self.error = self.y_mem_result - self.y_benchmark_result
-        print("error", self.error)
+        print("\nElement-wise Error: \n", self.error)
 
     def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction= False):
 
         self.parallelMatVec(type="benchmark", correction=correction)
         if self.y_mem_result is not None:
             self.error = self.y_mem_result - self.y_benchmark_result
-            print("\nElement-wise Error: \n", self.error)
 
-            print(f"\nL2-norm Error: {np.linalg.norm(self.error, ord=2)}")
-            print(f"\nLoo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
+            print("\nElement-wise Error: \n", self.error)
+            print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
+            print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()
