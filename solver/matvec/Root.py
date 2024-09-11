@@ -182,7 +182,7 @@ class Root:
         else:
             self.hardwareOn  = 1
             self.y_mem_result = (self.hardwareOn + 1) * np.copy(self.y)
-            print(f"\nMultiplication Result: \n {self.y_benchmark_result}")
+            print(f"\nMultiplication Result: \n {self.y_mem_result}")
 
     def benchmarkMatVec(self):
         y = np.dot(self.mca.mat, self.mca.x)
