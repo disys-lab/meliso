@@ -2,16 +2,16 @@ exp_params:
   turnOnHardware: 1
   turnOnScaling: 1
   interpolants: 3
-  matrix_name: "bcsstk02"
-  matrix_file: "inputs/matrices/bcsstk02.mtx"
+  matrix_name: "email-Eu-core-temporal_temporal_edges"
+  matrix_file: "inputs/matrices/email-Eu-core-temporal_temporal_edges.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 2
-    mca_cols: 2
+    mca_rows: 16
+    mca_cols: 16
 
 device_config:
   root: "config_files/"
-  cell_rows: 32
-  cell_cols: 32
+  cell_rows: 64
+  cell_cols: 64
   assignment:
     device_Ag-aSi.yaml: [[-1]]

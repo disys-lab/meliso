@@ -77,7 +77,6 @@ class RootMCA(BaseMCA):
     def readMatrix(self,filename):
         if not os.path.isfile(filename):
             raise Exception("MatrixFileNotFoundError:The file %s does not exist or is invalid".format(filename))
-        #0.5*np.eye(66,) #
         mat = mmread(filename)
 
         if not isinstance(mat, np.ndarray):
