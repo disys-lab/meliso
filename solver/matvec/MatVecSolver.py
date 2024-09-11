@@ -22,15 +22,19 @@ class MatVecSolver:
             self.solverObject = NonRoot(MPI.COMM_WORLD)
 
     def matVec(self,correction=False):
+        print("Running VMM Operation...")
         self.solverObject.parallelMatVec(correction=correction)
 
     def centralizedBenchmarkMatVec(self):
+        print("Running Centralized VMM Operation...")
         self.solverObject.benchmarkMatVec()
 
     def parallelizedBenchmarkMatVec(self, hardwareOn=0, scalingOn=0,correction=False):
+        print("Running Parallelized VMM Operation...")
         self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn,correction=correction)
 
     def acquireMCAStats(self):
+        print("Acquring MCA Statistics...")
         self.solverObject.acquireMCAStats()
 
     def finalize(self):
