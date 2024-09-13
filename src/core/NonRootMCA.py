@@ -22,9 +22,11 @@ class NonRootMCA(BaseMCA):
         self.MIN_TOL = 0.0
         self.OLIM = 1
 
-        self.PRECISION = 1e-6
-        self.ITER_LIMIT = 1000
-        self.RESIDUALS_TOL = 1e-6
+        self.PRECISION = 1e-12
+        self.ITER_LIMIT = 10
+        self.RESIDUALS_TOL = 1e-12
+        self.Xiter = 0; self.Xresiduals = 0
+        self.Aiter = 0; self.Aresiduals = 0
 
         self.device_type = 1
         self.interpolants = 3
@@ -130,12 +132,11 @@ class NonRootMCA(BaseMCA):
             actualWeights = self.meliso_obj.getWeights()
 
             current_residuals = np.linalg.norm(actualWeights - A)
-            if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
-                break
+            # if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
+            #     break
             residuals = current_residuals
             j += 1
-        print(f"No. iterations: {j}. Current residuals: {residuals}")
-
+        return j, current_residuals
 
     def parseRankList(self, rank_list):
         for ranks in rank_list:
@@ -145,8 +146,8 @@ class NonRootMCA(BaseMCA):
 
     def getMCAStats(self):
         recvbuf = None
-        self.mcaStats = self.melisoObj.getMCAStats(self.num_mca_stats)
-        self.comm.Gather(self.mcaStats, recvbuf, root=0)
+        self.mcaStats = self.meliso_obj.getMCAStats(self.num_mca_stats)
+        self.comm.Gather(self.mcaStats, recvbuf, root=self.ROOT_PROCESS_RANK)
 
     def getDeviceConfig(self):
         self.device_config = None
@@ -247,12 +248,12 @@ class NonRootMCA(BaseMCA):
         # Timing for Error Correction:
         start_time = time.time(); self.y = self.errorCorrection(); end_time = time.time()
         self.errorCorrectionTime = end_time - start_time
-        print(f"\Elapsed Error Correction Time at Device Rank {self.rank}: {self.errorCorrectionTime}")
+        print(f"INFO: Elapsed Error Correction Time at Device Rank {self.rank}: {self.errorCorrectionTime}")
 
         #Timing for MPI Send:
         start_time = time.time(); self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK); end_time = time.time()
         self.NonRootProcessSendingTime = end_time - start_time
-        print(f"\Elapsed MPI Sending Time at Device Rank {self.rank}: {self.NonRootProcessSendingTime}")
+        print(f"INFO: Elapsed MPI Sending Time at Device Rank {self.rank}: {self.NonRootProcessSendingTime}")
 
         return self.y
     
@@ -271,7 +272,8 @@ class NonRootMCA(BaseMCA):
             
             X_tilde = np.copy(self.X)
             self.meliso_obj.initializeWeights()
-            self.setWeightsIncremental(X_tilde)
+            self.Xiter, self.Xresiduals = self.setWeightsIncremental(X_tilde)
+            print(f"INFO: Encoding vector X: No. iterations : {self.Xiter}; Final residuals: {self.Xresiduals}")
             X_tilde = self.meliso_obj.getWeights()
 
             for i in range(self.locRows):
@@ -286,8 +288,9 @@ class NonRootMCA(BaseMCA):
         try:
             V_tilde_a = np.empty((self.locRows, 1), dtype=float)
             A_tilde = np.copy(self.A)
-            self.meliso_obj.initializeWeights()
-            self.setWeightsIncremental(A_tilde)
+            self.meliso_obj.initializeWeights(); 
+            self.Aiter, self.Aresiduals = self.setWeightsIncremental(A_tilde)
+            print(f"INFO: Encoding matrix A: No. iterations : {self.Aiter}; Final residuals: {self.Aresiduals}")
             A_tilde = self.meliso_obj.getWeights()
 
             for i in range(self.locRows):
