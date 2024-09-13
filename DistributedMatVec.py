@@ -10,7 +10,7 @@ mv = MatVecSolver()
 mv.matVec(correction=correction)
 mv.finalize()
 mv.parallelizedBenchmarkMatVec(0,0,correction=correction)
-mv.acquireMCAStats()
+# mv.acquireMCAStats()
 mv.finalize()
 
 end_time = time.time()

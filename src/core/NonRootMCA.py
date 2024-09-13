@@ -15,8 +15,7 @@ class NonRootMCA(BaseMCA):
         self.endCol = 0
         self.startRow = 0
         self.endRow = 0
-        self.turnOnHardware = 0
-        self.turnOnScaling = 0
+
         self.mcaStats = np.zeros((self.num_mca_stats,1),dtype=float)
 
         self.MAX_TOL = 1.0
@@ -215,81 +214,103 @@ class NonRootMCA(BaseMCA):
         self.meliso_obj.setConductanceProperties(maxConductance, minConductance, avgMaxConductance, avgMinConductance,
                                                  conductance, conductancePrev)
 
+    
     def denoiseLeastSquare(self, w, lbda=1e-6):
+        """
+        Applying the Least Square denoising method.
+        """
         rows = w.shape[0]
-        I = np.eye(rows)
-        L = np.eye(rows)
-        for i in range(rows - 1):
-            L[i, i + 1] = -1
 
-        print("Applying least-square denoising...")
-        y = np.linalg.inv(I + lbda * L @ L.T) @ w
+        I = np.eye(rows)
+        L = np.eye(rows) - np.eye(rows, k=1)
+
+        y = np.linalg.solve(I + lbda * L @ L.T, w)
         return y
 
     def localMatVec(self, x, RESULT_MULT=1.0):
-        print(f"Computing MVM at Device Rank {self.rank}...")
+        """
+        Compute Matrix-Vector Multiplication in local memristive device.
+        """
         self.meliso_obj.loadInput(x)
         self.meliso_obj.matVec()
         y = RESULT_MULT * self.meliso_obj.getResults()
+        
         return y
 
     def parallelMatVec(self):
+        """
+        Execute Distributed Matrix-Vector computation.
+        """
         
-        start_time = time.time()
-        self.y = self.errorCorrection()
-        end_time = time.time()
+        print(f"Computing MVM at Device Rank {self.rank}...")
 
-        print(f"\nEstimating Error Correction Time at Device Rank {self.rank}")
-        print(f"Elapsed time: {end_time - start_time}\n")
+        # Timing for Error Correction:
+        start_time = time.time(); self.y = self.errorCorrection(); end_time = time.time()
+        self.errorCorrectionTime = end_time - start_time
+        print(f"\Elapsed Error Correction Time at Device Rank {self.rank}: {self.errorCorrectionTime}")
 
-        start_time = time.time()
-        self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK)
-        end_time = time.time()
-
-        print(f"Estimating MPI Sending Time at Device Rank {self.rank}")
-        print(f"Elapsed time: {end_time - start_time}")
+        #Timing for MPI Send:
+        start_time = time.time(); self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK); end_time = time.time()
+        self.NonRootProcessSendingTime = end_time - start_time
+        print(f"\Elapsed MPI Sending Time at Device Rank {self.rank}: {self.NonRootProcessSendingTime}")
 
         return self.y
     
     def errorCorrection(self):
+        """
+        Apply Error Correction Method.
+        """
+        
         x = np.empty(self.locCols, dtype=np.float64)
         self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
         self.acquireLocalX(x)
-
-        y_a = np.zeros((self.locRows, 1), dtype=float)
         
-        # Compute U_tilde = A @ x_tilde:
-        U_tilde = np.empty((self.locRows, 1), dtype=float)
-        X_tilde = np.copy(self.X)
-        A_tilde = np.copy(self.A)
+        # Compite U_tilde = A @ x_tilde:
+        try:
+            U_tilde = np.empty((self.locRows, 1), dtype=float)
+            
+            X_tilde = np.copy(self.X)
+            self.meliso_obj.initializeWeights()
+            self.setWeightsIncremental(X_tilde)
+            X_tilde = self.meliso_obj.getWeights()
 
-        self.meliso_obj.initializeWeights()
-        self.setWeightsIncremental(X_tilde)
-        X_tilde = self.meliso_obj.getWeights()
+            for i in range(self.locRows):
+                ai = self.A[i, :].flatten()
+                ui_tilde = self.localMatVec(ai).flatten()
+                ui_tilde = self.denoiseLeastSquare(ui_tilde)
+                U_tilde[i] = ui_tilde[i]
         
-        for i in range(self.locRows):
-            ai = self.A[i, :].flatten()
-            ui_tilde = self.localMatVec(ai).flatten()
-            ui_tilde = self.denoiseLeastSquare(ui_tilde)
-            U_tilde[i] = ui_tilde[i]
+        except: None
 
         # Compute V_tilde = A_tilde @ x:
-        V_tilde_a = np.empty((self.locRows, 1), dtype=float)
-        self.meliso_obj.initializeWeights()
-        self.setWeightsIncremental(A_tilde)
-        A_tilde = self.meliso_obj.getWeights()
-        for i in range(self.locRows):
-            xT_i = X_tilde[i,:].flatten()
-            v_tilde_i = self.localMatVec(xT_i)
-            v_tilde_i = self.denoiseLeastSquare(v_tilde_i)
-            V_tilde_a[i] = v_tilde_i[i]
+        try:
+            V_tilde_a = np.empty((self.locRows, 1), dtype=float)
+            A_tilde = np.copy(self.A)
+            self.meliso_obj.initializeWeights()
+            self.setWeightsIncremental(A_tilde)
+            A_tilde = self.meliso_obj.getWeights()
+
+            for i in range(self.locRows):
+                xT_i = X_tilde[i,:].flatten()
+                v_tilde_i = self.localMatVec(xT_i)
+                v_tilde_i = self.denoiseLeastSquare(v_tilde_i)
+                V_tilde_a[i] = v_tilde_i[i]
+        except: None
 
         # Compute y_tilde:
-        y_tilde = self.localMatVec(x)
-        y_tilde = self.denoiseLeastSquare(y_tilde)
+        try:
+            y_tilde = self.localMatVec(x)
+            y_tilde = self.denoiseLeastSquare(y_tilde)
+        except: None
 
-        for i in range(self.locRows):
-            y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i]
+        # Finalize results:
+        try:
+            y_a = np.zeros((self.locRows, 1), dtype=float)
 
-        y_corr = y_a
+            for i in range(self.locRows):
+                y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i]
+                
+            y_corr = y_a
+        except: None
+
         return y_corr
