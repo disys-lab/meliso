@@ -1,7 +1,7 @@
 from .BaseMCA import BaseMCA
 from scipy.io import mmread
 import numpy as np
-import os,sys
+import os,sys,time
 
 class RootMCA(BaseMCA):
     def __init__(self,comm):
