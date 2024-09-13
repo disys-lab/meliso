@@ -157,6 +157,6 @@ cdef class MelisoPy:
     def getMCAStats(self,num_mca_stats):
         mcaStats = np.zeros(num_mca_stats,dtype=float).reshape((num_mca_stats,1))
         for i in range(num_mca_stats):
-            mcaStats[i][0] = self.meliisoObj.mcaStats[i]
+            mcaStats[i][0] = self.melisoObj.mcaStats[i]
 
         return mcaStats
