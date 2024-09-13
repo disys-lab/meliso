@@ -240,14 +240,14 @@ class NonRootMCA(BaseMCA):
         end_time = time.time()
 
         print(f"\nEstimating Error Correction Time at Device Rank {self.rank}")
-        print(f"Elapse time: {end_time - start_time}\n")
+        print(f"Elapsed time: {end_time - start_time}\n")
 
         start_time = time.time()
         self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK)
         end_time = time.time()
 
         print(f"Estimating MPI Sending Time at Device Rank {self.rank}")
-        print(f"Elapse time: {end_time - start_time}")
+        print(f"Elapsed time: {end_time - start_time}")
 
         return self.y
     
