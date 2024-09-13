@@ -36,8 +36,6 @@ class NonRoot:
             self.y = self.mca.parallelMatVec()
 
         
-        self.comm.gather([self.mca.errorCorrectionTime],root=self.ROOT_PROCESS_RANK)
-
     def benchmarkMatVec(self):
        pass
 
