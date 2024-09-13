@@ -147,7 +147,7 @@ class NonRootMCA(BaseMCA):
     def getMCAStats(self):
         recvbuf = None
         self.mcaStats = self.melisoObj.getMCAStats(self.num_mca_stats)
-        self.comm.Gather(self.mcaStats, recvbuf, root=self.ROOT_PROCESS_RANK)
+        self.comm.Gather(self.mcaStats, recvbuf, root=0)
 
     def getDeviceConfig(self):
         self.device_config = None
