@@ -23,7 +23,7 @@ class NonRootMCA(BaseMCA):
         self.OLIM = 1
 
         self.PRECISION = 1e-12
-        self.ITER_LIMIT = 10
+        self.ITER_LIMIT = 100
         self.RESIDUALS_TOL = 1e-12
         self.Xiter = 0; self.Xresiduals = 0
         self.Aiter = 0; self.Aresiduals = 0

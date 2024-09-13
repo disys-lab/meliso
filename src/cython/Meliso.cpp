@@ -113,10 +113,10 @@ void Meliso::matVec(){
 
 
 	//acquire the values that can change with compute operations
-    mcaStats[4] += subArrayIH->writeLatency;
-    mcaStats[5] += arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy;
-    mcaStats[6] += subArrayIH->readLatency;
-    mcaStats[7] += arrayIH->readEnergy + subArrayIH->readDynamicEnergy;
+    mcaStats[4] = mcaStats[4] + subArrayIH->writeLatency;
+    mcaStats[5] = mcaStats[5] + arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy;
+    mcaStats[6] = mcaStats[6] + subArrayIH->readLatency;
+    mcaStats[7] = mcaStats[7] + arrayIH->readEnergy + subArrayIH->readDynamicEnergy;
 
 }
 

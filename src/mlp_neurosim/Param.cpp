@@ -71,8 +71,8 @@ Param::Param() {
 
 	useHardwareInTraining = useHardwareInTrainingFF || useHardwareInTrainingWU;    // Use hardware in the training or not
 	useHardwareInTestingFF = true;    // Use hardware in the feed forward part of testing or not (true: realistic hardware, false: ideal software)
-	numBitInput = 10;       // # of bits of the input data (=1 for black and white data)
-	numBitPartialSum = 10;  // # of bits of the digital output (partial weighted sum output)
+	numBitInput = 16;       // # of bits of the input data (=1 for black and white data)
+	numBitPartialSum = 8;  // # of bits of the digital output (partial weighted sum output)
 	pSumMaxHardware = pow(2, numBitPartialSum) - 1;   // Max digital output value of partial weighted sum
 	numInputLevel = pow(2, numBitInput);  // # of levels of the input data
 	numWeightBit = 6;	// # of weight bits (only for pure algorithm, SRAM and digital RRAM hardware)
