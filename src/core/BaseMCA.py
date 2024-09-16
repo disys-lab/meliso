@@ -28,6 +28,7 @@ class BaseMCA:
         self.num_mca_stats = 8
 
         self.useMPI4MatDist = True
+        self.ERR_CORR = 1
 
 
         if "EXP_CONFIG_FILE" not in os.environ.keys():
@@ -50,6 +51,12 @@ class BaseMCA:
         self.cellCols = 1
 
         self.readExpConfig(self.expConfigFile)
+
+        if "errCorr" in self.exp_config["exp_params"].keys():
+            self.ERR_CORR = self.exp_config["exp_params"]["errCorr"]
+
+        if "EC" in os.environ.keys():
+            self.ERR_CORR = int(os.environ["EC"])
 
         if self.size-1 != self.mcaRows*self.mcaCols:
             raise Exception("ExperimentConfigFileError: MCA grid size {}x{} != mpi processes {}".format(self.mcaRows,self.mcaCols,self.size))

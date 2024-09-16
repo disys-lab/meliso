@@ -31,6 +31,7 @@ class NonRootMCA(BaseMCA):
         self.device_type = 1
         self.interpolants = 3
 
+
         if "DT" in os.environ.keys():
             self.device_type = int(os.environ["DT"])
         print("INFO: Device type set to {} on rank {}".format(self.device_type,self.rank))
@@ -55,7 +56,6 @@ class NonRootMCA(BaseMCA):
                 self.turnOnScaling = self.exp_config["exp_params"]["turnOnScaling"]
         else:
             self.turnOnScaling = SC
-
 
         self.meliso_obj = meliso.MelisoPy(self.device_type, self.cellRows, self.cellCols, self.MAX_TOL, self.MIN_TOL, self.turnOnHardware,self.turnOnScaling)
 
@@ -223,9 +223,6 @@ class NonRootMCA(BaseMCA):
         rows = self.A.shape[0]
 
         I = np.eye(rows)
-
-        # L = np.eye(rows) - np.eye(rows, k=1)
-
         L = np.eye(rows)
         for i in range(rows - 1):
             L[i, i + 1] = -1
@@ -234,12 +231,15 @@ class NonRootMCA(BaseMCA):
         y = np.linalg.solve(I+l_dn*LTL, w) #np.linalg.solve(I + lbda * L @ L.T, w)
         return y
 
-    def localMatVec(self, x, RESULT_MULT=1.0):
+    def localMatVec(self, x):
         """
         Compute Matrix-Vector Multiplication in local memristive device.
         """
         self.meliso_obj.loadInput(x)
         self.meliso_obj.matVec()
+
+        RESULT_MULT=1.0
+
         y = RESULT_MULT * self.meliso_obj.getResults()
         
         return y
@@ -250,8 +250,8 @@ class NonRootMCA(BaseMCA):
         """
 
         print(f"Computing MVM at Device Rank {self.rank}...")
-        ERR_CORR=False
-        if ERR_CORR:
+
+        if self.ERR_CORR:
             # Timing for Error Correction:
             start_time = time.time(); self.y = self.errorCorrection(); end_time = time.time()
             self.errorCorrectionTime = end_time - start_time
@@ -262,7 +262,7 @@ class NonRootMCA(BaseMCA):
             self.setWeights(self.A)
 
             start_time = time.time()
-            self.y = self.localMatVec(x,RESULT_MULT=0.5)
+            self.y = self.localMatVec(x)
             end_time = time.time()
             self.matVecTime = end_time - start_time
             print(f"INFO: Simple MatVec Time at Device Rank {self.rank}: {self.matVecTime}")
@@ -427,7 +427,7 @@ class NonRootMCA(BaseMCA):
             for i in range(rows):
                 lbda[i] = lbda[i] + rho * (y_x[i].flatten() - y_a[i].flatten())
 
-        y_corr = 0.5 * (y_a + y_x)
+        y_corr = (y_a + y_x)
 
         y_corr = self.denoiseLeastSquare(y_corr)
 
