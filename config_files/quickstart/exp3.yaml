@@ -1,7 +1,6 @@
 exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
-  interpolants: 3
   matrix_name: "bcsstk02"
   matrix_file: "inputs/matrices/bcsstk02.mtx"
   distributed:

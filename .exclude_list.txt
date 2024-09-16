@@ -7,3 +7,4 @@
 ./results/*.*
 ./documents/*
 ./meliso_old/*
+./build/*

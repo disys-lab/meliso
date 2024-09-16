@@ -96,10 +96,10 @@ void Meliso::matVec(){
     else if(_2T1F *temp = dynamic_cast<_2T1F*>(arrayIH->cell[0][0]))
         WeightTransfer_2T1F();
     /* Here the performance metrics of subArray also includes that of neuron peripheries (see Train.cpp and Test.cpp) */
-    printf("INFO: Meliso:matVec: Read latency=%.4e s\n", subArrayIH->readLatency);// + subArrayHO->readLatency);
-    printf("INFO: Meliso:matVec: Write latency=%.4e s\n", subArrayIH->writeLatency);// + subArrayHO->writeLatency);
-    printf("INFO: Meliso:matVec: Read energy=%.4e J\n", arrayIH->readEnergy + subArrayIH->readDynamicEnergy); // + arrayHO->readEnergy + subArrayHO->readDynamicEnergy);
-    printf("INFO: Meliso:matVec: Write energy=%.4e J\n", arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy); // + arrayHO->writeEnergy + subArrayHO->writeDynamicEnergy);
+//    printf("INFO: Meliso:matVec: Read latency=%.4e s\n", subArrayIH->readLatency);// + subArrayHO->readLatency);
+//    printf("INFO: Meliso:matVec: Write latency=%.4e s\n", subArrayIH->writeLatency);// + subArrayHO->writeLatency);
+//    printf("INFO: Meliso:matVec: Read energy=%.4e J\n", arrayIH->readEnergy + subArrayIH->readDynamicEnergy); // + arrayHO->readEnergy + subArrayHO->readDynamicEnergy);
+//    printf("INFO: Meliso:matVec: Write energy=%.4e J\n", arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy); // + arrayHO->writeEnergy + subArrayHO->writeDynamicEnergy);
     if(HybridCell* temp = dynamic_cast<HybridCell*>(arrayIH->cell[0][0])){
         printf("INFO: Meliso:matVec: Transfer latency=%.4e s\n", subArrayIH->transferLatency);// + subArrayHO->transferLatency);
         printf("INFO: Meliso:matVec: Transfer latency=%.4e s\n", subArrayIH->transferLatency);
@@ -118,6 +118,10 @@ void Meliso::matVec(){
     mcaStats[6] = mcaStats[6] + subArrayIH->readLatency;
     mcaStats[7] = mcaStats[7] + arrayIH->readEnergy + subArrayIH->readDynamicEnergy;
 
+    printf("INFO: Meliso:matVec: Read latency=%.4e s\n", mcaStats[6]);// + subArrayHO->readLatency);
+    printf("INFO: Meliso:matVec: Write latency=%.4e s\n", mcaStats[4]);// + subArrayHO->writeLatency);
+    printf("INFO: Meliso:matVec: Read energy=%.4e J\n", mcaStats[7]); // + arrayHO->readEnergy + subArrayHO->readDynamicEnergy);
+    printf("INFO: Meliso:matVec: Write energy=%.4e J\n", mcaStats[5]); // + arrayHO->writeEnergy + subArrayHO->writeDynamicEnergy);
 }
 
 void Meliso::getResults(){
