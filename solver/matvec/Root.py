@@ -180,10 +180,7 @@ class Root:
             self.y_benchmark_result = np.copy(self.y)
             print(f"\nBenchmarked Result: \n {self.y_benchmark_result}")
         else:
-            if "DT" in os.environ.keys():
-                self.device_type = int(os.environ["DT"])
-                
-            self.y_mem_result = (self.device_type + 1) * np.copy(self.y)
+            self.y_mem_result = np.copy(self.y)
             print(f"\nMultiplication Result: \n {self.y_mem_result}")
 
     def benchmarkMatVec(self):
@@ -207,8 +204,8 @@ class Root:
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()
-        print("AllMCAStats\n")
-        print(self.mca.allMCAStats)
+        # print("AllMCAStats\n")
+        # print(self.mca.allMCAStats)
 
     def finalize(self):
         data = np.array([-1, -1], dtype=np.float64)

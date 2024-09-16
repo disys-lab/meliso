@@ -341,6 +341,19 @@ class RootMCA(BaseMCA):
             print("\t arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy = {}".format(self.allMCAStats[rank][5][0]))
             print("\t subArrayIH->readLatency = {}".format(self.allMCAStats[rank][6][0]))
             print("\t arrayIH->readEnergy + subArrayIH->readDynamicEnergy = {}".format(self.allMCAStats[rank][7][0]))
-        
+
+        self.allMCAStats = self.allMCAStats.reshape((self.size,self.num_mca_stats))
+
+        writeLat = self.allMCAStats[:,4]
+        writeEnergy = self.allMCAStats[:,5]
+
+        readLat= self.allMCAStats[:,6]
+        readEnergy = self.allMCAStats[:,7]
+
+        print("EC= {}; writeLatency mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(writeLat),np.std(writeLat)))
+        print("EC= {}; writeEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(writeEnergy), np.std(writeEnergy)))
+        print("EC= {}; readLatency mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readLat), np.std(readLat)))
+        print("EC= {}; readEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readEnergy), np.std(readEnergy)))
+
     def globalMatVec(self):
         return None
