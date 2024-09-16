@@ -189,8 +189,11 @@ class Root:
     def benchmarkMatVec(self):
         y = np.dot(self.mca.mat, self.mca.x)
         self.y_benchmark_result = y[:self.mca.origMatRows]
-        self.error = self.y_mem_result - self.y_benchmark_result
-        print("\nElement-wise Error: \n", self.error)
+        self.error = self.y_mem_result - self.y_benchmark_result.flatten()
+        if self.y_mem_result is not None:
+            print("\nElement-wise Error: \n", self.error)
+            print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
+            print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
 
     def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction= False):
 

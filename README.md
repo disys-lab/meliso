@@ -80,6 +80,7 @@ docker pull pramanan3/MELISO:v0.0.3
 2. To run the experiments:
     * On [Pete Supercomputer](https://hpcc.okstate.edu/pete-supercomputer.html) (assuming you are authorized to do so AND familiar with the system), use the following command
 `EXP_CONFIG_FILE=/path/to/exp/config/file mpiexec -n <numMCAs+1> python3 DistributedMatVec.py`
+    * To set the environment on Pete you can simply do `source start_export.env` after enabling `conda activate mpienv38`
     * On Docker container, add `--allow-run-as-root --oversubscribe` tags
 
 3. For the experiments to run smoothly, make sure that: 

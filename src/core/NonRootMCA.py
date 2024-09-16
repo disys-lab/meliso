@@ -22,9 +22,9 @@ class NonRootMCA(BaseMCA):
         self.MIN_TOL = 0.0
         self.OLIM = 1
 
-        self.PRECISION = 1e-12
+        self.PRECISION = 1e-2
         self.ITER_LIMIT = 100
-        self.RESIDUALS_TOL = 1e-12
+        self.RESIDUALS_TOL = self.PRECISION*self.PRECISION
         self.Xiter = 0; self.Xresiduals = 0
         self.Aiter = 0; self.Aresiduals = 0
 
@@ -62,8 +62,7 @@ class NonRootMCA(BaseMCA):
         if "interpolants" in self.exp_config["exp_params"].keys():
             self.interpolants = self.exp_config["exp_params"]["interpolants"]
             print("setting interpolants to {}".format(self.interpolants))
-
-        self.meliso_obj.setInterpolants(self.interpolants)
+            self.meliso_obj.setInterpolants(self.interpolants)
 
         if "device_config" not in self.exp_config.keys():
             raise Exception("ExperimentConfigFileError: Device config not specified in %s for MCA rank %s".format(expConfigFile,self.rank))
@@ -127,13 +126,14 @@ class NonRootMCA(BaseMCA):
     def setWeightsIncremental(self, A):
         j = 0
         residuals = 0
+        current_residuals = 0
         while j < self.ITER_LIMIT:
             self.meliso_obj.setWeightsIncremental(A, self.PRECISION)
             actualWeights = self.meliso_obj.getWeights()
 
             current_residuals = np.linalg.norm(actualWeights - A)
-            # if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
-            #     break
+            if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
+                break
             residuals = current_residuals
             j += 1
         return j, current_residuals
@@ -216,16 +216,22 @@ class NonRootMCA(BaseMCA):
                                                  conductance, conductancePrev)
 
     
-    def denoiseLeastSquare(self, w, lbda=1e-6):
+    def denoiseLeastSquare(self, w, l_dn=1e-6):
         """
         Applying the Least Square denoising method.
         """
-        rows = w.shape[0]
+        rows = self.A.shape[0]
 
         I = np.eye(rows)
-        L = np.eye(rows) - np.eye(rows, k=1)
 
-        y = np.linalg.solve(I + lbda * L @ L.T, w)
+        # L = np.eye(rows) - np.eye(rows, k=1)
+
+        L = np.eye(rows)
+        for i in range(rows - 1):
+            L[i, i + 1] = -1
+        LTL = L.T @ L
+
+        y = np.linalg.solve(I+l_dn*LTL, w) #np.linalg.solve(I + lbda * L @ L.T, w)
         return y
 
     def localMatVec(self, x, RESULT_MULT=1.0):
@@ -242,13 +248,24 @@ class NonRootMCA(BaseMCA):
         """
         Execute Distributed Matrix-Vector computation.
         """
-        
-        print(f"Computing MVM at Device Rank {self.rank}...")
 
-        # Timing for Error Correction:
-        start_time = time.time(); self.y = self.errorCorrection(); end_time = time.time()
-        self.errorCorrectionTime = end_time - start_time
-        print(f"INFO: Elapsed Error Correction Time at Device Rank {self.rank}: {self.errorCorrectionTime}")
+        print(f"Computing MVM at Device Rank {self.rank}...")
+        ERR_CORR=False
+        if ERR_CORR:
+            # Timing for Error Correction:
+            start_time = time.time(); self.y = self.errorCorrection(); end_time = time.time()
+            self.errorCorrectionTime = end_time - start_time
+            print(f"INFO: Elapsed Error Correction Time at Device Rank {self.rank}: {self.errorCorrectionTime}")
+        else:
+            x = np.empty(self.locCols, dtype=np.float64)
+            self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
+            self.setWeights(self.A)
+
+            start_time = time.time()
+            self.y = self.localMatVec(x,RESULT_MULT=0.5)
+            end_time = time.time()
+            self.matVecTime = end_time - start_time
+            print(f"INFO: Simple MatVec Time at Device Rank {self.rank}: {self.matVecTime}")
 
         #Timing for MPI Send:
         start_time = time.time(); self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK); end_time = time.time()
@@ -257,7 +274,7 @@ class NonRootMCA(BaseMCA):
 
         return self.y
     
-    def errorCorrection(self):
+    def errorCorrectionOld(self):
         """
         Apply Error Correction Method.
         """
@@ -288,7 +305,7 @@ class NonRootMCA(BaseMCA):
         try:
             V_tilde_a = np.empty((self.locRows, 1), dtype=float)
             A_tilde = np.copy(self.A)
-            self.meliso_obj.initializeWeights(); 
+            self.meliso_obj.initializeWeights()
             self.Aiter, self.Aresiduals = self.setWeightsIncremental(A_tilde)
             print(f"INFO: Encoding matrix A: No. iterations : {self.Aiter}; Final residuals: {self.Aresiduals}")
             A_tilde = self.meliso_obj.getWeights()
@@ -315,5 +332,105 @@ class NonRootMCA(BaseMCA):
                 
             y_corr = y_a
         except: None
+
+        return y_corr
+
+    def errorCorrection(self):
+        ADMM= False
+        eta = 1e-3
+        rho = 1e-3
+        x = np.empty(self.locCols, dtype=np.float64)
+        self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
+        self.acquireLocalX(x)
+
+        samples = self.locCols
+        rows = self.A.shape[0]
+        cols = self.A.shape[1]
+
+        U_tilde = np.empty((rows, 1), dtype=float)
+
+        V_tilde_a = np.empty((rows, 1), dtype=float)
+
+        V_tilde_x = np.empty((rows, 1), dtype=float)
+
+        lbda = np.zeros((rows, 1), dtype=float).flatten()
+
+        X_itrs = 0
+        A_itrs = 0
+
+        y_a = np.zeros((rows, 1), dtype=float)
+
+        y_x = np.zeros((rows, 1), dtype=float)
+
+        X_tilde = np.copy(self.X)
+        self.meliso_obj.initializeWeights()
+        X_j, X_res = self.setWeightsIncremental(X_tilde)
+
+        X_itrs = X_itrs + X_j
+
+        X_tilde = self.meliso_obj.getWeights()
+
+        for i in range(rows):
+            ai = self.A[i, :].flatten()
+            ui_tilde = self.localMatVec(ai).flatten()
+            ui_tilde = self.denoiseLeastSquare(ui_tilde)
+            U_tilde[i] = ui_tilde[i]
+
+        for i in range(rows):
+            ait = self.A[i, :].flatten()
+            vi_tilde = self.localMatVec(ait).flatten()
+            vi_tilde = self.denoiseLeastSquare(vi_tilde)
+            V_tilde_x[i] = vi_tilde[i]
+
+        # # for i in range(rows):
+        r_list = np.random.randint(low=0, high=rows - 1, size=samples)
+        if ADMM:
+            for r in r_list:
+                gradX = 2 * np.dot(X_tilde[r, :], (X_tilde[r, :] - self.X[r, :]))
+                gradX = gradX - (lbda[r] + rho * (y_x[r] - y_a[r])) * (self.A[r, :] - self.A[r, :])
+                X_tilde[r, :] = X_tilde[r, :] + eta * gradX
+
+        self.meliso_obj.initializeWeights()
+        # Optimize for A
+        A_j, A_res = self.setWeightsIncremental(self.A)
+
+        A_itrs = A_itrs + A_j
+        #
+        A_tilde = self.meliso_obj.getWeights()
+
+        for i in range(rows):
+            xit = X_tilde[i, :].flatten()
+            vi_tilde = self.localMatVec(xit).flatten()
+            vi_tilde = self.denoiseLeastSquare(vi_tilde)
+            V_tilde_a[i] = vi_tilde[i]
+
+        if ADMM:
+            for r in r_list:
+                gradA = 2 * np.dot(A_tilde[r, :], (A_tilde[r, :] - self.A[r, :]))
+                gradA = gradA + (lbda[r] + rho * (y_x[r] - y_a[r])) * (X_tilde[r, :] - self.X[r, :])
+                A_tilde[r, :] = A_tilde[r, :] + eta * gradA
+
+        y_tilde = self.localMatVec(x)
+
+        y_tilde = self.denoiseLeastSquare(y_tilde) #np.linalg.solve(np.eye(rows) + l_dn * LTL, y_tilde)
+
+        for i in range(rows):
+            y_a[i] = y_tilde[i] - V_tilde_a[i] + U_tilde[i]  # + (DAX_tilde[i] + DXA_tilde[i])/2.0
+            y_x[i] = U_tilde[i] - V_tilde_x[i] + y_tilde[i]
+
+            # print(y_a[i]+y_x[i],y_tilde[i],V_tilde_a[i],V_tilde_x[i],U_tilde[i])
+
+        y_a = self.denoiseLeastSquare(y_a) #np.linalg.solve(np.eye(rows) + l_dn * LTL, y_a)
+        y_x = self.denoiseLeastSquare(y_x) #np.linalg.solve(np.eye(rows) + l_dn * LTL, y_x)
+
+        if ADMM:
+            for i in range(rows):
+                lbda[i] = lbda[i] + rho * (y_x[i].flatten() - y_a[i].flatten())
+
+        y_corr = 0.5 * (y_a + y_x)
+
+        y_corr = self.denoiseLeastSquare(y_corr)
+
+        print(f"INFO: Rank = {self.rank} : A_iter : {A_itrs}, X_iter : {X_itrs}: A_res: {A_res}, X_res: {X_res}")
 
         return y_corr
