@@ -19,7 +19,7 @@ git clone https://github.com/paritoshpr/MELISO.git
 ```
 cd MELISO
 mkdir build
-export PYTHONPATH=$PYTHONPATH:./build
+export PYTHON_PATH=$PYTHON_PATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
 make all
 ```
@@ -35,7 +35,7 @@ make clean
 make clean-neurosim
 make clean-MELISO
 mkdir build
-export PYTHONPATH=$PYTHONPATH:./build
+export PYTHON_PATH=$PYTHON_PATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
 make all
 ```
