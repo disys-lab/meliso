@@ -10,12 +10,12 @@ exp_params:
   matrix_file: "inputs/matrices/bcsstk02.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 1
-    mca_cols: 1
+    mca_rows: 3
+    mca_cols: 3
 
 device_config:
   root: "config_files/"
-  cell_rows: 66
-  cell_cols: 66
+  cell_rows: 22
+  cell_cols: 22
   assignment:
     device_AlOx-HfO2.yaml: [[-1]]
