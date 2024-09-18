@@ -1,6 +1,5 @@
 build/
 plot/
-matrices/
 .idea/
 *.so
 *.png
