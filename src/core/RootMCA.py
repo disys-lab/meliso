@@ -149,7 +149,7 @@ class RootMCA(BaseMCA):
             os.makedirs(decomp_folder_name, exist_ok=True)
 
     def scaleMatrix(self,mat):
-        #mat = np.copy(matrix)
+        mat = mat.astype(np.float64)
         mat_row_sum = np.sum(mat, axis=1)
         mat_min = mat.min()
         mat -= mat_min
