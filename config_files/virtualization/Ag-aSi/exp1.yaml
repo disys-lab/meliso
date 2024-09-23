@@ -15,7 +15,7 @@ exp_params:
 
 device_config:
   root: "config_files/"
-  cell_rows: 256
-  cell_cols: 256
+  cell_rows: 128
+  cell_cols: 128
   assignment:
     device_Ag-aSi.yaml: [[-1]]
