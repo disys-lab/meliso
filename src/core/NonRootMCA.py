@@ -24,6 +24,7 @@ class NonRootMCA(BaseMCA):
 
         self.PRECISION = 1e-6
         self.ITER_LIMIT = int(os.environ["ITER_LIMIT"])
+        self.OVERIDE = int(os.environ["OVERIDE"])
         self.RESIDUALS_TOL = self.PRECISION*self.PRECISION
         self.Xiter = 0; self.Xresiduals = 0
         self.Aiter = 0; self.Aresiduals = 0
@@ -106,19 +107,7 @@ class NonRootMCA(BaseMCA):
 
     def initializeMCA(self):
         self.meliso_obj.initializeWeights()
-        
-        try:
-            methods = int(os.getenv("WEIGHT_INIT_METHOD"))
-        except (TypeError, ValueError):
-            raise ValueError("WeightInitMethodError: WEIGHT_INIT_METHOD must be an integer.")
-            
-        if methods == 0:
-            self.setWeightsIncremental(self.A)
-        elif methods == 1:
-            self.setWeights(self.A)
-        else:
-            raise ValueError(f"WeightInitMethodError: Only accept 0 (IncrementalInit) or 1 (SingleInit), got {methods}.")
-
+        self.setWeightsIncremental(self.A)
 
     def setWeights(self,A):
         self.meliso_obj.setWeights(A)
@@ -127,13 +116,15 @@ class NonRootMCA(BaseMCA):
         j = 0
         residuals = 0
         current_residuals = 0
+
         while j < self.ITER_LIMIT:
             self.meliso_obj.setWeightsIncremental(A, self.PRECISION)
             actualWeights = self.meliso_obj.getWeights()
 
             current_residuals = np.linalg.norm(actualWeights - A)
-            if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
-                break
+            if (self.OVERIDE == 0):
+                if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
+                    break
             residuals = current_residuals
             j += 1
         return j, current_residuals
