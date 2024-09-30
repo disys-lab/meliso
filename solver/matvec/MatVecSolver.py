@@ -25,11 +25,11 @@ class MatVecSolver:
         print("\nRunning VMM Operation...")
         self.solverObject.parallelMatVec(correction=correction)
 
-    def centralizedBenchmarkMatVec(self):
-        print("\nRunning Centralized VMM Operation...")
-        self.solverObject.benchmarkMatVec()
+    # def centralizedBenchmarkMatVec(self):
+    #     print("\nRunning Centralized VMM Operation...")
+    #     self.solverObject.benchmarkMatVec()
 
-    def parallelizedBenchmarkMatVec(self, hardwareOn=0, scalingOn=0,correction=False):
+    def parallelizedBenchmarkMatVec(self, hardwareOn=1, scalingOn=0,correction=False):
         print("\nRunning Parallelized VMM Operation...")
         self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn,correction=correction)
 

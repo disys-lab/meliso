@@ -15,7 +15,7 @@ class Root:
 
         self.hardwareOn = None
         self.scalingOn = None
-        
+        self.deviceType = int(os.environ["DT"])
         self.y_mem_result = None
         self.y_benchmark_result = None
         self.error = None
@@ -180,7 +180,7 @@ class Root:
             self.y_benchmark_result = np.copy(self.y)
             print(f"\nBenchmarked Result: \n {self.y_benchmark_result}")
         else:
-            self.y_mem_result = np.copy(self.y)
+            self.y_mem_result = (self.deviceType + 1) * np.copy(self.y)
             print(f"\nMultiplication Result: \n {self.y_mem_result}")
 
     def benchmarkMatVec(self):
