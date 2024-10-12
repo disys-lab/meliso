@@ -6,8 +6,8 @@ exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
   errCorr: 1
-  matrix_name: "Ipertubed"
-  matrix_file: "inputs/matrices/Ipertubed.mtx"
+  matrix_name: "Iperturb"
+  matrix_file: "inputs/matrices/Iperturb.mtx"
   distributed:
     decomposition_dir: "/tmp/"
     mca_rows: 1
@@ -15,7 +15,7 @@ exp_params:
 
 device_config:
   root: "config_files/"
-  cell_rows: 128
-  cell_cols: 128
+  cell_rows: 66
+  cell_cols: 66
   assignment:
     device_AlOx-HfO2.yaml: [[-1]]
