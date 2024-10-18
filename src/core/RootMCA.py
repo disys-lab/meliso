@@ -42,9 +42,11 @@ class RootMCA(BaseMCA):
         #     self.setMat(self.mat)
     
     def printConfiguration(self):
-        print("\nExperiment Configuration")
+        print("\nExperiment Configuration:")
         print(self.exp_config["exp_params"])
-
+        
+        with open("output.txt", "a+") as file:
+            file.write(f'\nExperiment Configuration:\n {self.exp_config["exp_params"]}\n')
 
     def initializeMatrix(self,mat):
         if mat is None:
@@ -354,6 +356,12 @@ class RootMCA(BaseMCA):
         print("EC= {}; writeEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(writeEnergy), np.std(writeEnergy)))
         print("EC= {}; readLatency mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readLat), np.std(readLat)))
         print("EC= {}; readEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readEnergy), np.std(readEnergy)))
+
+        with open("output.txt", "a+") as file:
+            file.write(f"EC= {self.ERR_CORR}; writeLatency mean = {np.mean(writeLat)}, std_dev = {np.std(writeLat)}\n")
+            file.write(f"EC= {self.ERR_CORR}; writeEnergy mean = {np.mean(writeEnergy)}, std_dev = {np.std(writeEnergy)}\n")
+            file.write(f"EC= {self.ERR_CORR}; readLatency mean = {np.mean(readLat)}, std_dev = {np.std(readLat)}\n")
+            file.write(f"EC= {self.ERR_CORR}; readEnergy mean = {np.mean(readEnergy)}, std_dev = {np.std(readEnergy)}\n")
 
     def globalMatVec(self):
         return None

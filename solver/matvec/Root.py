@@ -192,6 +192,10 @@ class Root:
             print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
             print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
 
+            with open("output.txt", "a+") as file:
+                file.write(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
+                file.write(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
+
     def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction= False):
 
         self.parallelMatVec(type="benchmark", correction=correction)
@@ -201,6 +205,10 @@ class Root:
             print("\nElement-wise Error: \n", self.error)
             print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
             print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
+
+            with open("output.txt", "a+") as file:
+                file.write(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
+                file.write(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()

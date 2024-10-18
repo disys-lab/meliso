@@ -55,6 +55,10 @@ y_mca = memristor.getResults().reshape((1, DIM))
 # Real MVM
 y = np.dot(A, x).reshape((1, DIM))
 
-# Difference between Memristor and Ream MVM
-print(f"L2-norm: {np.linalg.norm(y - y_mca)}")
-print(f"Loo-norm: {np.linalg.norm(y - y_mca, ord=np.inf)}")
+# Difference between Memristor and Real MVM
+print(f"L2-norm: {np.linalg.norm(y - y_mca)}\n")
+print(f"Loo-norm: {np.linalg.norm(y - y_mca, ord=np.inf)}\n")
+
+with open("output.txt", "a+") as file:
+    file.write(f"L2-norm: {np.linalg.norm(y - y_mca)}\n")
+    file.write(f"Loo-norm: {np.linalg.norm(y - y_mca, ord=np.inf)}\n")
