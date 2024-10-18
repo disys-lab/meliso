@@ -12,4 +12,9 @@ mv.acquireMCAStats()
 mv.parallelizedBenchmarkMatVec(0,0,correction=correction)
 mv.finalize()
 end_time = time.time()
-print(f"Elapsed time for the entire VMM operation: {end_time - start_time}\n")
+
+duration = end_time - start_time
+print(f"Elapsed time for the entire VMM operation: {duration}\n")
+
+with open("output.txt", "a+") as file:
+    file.write(f"Elapsed time for the entire VMM operation: {duration}\n")
