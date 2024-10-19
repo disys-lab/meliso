@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Setup
+conda activate mpienv38
+export PYTHONPATH=$PYTHONPATH:./build
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
+python3 MelisoDriver.py
+
 # Number of replications
 REPS=5
 
@@ -39,7 +45,7 @@ for material in "${!MATERIALS[@]}"; do
       # Run the experiment
       DT=1 OVERIDE=1 ITER_LIMIT=$iter_limit XVEC_PATH=$XVEC_PATH \
       EXP_CONFIG_FILE=$EXP_CONFIG_FILE REPORT_PATH=$REPORT_PATH \
-      mpiexec -n 2 python DistributedMatVec.py
+      mpiexec -n 2 python3 DistributedMatVec.py
     done
 
   done
