@@ -12,14 +12,14 @@ REPS=5
 # List of materials and corresponding config paths
 declare -A MATERIALS
 MATERIALS=(
-    ["Ag-aSi"]="config_files/iterations/Ag-aSi/exp2.yaml"
-    ["AlOx-HfO2"]="config_files/iterations/AlOx-HfO2/exp2.yaml"
-    ["EpiRAM"]="config_files/iterations/EpiRAM/exp2.yaml"
-    ["TaOx-HfOx"]="config_files/iterations/TaOx-HfOx/exp2.yaml"
+    ["Ag-aSi"]="config_files/iterations/Ag-aSi/exp1.yaml"
+    ["AlOx-HfO2"]="config_files/iterations/AlOx-HfO2/exp1.yaml"
+    ["EpiRAM"]="config_files/iterations/EpiRAM/exp1.yaml"
+    ["TaOx-HfOx"]="config_files/iterations/TaOx-HfOx/exp1.yaml"
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(1 3 5 10 20 50 100)
+ITER_LIMITS=(1 10 20 30 40 50 60 70 80 90 100)
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
