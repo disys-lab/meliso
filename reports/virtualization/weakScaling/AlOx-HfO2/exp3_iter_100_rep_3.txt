@@ -1,0 +1,170 @@
+
+Experiment Configuration:
+ {'turnOnHardware': 1, 'turnOnScaling': 0, 'errCorr': 1, 'matrix_name': 'email-Eu-core-temporal', 'matrix_file': 'inputs/matrices/email-Eu-core-temporal.mtx', 'distributed': {'decomposition_dir': '/tmp/', 'mca_rows': 8, 'mca_cols': 8}}
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+EC= 1; writeLatency mean = 479.5137155771796, std_dev = 60.48306163986011
+EC= 1; writeEnergy mean = 0.5783705732200283, std_dev = 0.07361609207392628
+EC= 1; readLatency mean = 0.14014380134692145, std_dev = 0.01751797516836518
+EC= 1; readEnergy mean = 0.0002635344399111698, std_dev = 3.295084875115245e-05
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+L2-norm Error: 160.04007487265557
+Loo-norm Error: 7.385587197370622
+Elapsed time for the entire VMM operation: 19.39578628540039
+Elapsed time for the entire VMM operation: 19.39577579498291
+8
+Elapsed time for the entire VMM operation: 19.435150384902954
+Elapsed time for the entire VMM operation: 19.39534091949463
+Elapsed time for the entire VMM operation: 19.395660877227783
+Elapsed time for the entire VMM operation: 19.395740270614624
+Elapsed time for the entire VMM operation: 19.39561438560486
+Elapsed time for the entire VMM operation: 19.43637204170227
+
+Elapsed time for the entire VMM operation: 19.43620991706848
+Elapsed time for the entire VMM operation: 19.43575119972229
+
+Elapsed time for the entire VMM operation: 19.396209955215454
+Elapsed time for the entire VMM operation: 19.435946226119995EElapsed time for the entire VMM operation: 19.438053607940674
+Elapsed time for the entire VMM operation: 19.437716007232666EElapsed time for the entire VMM operation: 19.435630321502686EElapsed time for the entire VMM operation: 19.435487985610962Elapsed time for the entire VMM operation: 19.397878170013428
+Elapsed time for the entire VMM operation: 19.396504402160645
+lapsed time for the entire VMM operation: 19.435485124588013
+Elapsed time for the entire VMM operation: 19.43538236618042
+Elapsed time for the entire VMM operation: 19.395824193954468
+Elapsed time for the entire VMM operation: 19.395966053009033EElapsed time for the entire VMM operation: 19.395533561706543Elapsed time for the entire VMM operation: 19.43562912940979
+ElElapsed time for the entire VMM operation: 19.395398378372192
+Elapsed time for the entire VMM operation: 19.396389484405518
+psed time for the entire VMM operation: 19.435636281967163
+Elapsed time for the entire VMM operation: 19.3980655670166
+Elapsed time for the entire VMM operation: 19.39811110496521
+25
+Elapsed time for the entire VMM operation: 19.43584680557251
+Elapsed time for the entire VMM operation: 19.435863256454468
+Elapsed time for the entire VMM operation: 19.396106719970703
+Elapsed time for the entire VMM operation: 19.4364812374115
+8
+Elapsed time for the entire VMM operation: 19.39552927017212
+Elapsed time for the entire VMM operation: 19.396148204803467
+Elapsed time for the entire VMM operation: 19.395949363708496
+Elapsed time for the entire VMM operation: 19.395347118377686
+Elapsed time for the entire VMM operation: 19.396240234375

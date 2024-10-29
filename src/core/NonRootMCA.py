@@ -3,6 +3,8 @@ import numpy as np
 import os,sys,yaml,time
 import meliso
 
+REPORT_PATH = os.environ["REPORT_PATH"]
+
 class NonRootMCA(BaseMCA):
     def __init__(self,comm,HW=-1,SC=-1,set_mat=True):
         super().__init__(comm)
@@ -24,7 +26,7 @@ class NonRootMCA(BaseMCA):
 
         self.PRECISION = 1e-6
         self.ITER_LIMIT = int(os.environ["ITER_LIMIT"])
-        self.OVERIDE = int(os.environ["OVERIDE"])
+        self.OVERRIDE = int(os.environ["OVERRIDE"])
         self.RESIDUALS_TOL = self.PRECISION*self.PRECISION
         self.Xiter = 0; self.Xresiduals = 0
         self.Aiter = 0; self.Aresiduals = 0
@@ -122,7 +124,7 @@ class NonRootMCA(BaseMCA):
             actualWeights = self.meliso_obj.getWeights()
 
             current_residuals = np.linalg.norm(actualWeights - A)
-            if (self.OVERIDE == 0):
+            if (self.OVERRIDE == 0):
                 if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
                     break
             residuals = current_residuals
@@ -423,5 +425,8 @@ class NonRootMCA(BaseMCA):
         y_corr = self.denoiseLeastSquare(y_corr)
 
         print(f"INFO: Rank = {self.rank} : A_iter : {A_itrs}, X_iter : {X_itrs}: A_res: {A_res}, X_res: {X_res}")
+
+        with open(REPORT_PATH, "a+") as file:
+            file.write(f"SetWeightsIncrental Iter: {A_itrs} \t {X_itrs}\n")
 
         return y_corr

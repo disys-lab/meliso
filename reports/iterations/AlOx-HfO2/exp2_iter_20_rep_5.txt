@@ -1,0 +1,13 @@
+
+Experiment Configuration:
+ {'turnOnHardware': 1, 'turnOnScaling': 0, 'errCorr': 1, 'matrix_name': 'Iperturb', 'matrix_file': 'inputs/matrices/Iperturb.mtx', 'distributed': {'decomposition_dir': '/tmp/', 'mca_rows': 1, 'mca_cols': 1}}
+SetWeightsIncrental Iter: 20 	 20
+EC= 1; writeLatency mean = 91.22316027645509, std_dev = 91.22316027645509
+EC= 1; writeEnergy mean = 0.04313985590788228, std_dev = 0.04313985590788228
+EC= 1; readLatency mean = 0.01907991603609523, std_dev = 0.01907991603609523
+EC= 1; readEnergy mean = 2.2467365161888246e-05, std_dev = 2.2467365161888246e-05
+SetWeightsIncrental Iter: 20 	 20
+L2-norm Error: 4.299147878119781
+Loo-norm Error: 0.7450796895938394
+Elapsed time for the entire VMM operation: 8.164218425750732
+Elapsed time for the entire VMM operation: 8.212911605834961
