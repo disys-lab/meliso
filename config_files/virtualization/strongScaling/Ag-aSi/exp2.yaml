@@ -1,0 +1,18 @@
+exp_params:
+  turnOnHardware: 1
+  turnOnScaling: 0
+  errCorr: 1
+  matrix_name: "cond-mat-2003"
+  matrix_file: "inputs/matrices/cond-mat-2003.mtx"
+  distributed:
+    decomposition_dir: "/tmp/"
+    mca_rows: 122
+    mca_cols: 122
+    # Total Non-Root chiplets: 14884
+
+device_config:
+  root: "config_files/"
+  cell_rows: 256
+  cell_cols: 256
+  assignment:
+    device_Ag-aSi.yaml: [[-1]]
