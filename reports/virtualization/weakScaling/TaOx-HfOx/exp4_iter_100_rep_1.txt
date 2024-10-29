@@ -1,0 +1,58 @@
+
+Experiment Configuration:
+ {'turnOnHardware': 1, 'turnOnScaling': 0, 'errCorr': 1, 'matrix_name': 'email-Eu-core-temporal', 'matrix_file': 'inputs/matrices/email-Eu-core-temporal.mtx', 'distributed': {'decomposition_dir': '/tmp/', 'mca_rows': 4, 'mca_cols': 4}}
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+EC= 1; writeLatency mean = 1.6051381572830608, std_dev = 0.4029482074891373
+EC= 1; writeEnergy mean = 0.002491579757122313, std_dev = 0.0006260927294373769
+EC= 1; readLatency mean = 0.5336591635229825, std_dev = 0.13341479088074562
+EC= 1; readEnergy mean = 0.0021457000177689347, std_dev = 0.0005364276744918961
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+SetWeightsIncrental Iter: 100 	 100
+L2-norm Error: 133.5066056158111
+Loo-norm Error: 5.659503284724349
+Elapsed time for the entire VMM operation: 105.1448290348053
+Elapsed time for the entire VMM operation: 105.14451599121094
+Elapsed time for the entire VMM operation: 105.1448540687561
+Elapsed time for the entire VMM operation: 105.14457988739014
+Elapsed time for the entire VMM operation: 105.14476799964905
+Elapsed time for the entire VMM operation: 105.1446738243103
+Elapsed time for the entire VMM operation: 105.14487719535828
+Elapsed time for the entire VMM operation: 105.14478516578674
+Elapsed time for the entire VMM operation: 105.14514327049255
+Elapsed time for the entire VMM operation: 105.14479374885559
+Elapsed time for the entire VMM operation: 105.14493775367737
+Elapsed time for the entire VMM operation: 105.14650964736938
+Elapsed time for the entire VMM operation: 105.1446042060852
+Elapsed time for the entire VMM operation: 105.14498448371887
+Elapsed time for the entire VMM operation: 105.14658570289612
+Elapsed time for the entire VMM operation: 105.14467692375183
+Elapsed time for the entire VMM operation: 105.14655685424805

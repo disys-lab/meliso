@@ -9,6 +9,7 @@ if "MELISO_SRC_PATH" in os.environ.keys():
 else:
     sys.path.append("../../")
 from src.core.RootMCA import RootMCA
+REPORT_PATH = os.environ["REPORT_PATH"]
 
 class Root:
     def __init__(self,comm,x=None,mat=None):
@@ -192,7 +193,7 @@ class Root:
             print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
             print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
 
-            with open("output.txt", "a+") as file:
+            with open(REPORT_PATH, "a+") as file:
                 file.write(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}\n")
                 file.write(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}\n")
 
@@ -206,7 +207,7 @@ class Root:
             print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
             print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
 
-            with open("output.txt", "a+") as file:
+            with open(REPORT_PATH, "a+") as file:
                 file.write(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}\n")
                 file.write(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}\n")
 

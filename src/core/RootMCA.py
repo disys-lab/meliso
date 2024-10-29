@@ -3,6 +3,8 @@ from scipy.io import mmread
 import numpy as np
 import os,sys,time
 
+REPORT_PATH = os.environ["REPORT_PATH"]
+
 class RootMCA(BaseMCA):
     def __init__(self,comm):
         super().__init__(comm)
@@ -45,7 +47,7 @@ class RootMCA(BaseMCA):
         print("\nExperiment Configuration:")
         print(self.exp_config["exp_params"])
         
-        with open("output.txt", "a+") as file:
+        with open(REPORT_PATH, "a+") as file:
             file.write(f'\nExperiment Configuration:\n {self.exp_config["exp_params"]}\n')
 
     def initializeMatrix(self,mat):
@@ -357,7 +359,7 @@ class RootMCA(BaseMCA):
         print("EC= {}; readLatency mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readLat), np.std(readLat)))
         print("EC= {}; readEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readEnergy), np.std(readEnergy)))
 
-        with open("output.txt", "a+") as file:
+        with open(REPORT_PATH, "a+") as file:
             file.write(f"EC= {self.ERR_CORR}; writeLatency mean = {np.mean(writeLat)}, std_dev = {np.std(writeLat)}\n")
             file.write(f"EC= {self.ERR_CORR}; writeEnergy mean = {np.mean(writeEnergy)}, std_dev = {np.std(writeEnergy)}\n")
             file.write(f"EC= {self.ERR_CORR}; readLatency mean = {np.mean(readLat)}, std_dev = {np.std(readLat)}\n")
