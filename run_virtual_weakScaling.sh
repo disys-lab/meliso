@@ -1,9 +1,15 @@
 #!/bin/bash
+#SBATCH -p long
+#SBATCH -t 12:00:00
+#SBATCH --nodes=33
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=lucius.vo@okstate.edu
+#SBATCH --mail-type=end
 
 # Setup
+source activate mpienv38
 export PYTHONPATH=$PYTHONPATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
-python3 MelisoDriver.py
 
 # Number of replications
 REPS=5
