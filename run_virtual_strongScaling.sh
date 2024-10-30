@@ -1,12 +1,20 @@
 #!/bin/bash
 #SBATCH -p cascadelake
 #SBATCH -t 12:00:00
-#SBATCH --ntasks=1048580
+#SBATCH --nodes=1
+#SBATCH --ntasks=32
+#SBATCH --cpus-per-task=1
 #SBATCH --mail-user=lucius.vo@okstate.edu
-#SBATCH --mail-type=end
+#SBATCH --mail-type=END
+
+# Exit immediately if a command exits with a non-zero status
+set -e
 
 # Setup
-source activate mpienv38
+module load anaconda3/2022.10
+module load gcc/7.5.0
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate mpienv38
 export PYTHONPATH=$PYTHONPATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
 
