@@ -1,9 +1,15 @@
 #!/bin/bash
+#SBATCH -p cascadelake
+#SBATCH -t 12:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=lucius.vo@okstate.edu
+#SBATCH --mail-type=end
 
 # Setup
+source activate mpienv38
 export PYTHONPATH=$PYTHONPATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
-python3 MelisoDriver.py
 
 # Number of replications
 REPS=5
@@ -39,7 +45,7 @@ for material in "${!MATERIALS[@]}"; do
       # Run the experiment REPS times for each ITER_LIMIT
       for ((i=1; i<=REPS; i++)); do
         echo "Running ${material}, exp${expid} with ITER_LIMIT=${iter_limit}, repetition $i"
-        REPORT_PATH="exp_reports/iterations/${material}/exp${expid}_iter_${iter_limit}_rep_${i}.txt"
+        REPORT_PATH="reports/iterations/${material}/exp${expid}_iter_${iter_limit}_rep_${i}.txt"
         
         # Remove old report file if it exists
         if [ -f "$REPORT_PATH" ]; then
