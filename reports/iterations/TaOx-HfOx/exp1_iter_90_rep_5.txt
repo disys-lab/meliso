@@ -2,12 +2,12 @@
 Experiment Configuration:
  {'turnOnHardware': 1, 'turnOnScaling': 0, 'errCorr': 1, 'matrix_name': 'bcsstk02', 'matrix_file': 'inputs/matrices/bcsstk02.mtx', 'distributed': {'decomposition_dir': '/tmp/', 'mca_rows': 1, 'mca_cols': 1}}
 SetWeightsIncrental Iter: 90 	 90
-EC= 1; writeLatency mean = 0.08836171904855557, std_dev = 0.08836171904855557
-EC= 1; writeEnergy mean = 2.876456810071523e-05, std_dev = 2.876456810071523e-05
+EC= 1; writeLatency mean = 0.08865721904855582, std_dev = 0.08865721904855582
+EC= 1; writeEnergy mean = 2.8747489089008362e-05, std_dev = 2.8747489089008362e-05
 EC= 1; readLatency mean = 0.01907991603609523, std_dev = 0.01907991603609523
-EC= 1; readEnergy mean = 1.91814409925846e-05, std_dev = 1.91814409925846e-05
+EC= 1; readEnergy mean = 1.9173014596125958e-05, std_dev = 1.9173014596125958e-05
 SetWeightsIncrental Iter: 90 	 90
-L2-norm Error: 3.928304924237745
-Loo-norm Error: 0.7145671843856789
-Elapsed time for the entire VMM operation: 7.741976737976074
-Elapsed time for the entire VMM operation: 7.769317865371704
+L2-norm Error: 3.818435378317107
+Loo-norm Error: 0.6988487514052721
+Elapsed time for the entire VMM operation: 3.1733949184417725
+Elapsed time for the entire VMM operation: 3.1721396446228027

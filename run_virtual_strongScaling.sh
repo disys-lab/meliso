@@ -33,7 +33,7 @@ EXPERIMENTS=("exp1.yaml" "exp2.yaml" "exp3.yaml" "exp4.yaml" "exp5.yaml")
 PROCESSORS=(16 14885 60026 262145 1048577)  # Number of processors for each experiment
 
 # Constant ITER_LIMIT value
-ITER_LIMIT=10
+ITER_LIMIT=100
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
@@ -62,6 +62,5 @@ for material in "${!MATERIALS[@]}"; do
       EXP_CONFIG_FILE=$EXP_CONFIG_FILE REPORT_PATH=$REPORT_PATH \
       mpiexec -n $NUM_PROCESSORS python3 DistributedMatVec.py
     done
-
   done
 done
