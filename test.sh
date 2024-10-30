@@ -10,7 +10,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Load the conda environment
+# Setup
 module load anaconda3/2022.10
 module load gcc/7.5.0
 source "$(conda info --base)/etc/profile.d/conda.sh"
