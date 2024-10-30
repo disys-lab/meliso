@@ -2,17 +2,17 @@ exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
   errCorr: 1
-  matrix_name: "email-Eu-core-temporal"
-  matrix_file: "inputs/matrices/email-Eu-core-temporal.mtx"
+  matrix_name: "cond-mat"
+  matrix_file: "inputs/matrices/cond-mat.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 4
-    mca_cols: 4
-    # Total Non-Root chiplets: 16
+    mca_rows: 17
+    mca_cols: 17
+    # Total Non-Root chiplets: 289
 
 device_config:
   root: "config_files/"
-  cell_rows: 256
-  cell_cols: 256
+  cell_rows: 1024
+  cell_cols: 1024
   assignment:
     device_Ag-aSi.yaml: [[-1]]

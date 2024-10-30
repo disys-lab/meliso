@@ -6,13 +6,13 @@ exp_params:
   matrix_file: "inputs/matrices/kron_g500-logn18.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 1024
-    mca_cols: 1024
-    # Total Non-Root chiplets: 1048576
+    mca_rows: 256
+    mca_cols: 256
+    # Total Non-Root chiplets: 65536
 
 device_config:
   root: "config_files/"
-  cell_rows: 256
-  cell_cols: 256
+  cell_rows: 1024
+  cell_cols: 1024
   assignment:
     device_Ag-aSi.yaml: [[-1]]

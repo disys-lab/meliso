@@ -6,13 +6,13 @@ exp_params:
   matrix_file: "inputs/matrices/cond-mat-2003.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 122
-    mca_cols: 122
-    # Total Non-Root chiplets: 14884
+    mca_rows: 31
+    mca_cols: 31
+    # Total Non-Root chiplets: 961
 
 device_config:
   root: "config_files/"
-  cell_rows: 256
-  cell_cols: 256
+  cell_rows: 1024
+  cell_cols: 1024
   assignment:
     device_Ag-aSi.yaml: [[-1]]
