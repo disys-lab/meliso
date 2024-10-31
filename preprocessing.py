@@ -15,7 +15,13 @@ matrix_properties = []
 
 # Function to calculate properties of a matrix and store them in the list
 def analyze_matrix(matrix_path):
-    matrix = scipy.io.mmread(matrix_path).tocsc()
+    matrix = scipy.io.mmread(matrix_path)
+    
+    # Convert to sparse format if necessary
+    if isinstance(matrix, np.ndarray):
+        matrix = scipy.sparse.csc_matrix(matrix)
+    else:
+        matrix = matrix.tocsc()
     
     # Properties of the matrix
     nrows, ncols = matrix.shape
