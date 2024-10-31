@@ -49,3 +49,6 @@ df = pd.DataFrame(matrix_properties)
 
 # Display or save the DataFrame as needed
 print(df)
+
+# Save to a CSV file
+df.to_csv('matrix_properties.csv', index=False)
