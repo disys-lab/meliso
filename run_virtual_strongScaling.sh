@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p cascadelake
 #SBATCH -t 12:00:00
-#SBATCH --ntasks=1048580
+#SBATCH --ntasks=65537
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 
@@ -30,7 +30,7 @@ MATERIALS=(
 
 # List of experiment file names and corresponding number of processors
 EXPERIMENTS=("exp1.yaml" "exp2.yaml" "exp3.yaml" "exp4.yaml" "exp5.yaml")
-PROCESSORS=(16 14885 60026 262145 1048577)  # Number of processors for each experiment
+PROCESSORS=(290 962 3845 16385 65537)  # Number of processors for each experiment
 
 # Constant ITER_LIMIT value
 ITER_LIMIT=100
