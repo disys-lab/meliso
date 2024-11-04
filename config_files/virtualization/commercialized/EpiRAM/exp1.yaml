@@ -1,7 +1,3 @@
-# Experiment Description:
-# Fixed Number of Iterations for Error Correction; 
-# Applied Error Correction to all Devices;
-
 exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
@@ -10,9 +6,9 @@ exp_params:
   matrix_file: "inputs/matrices/email-Eu-core-temporal.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 32
-    mca_cols: 32
-    # Total chiplets: 1024
+    mca_rows: 3
+    mca_cols: 3
+    # Total chiplets: 9
 
 device_config:
   root: "config_files/"
