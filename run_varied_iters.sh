@@ -19,7 +19,7 @@ export PYTHONPATH=$PYTHONPATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
 
 # Number of replications
-REPS=5
+REPS=100
 
 # Experiment IDs
 EXPIDs=("1" "2")
