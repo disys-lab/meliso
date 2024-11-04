@@ -29,8 +29,8 @@ export REPORT_PATH="reports/quickstart/exp1.txt"
 # Run the serial job
 python3 MelisoDriver.py
 
-# Run the parallel job using srun for better integration with SLURM
+# Run the parallel job
 mpiexec -n 2 python3 DistributedMatVec.py
 
-# Run the serial job to get matrices' properties
+# Run the serial job
 python3 preprocessing.py

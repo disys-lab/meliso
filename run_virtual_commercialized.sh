@@ -26,3 +26,6 @@ export ITER_LIMIT=100
 export XVEC_PATH="inputs/vectors/input_x.txt"
 export EXP_CONFIG_FILE="config_files/virtualization/commercialized/exp1.yaml"
 export REPORT_PATH="reports/virtualization/commercialized/exp1.txt"
+
+# Run the parallel job
+mpiexec -n 2 python3 DistributedMatVec.py
