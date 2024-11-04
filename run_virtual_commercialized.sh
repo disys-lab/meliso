@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p cascadelake
 #SBATCH -t 12:00:00
-#SBATCH --ntasks=1030
+#SBATCH --ntasks=10  # Adjusted to match the number of processors used
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 
@@ -26,15 +26,17 @@ ITER_LIMIT=10
 
 # List of materials and corresponding config paths for each experiment
 declare -A MATERIALS
-MATERIALS=( 
+MATERIALS=(
     ["Ag-aSi"]="config_files/virtualization/commercialized/Ag-aSi/"
     ["AlOx-HfO2"]="config_files/virtualization/commercialized/AlOx-HfO2/"
     ["EpiRAM"]="config_files/virtualization/commercialized/EpiRAM/"
     ["TaOx-HfOx"]="config_files/virtualization/commercialized/TaOx-HfOx/"
 )
 
-# List of experiment file names and corresponding number of processors
+# List of experiment file names
 EXPERIMENTS=("exp1.yaml" "exp2.yaml" "exp3.yaml" "exp4.yaml" "exp5.yaml" "exp6.yaml")
+
+# Define the number of processors
 PROCESSORS=10
 
 # Common input vector path
@@ -49,9 +51,12 @@ for material in "${!MATERIALS[@]}"; do
 
     # Run the experiment REPS times with the constant ITER_LIMIT
     for ((i=1; i<=REPS; i++)); do
-      echo "Running ${material} with ${EXPERIMENTS[$idx]}, ITER_LIMIT=${ITER_LIMIT}, repetition $i using ${NUM_PROCESSORS} processors"
-      REPORT_PATH="reports/virtualization/weakScaling/${material}/${EXPERIMENTS[$idx]%.yaml}_iter_${ITER_LIMIT}_rep_${i}.txt"
-      
+      echo "Running ${material} with ${EXPERIMENTS[$idx]}, ITER_LIMIT=${ITER_LIMIT}, repetition $i using ${PROCESSORS} processors"
+      REPORT_PATH="reports/virtualization/commercialized/${material}/${EXPERIMENTS[$idx]%.yaml}_iter_${ITER_LIMIT}_rep_${i}.txt"
+
+      # Create the report directory if it doesn't exist
+      mkdir -p "$(dirname "$REPORT_PATH")"
+
       # Remove old report file if it exists
       if [ -f "$REPORT_PATH" ]; then
         echo "Removing old report file: $REPORT_PATH"
@@ -61,7 +66,7 @@ for material in "${!MATERIALS[@]}"; do
       # Run the experiment
       DT=1 OVERRIDE=1 ITER_LIMIT=$ITER_LIMIT XVEC_PATH=$XVEC_PATH \
       EXP_CONFIG_FILE=$EXP_CONFIG_FILE REPORT_PATH=$REPORT_PATH \
-      mpiexec -n $NUM_PROCESSORS python3 DistributedMatVec.py
+      mpiexec -n $PROCESSORS python3 DistributedMatVec.py
     done
   done
 done
