@@ -13,11 +13,16 @@ module load anaconda3/2022.10
 module load gcc/7.5.0
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate mpienv38
+
+# Set up environment variables
 export PYTHONPATH=$PYTHONPATH:./build
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/
 
 # Number of replications
 REPS=5
+
+# Number of iterations
+ITER_LIMIT=10
 
 # List of materials and corresponding config paths for each experiment
 declare -A MATERIALS
@@ -31,9 +36,6 @@ MATERIALS=(
 # List of experiment file names and corresponding number of processors
 EXPERIMENTS=("exp1.yaml" "exp2.yaml" "exp3.yaml" "exp4.yaml")
 PROCESSORS=(1025 257 65 17)  # Number of processors for each experiment
-
-# Constant ITER_LIMIT value
-ITER_LIMIT=10
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
