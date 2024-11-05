@@ -1,22 +1,18 @@
-# Experiment Description:
-# Fixed Number of Iterations for Error Correction; 
-# Applied Error Correction to all Devices;
-
 exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
   errCorr: 1
-  matrix_name: "email-Eu-core-temporal"
-  matrix_file: "inputs/matrices/email-Eu-core-temporal.mtx"
+  matrix_name: "bcsstk02"
+  matrix_file: "inputs/matrices/bcsstk02.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 32
-    mca_cols: 32
-    # Total chiplets: 1024
+    mca_rows: 11
+    mca_cols: 11
+    # Total chiplets: 121
 
 device_config:
   root: "config_files/"
-  cell_rows: 32
-  cell_cols: 32
+  cell_rows: 6
+  cell_cols: 6
   assignment:
     device_Ag-aSi.yaml: [[-1]]
