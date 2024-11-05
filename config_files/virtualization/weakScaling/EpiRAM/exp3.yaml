@@ -15,4 +15,4 @@ device_config:
   cell_rows: 33
   cell_cols: 33
   assignment:
-    device_Ag-aSi.yaml: [[-1]]
+    device_EpiRAM.yaml: [[-1]]
