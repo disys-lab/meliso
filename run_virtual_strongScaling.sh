@@ -6,7 +6,7 @@
 #SBATCH --mail-type=END
 
 # Exit immediately if a command exits with a non-zero status
-set -e
+set -euo pipefail
 
 # Setup
 module load anaconda3/2022.10

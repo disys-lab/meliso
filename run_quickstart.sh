@@ -8,7 +8,7 @@
 #SBATCH --mail-type=END
 
 # Exit immediately if a command exits with a non-zero status
-set -e
+set -euo pipefail
 
 # Setup
 module load anaconda3/2022.10
@@ -17,8 +17,8 @@ source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate mpienv38
 
 # Set up environment variables
-export PYTHONPATH="$PYTHONPATH:./build"
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:./build/"
+export PYTHONPATH="${PYTHONPATH:-}:./build"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 export DT=1
 export OVERRIDE=1
 export ITER_LIMIT=1
