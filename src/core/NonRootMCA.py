@@ -3,8 +3,6 @@ import numpy as np
 import os,sys,yaml,time
 import meliso
 
-REPORT_PATH = os.environ["REPORT_PATH"]
-
 class NonRootMCA(BaseMCA):
     def __init__(self,comm,HW=-1,SC=-1,set_mat=True):
         super().__init__(comm)
@@ -425,8 +423,5 @@ class NonRootMCA(BaseMCA):
         y_corr = self.denoiseLeastSquare(y_corr)
 
         print(f"INFO: Rank = {self.rank} : A_iter : {A_itrs}, X_iter : {X_itrs}: A_res: {A_res}, X_res: {X_res}")
-
-        with open(REPORT_PATH, "a+") as file:
-            file.write(f"SetWeightsIncrental Iter: {A_itrs} \t {X_itrs}\n")
 
         return y_corr
