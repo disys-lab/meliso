@@ -8,7 +8,7 @@ exp_params:
     decomposition_dir: "/tmp/"
     mca_rows: 245
     mca_cols: 245
-    # Total Non-Root chiplets: 3844
+    # Total Non-Root chiplets: 60025
 
 device_config:
   root: "config_files/"
