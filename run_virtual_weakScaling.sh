@@ -1,10 +1,7 @@
 #!/bin/bash
 #SBATCH -p cascadelake
 #SBATCH -t 12:00:00
-#SBATCH --nodes=33
-#SBATCH --ntasks=1025
-#SBATCH --ntasks-per-node=32
-#SBATCH --cpus-per-task=1
+#SBATCH -n 130
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 
@@ -36,16 +33,14 @@ declare -A MATERIALS=(
 )
 
 # Experiment IDs
-EXPIDs=("1" "2" "3" "4" "5" "6")
+EXPIDs=("1" "2" "3" "4")
 
 # Map EXPIDs to NUM_PROCESSES
 declare -A EXPID_TO_PROCESSES=(
-    ["1"]=1025
-    ["2"]=1025
-    ["3"]=257
-    ["4"]=257
-    ["5"]=65
-    ["6"]=17
+    ["1"]=122
+    ["2"]=10
+    ["3"]=5
+    ["4"]=2
 )
 
 # Common input vector path
