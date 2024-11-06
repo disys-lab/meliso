@@ -137,7 +137,7 @@ class Root:
         #set the matrix
         data = np.array([i,j], dtype=np.float64)
         self.comm.Bcast(data, root=self.mca.ROOT_PROCESS_RANK)
-        #print("ROOT: broadcasted {} {}".format(i, j))
+        # print("ROOT: broadcasted {} {}".format(i, j))
 
         self.mca.setMat(self.virtualizer[i,j]["mat"])
 
@@ -145,7 +145,7 @@ class Root:
 
         y = self.mca.parallelMatVec()
 
-        #print("ROOT: after parallelMatvec {} {}".format(i, j))
+        # print("ROOT: after parallelMatvec {} {}".format(i, j))
 
         self.virtualizer[i]["y"] = self.virtualizer[i]["y"] + y
 
@@ -166,7 +166,7 @@ class Root:
         else:
             self.mca.setX(self.x)
             self.y = self.mca.parallelMatVec()
-        #print("Correction:{}".format(correction))
+        # print("Correction:{}".format(correction))
         if correction:
             self.y = self.addCorrectionY(self.origMatCols,
                           self.y,

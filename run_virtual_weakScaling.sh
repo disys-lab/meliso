@@ -1,14 +1,16 @@
 #!/bin/bash
 #SBATCH -p cascadelake
-#SBATCH -t 12:00:00
-#SBATCH -n 130
+#SBATCH -t 24:00:00
+#SBATCH -n 260
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 
-# Exit immediately if a command exits with a non-zero status
-set -e
+# Enable debugging
+set -x
 
-#Setup
+# Removed 'set -e' to prevent the script from exiting on errors
+
+# Setup
 module load anaconda3/2022.10
 module load gcc/7.5.0
 source "$(conda info --base)/etc/profile.d/conda.sh"
@@ -33,14 +35,13 @@ declare -A MATERIALS=(
 )
 
 # Experiment IDs
-EXPIDs=("1" "2" "3" "4")
+EXPIDs=("1.1" "2.1" "3.1")
 
 # Map EXPIDs to NUM_PROCESSES
 declare -A EXPID_TO_PROCESSES=(
-    ["1"]=122
-    ["2"]=10
-    ["3"]=5
-    ["4"]=2
+    ["1.1"]=257
+    ["2.1"]=257
+    ["3.1"]=257
 )
 
 # Common input vector path
@@ -54,6 +55,12 @@ for material in "${!MATERIALS[@]}"; do
     for expid in "${EXPIDs[@]}"; do
         EXP_CONFIG_FILE="${CONFIG_PATH}/exp${expid}.yaml"
         NUM_PROCESSES="${EXPID_TO_PROCESSES[$expid]}"
+
+        # Check if the config file exists
+        if [ ! -f "$EXP_CONFIG_FILE" ]; then
+            echo "Warning: Config file $EXP_CONFIG_FILE does not exist. Skipping."
+            continue
+        fi
 
         # Loop over each ITER_LIMIT
         for iter_limit in "${ITER_LIMIT[@]}"; do
@@ -75,7 +82,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n "$NUM_PROCESSES" python3 DistributedMatVec.py
+                mpiexec -n "$NUM_PROCESSES" python3 DistributedMatVec.py || echo "Error running mpiexec for $material, exp${expid}, iteration $iter_limit, repetition $i"
             done
         done
     done

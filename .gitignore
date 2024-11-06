@@ -7,3 +7,4 @@ plot/
 src/core/__pycache__/
 src/cython/mel.cpp
 solver/matvec/__pycache__/
+inputs/

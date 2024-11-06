@@ -22,7 +22,7 @@ class NonRootMCA(BaseMCA):
         self.MIN_TOL = 0.0
         self.OLIM = 1
 
-        self.PRECISION = 1e-6
+        self.PRECISION = 1e-12
         self.ITER_LIMIT = int(os.environ["ITER_LIMIT"])
         self.OVERRIDE = int(os.environ["OVERRIDE"])
         self.RESIDUALS_TOL = self.PRECISION*self.PRECISION
@@ -35,7 +35,7 @@ class NonRootMCA(BaseMCA):
 
         if "DT" in os.environ.keys():
             self.device_type = int(os.environ["DT"])
-        print("INFO: Device type set to {} on rank {}".format(self.device_type,self.rank))
+        # print("INFO: Device type set to {} on rank {}".format(self.device_type,self.rank))
 
         # compute based on provided params
         self.locRows = 0
@@ -207,7 +207,7 @@ class NonRootMCA(BaseMCA):
                                                  conductance, conductancePrev)
 
     
-    def denoiseLeastSquare(self, w, l_dn=1e-6):
+    def denoiseLeastSquare(self, w, l_dn=1e-12):
         """
         Applying the Least Square denoising method.
         """
@@ -246,7 +246,7 @@ class NonRootMCA(BaseMCA):
             # Timing for Error Correction:
             start_time = time.time(); self.y = self.errorCorrection(); end_time = time.time()
             self.errorCorrectionTime = end_time - start_time
-            print(f"INFO: Elapsed Error Correction Time at Device Rank {self.rank}: {self.errorCorrectionTime}")
+            # print(f"INFO: Elapsed Error Correction Time at Device Rank {self.rank}: {self.errorCorrectionTime}")
         else:
             x = np.empty(self.locCols, dtype=np.float64)
             self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
@@ -256,12 +256,12 @@ class NonRootMCA(BaseMCA):
             self.y = self.localMatVec(x)
             end_time = time.time()
             self.matVecTime = end_time - start_time
-            print(f"INFO: Simple MatVec Time at Device Rank {self.rank}: {self.matVecTime}")
+            # print(f"INFO: Simple MatVec Time at Device Rank {self.rank}: {self.matVecTime}")
 
-        #Timing for MPI Send:
+        # Timing for MPI Send:
         start_time = time.time(); self.comm.Send(self.y, dest=self.ROOT_PROCESS_RANK); end_time = time.time()
         self.NonRootProcessSendingTime = end_time - start_time
-        print(f"INFO: Elapsed MPI Sending Time at Device Rank {self.rank}: {self.NonRootProcessSendingTime}")
+        # print(f"INFO: Elapsed MPI Sending Time at Device Rank {self.rank}: {self.NonRootProcessSendingTime}")
 
         return self.y
     
@@ -281,7 +281,7 @@ class NonRootMCA(BaseMCA):
             X_tilde = np.copy(self.X)
             self.meliso_obj.initializeWeights()
             self.Xiter, self.Xresiduals = self.setWeightsIncremental(X_tilde)
-            print(f"INFO: Encoding vector X: No. iterations : {self.Xiter}; Final residuals: {self.Xresiduals}")
+            # print(f"INFO: Encoding vector X: No. iterations : {self.Xiter}; Final residuals: {self.Xresiduals}")
             X_tilde = self.meliso_obj.getWeights()
 
             for i in range(self.locRows):
@@ -298,7 +298,7 @@ class NonRootMCA(BaseMCA):
             A_tilde = np.copy(self.A)
             self.meliso_obj.initializeWeights()
             self.Aiter, self.Aresiduals = self.setWeightsIncremental(A_tilde)
-            print(f"INFO: Encoding matrix A: No. iterations : {self.Aiter}; Final residuals: {self.Aresiduals}")
+            # print(f"INFO: Encoding matrix A: No. iterations : {self.Aiter}; Final residuals: {self.Aresiduals}")
             A_tilde = self.meliso_obj.getWeights()
 
             for i in range(self.locRows):
@@ -422,6 +422,6 @@ class NonRootMCA(BaseMCA):
 
         y_corr = self.denoiseLeastSquare(y_corr)
 
-        print(f"INFO: Rank = {self.rank} : A_iter : {A_itrs}, X_iter : {X_itrs}: A_res: {A_res}, X_res: {X_res}")
+        # print(f"INFO: Rank = {self.rank} : A_iter : {A_itrs}, X_iter : {X_itrs}: A_res: {A_res}, X_res: {X_res}")
 
         return y_corr
