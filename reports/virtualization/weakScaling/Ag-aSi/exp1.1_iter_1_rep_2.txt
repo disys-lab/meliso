@@ -1,0 +1,53 @@
+
+Experiment Configuration:
+ {'turnOnHardware': 1, 'turnOnScaling': 0, 'errCorr': 1, 'matrix_name': 'add32.mtx', 'matrix_file': 'inputs/matrices/add32.mtx', 'distributed': {'decomposition_dir': '/tmp/', 'mca_rows': 8, 'mca_cols': 8}}
+EC= 1; writeLatency mean = 684640.0679589352, std_dev = 94646.86344552545
+EC= 1; writeEnergy mean = 6.649375407934991, std_dev = 0.9166332264673841
+EC= 1; readLatency mean = 55.4978241180114, std_dev = 6.937228014751425
+EC= 1; readEnergy mean = 0.09796168342041191, std_dev = 0.012245397195260502
+L2-norm Error: 31793.98812826097
+Loo-norm Error: 452.18050530227356
+Elapsed time for the entire VMM operation: 186.6473526954651
+Elapsed time for the entire VMM operation: 186.64741373062134
+Elapsed time for the entire VMM operation: 186.64714407920837
+Elapsed time for the entire VMM operation: 186.64741039276123
+Elapsed time for the entire VMM operation: 186.6472625732422
+Elapsed time for the entire VMM operation: 186.64727187156677
+Elapsed time for the entire VMM operation: 186.64746379852295
+Elapsed time for the entire VMM operation: 186.64716243743896
+Elapsed time for the entire VMM operation: 186.64755749702454
+Elapsed time for the entire VMM operation: 186.6471598148346
+Elapsed time for the entire VMM operation: 186.64755630493164
+Elapsed time for the entire VMM operation: 186.6473023891449
+Elapsed time for the entire VMM operation: 186.61910223960876
+Elapsed time for the entire VMM operation: 186.61861729621887
+Elapsed time for the entire VMM operation: 186.61805701255798
+Elapsed time for the entire VMM operation: 186.61807942390442
+Elapsed time for the entire VMM operation: 186.61854004859924
+Elapsed time for the entire VMM operation: 186.6188223361969
+Elapsed time for the entire VMM operation: 186.61852836608887
+Elapsed time for the entire VMM operation: 186.6184663772583
+Elapsed time for the entire VMM operation: 186.61909580230713
+Elapsed time for the entire VMM operation: 186.61815977096558
+Elapsed time for the entire VMM operation: 186.61787223815918
+Elapsed time for the entire VMM operation: 186.61814332008362
+Elapsed time for the entire VMM operation: 186.61853003501892
+Elapsed time for the entire VMM operation: 186.61825132369995
+Elapsed time for the entire VMM operation: 186.61805605888367
+Elapsed time for the entire VMM operation: 186.61826372146606
+Elapsed time for the entire VMM operation: 186.61739778518677
+Elapsed time for the entire VMM operation: 186.6189444065094
+Elapsed time for the entire VMM operation: 186.61848306655884
+Elapsed time for the entire VMM operation: 186.61815738677979
+Elapsed time for the entire VMM operation: 186.61805772781372
+Elapsed time for the entire VMM operation: 186.61860132217407
+Elapsed time for the entire VMM operation: 186.61869859695435
+Elapsed time for the entire VMM operation: 186.61907935142517
+Elapsed time for the entire VMM operation: 186.6182680130005
+Elapsed time for the entire VMM operation: 186.6188325881958
+Elapsed time for the entire VMM operation: 186.61836957931519
+Elapsed time for the entire VMM operation: 186.61891388893127
+Elapsed time for the entire VMM operation: 186.61871981620789
+Elapsed time for the entire VMM operation: 186.6184537410736
+Elapsed time for the entire VMM operation: 186.6189408302307
+Elapsed time for the entire VMM operation: 186.6180009841919

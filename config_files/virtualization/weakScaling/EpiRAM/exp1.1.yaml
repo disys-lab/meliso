@@ -1,0 +1,18 @@
+exp_params:
+  turnOnHardware: 1
+  turnOnScaling: 0
+  errCorr: 1
+  matrix_name: "add32"
+  matrix_file: "inputs/matrices/add32.mtx"
+  distributed:
+    decomposition_dir: "/tmp/"
+    mca_rows: 16
+    mca_cols: 16
+    # Total chiplets: 256
+
+device_config:
+  root: "config_files/"
+  cell_rows: 128
+  cell_cols: 128
+  assignment:
+    device_EpiRAM.yaml: [[-1]]
