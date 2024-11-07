@@ -6,9 +6,9 @@ exp_params:
   matrix_file: "inputs/matrices/add32.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 16
-    mca_cols: 16
-    # Total chiplets: 256
+    mca_rows: 23
+    mca_cols: 23
+    # Total chiplets: 529
 
 device_config:
   root: "config_files/"

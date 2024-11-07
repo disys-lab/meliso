@@ -4,6 +4,8 @@
 #SBATCH -n 260
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
+#SBATCH --output=/dev/null
+#SBATCH --error=/dev/null
 
 # Enable debugging
 set -x
@@ -35,11 +37,11 @@ declare -A MATERIALS=(
 )
 
 # Experiment IDs
-EXPIDs=("1.1" "2.1" "3.1")
+EXPIDs=("1.1")
 
 # Map EXPIDs to NUM_PROCESSES
 declare -A EXPID_TO_PROCESSES=(
-    ["1.1"]=257
+    ["1.1"]=530
 )
 
 # Common input vector path
