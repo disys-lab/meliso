@@ -2,8 +2,8 @@ exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
   errCorr: 1
-  matrix_name: "add32.mtx"
-  matrix_file: "inputs/matrices/add32.mtx"
+  matrix_name: "wang2.mtx"
+  matrix_file: "inputs/matrices/wang2.mtx"
   distributed:
     decomposition_dir: "/tmp/"
     mca_rows: 23
