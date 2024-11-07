@@ -121,7 +121,7 @@ class NonRootMCA(BaseMCA):
             self.meliso_obj.setWeightsIncremental(A, self.PRECISION)
             actualWeights = self.meliso_obj.getWeights()
 
-            current_residuals = np.linalg.norm(actualWeights - A)
+            current_residuals = np.linalg.norm(actualWeights - A, ord=np.inf)
             if (self.OVERRIDE == 0):
                 if abs(residuals - current_residuals)< self.RESIDUALS_TOL and j>0:
                     break
@@ -207,7 +207,7 @@ class NonRootMCA(BaseMCA):
                                                  conductance, conductancePrev)
 
     
-    def denoiseLeastSquare(self, w, l_dn=1e-12):
+    def denoiseLeastSquare(self, w, lbda=1e-24):
         """
         Applying the Least Square denoising method.
         """
@@ -219,7 +219,7 @@ class NonRootMCA(BaseMCA):
             L[i, i + 1] = -1
         LTL = L.T @ L
 
-        y = np.linalg.solve(I+l_dn*LTL, w) #np.linalg.solve(I + lbda * L @ L.T, w)
+        y = np.linalg.solve(I+lbda*LTL, w)
         return y
 
     def localMatVec(self, x):
