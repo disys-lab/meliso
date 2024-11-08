@@ -190,12 +190,15 @@ class Root:
         self.error = self.y_mem_result - self.y_benchmark_result.flatten()
         if self.y_mem_result is not None:
             print("\nElement-wise Error: \n", self.error)
-            print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
-            print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
+            print(f"L2-norm Error: {np.linalg.norm(self.error)}")
+            print(f"Relative L2-norm Error: {np.linalg.norm(self.error) / np.linalg.norm(self.y_mem_result)}")
+            print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf) / np.linalg.norm(self.y_mem_result, ord=np.inf)}")
 
             with open(REPORT_PATH, "a+") as file:
                 file.write(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}\n")
                 file.write(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}\n")
+                file.write(f"Relative L2-norm Error: {np.linalg.norm(self.error) / np.linalg.norm(self.y_mem_result)}")
+                file.write(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf) / np.linalg.norm(self.y_mem_result, ord=np.inf)}")
 
     def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction= False):
 
@@ -204,12 +207,15 @@ class Root:
             self.error = self.y_mem_result - self.y_benchmark_result
 
             print("\nElement-wise Error: \n", self.error)
-            print(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}")
-            print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}")
+            print(f"L2-norm Error: {np.linalg.norm(self.error)}")
+            print(f"Relative L2-norm Error: {np.linalg.norm(self.error) / np.linalg.norm(self.y_mem_result)}")
+            print(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf) / np.linalg.norm(self.y_mem_result, ord=np.inf)}")
 
             with open(REPORT_PATH, "a+") as file:
                 file.write(f"L2-norm Error: {np.linalg.norm(self.error, ord=2)}\n")
                 file.write(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf)}\n")
+                file.write(f"Relative L2-norm Error: {np.linalg.norm(self.error) / np.linalg.norm(self.y_mem_result)}")
+                file.write(f"Loo-norm Error: {np.linalg.norm(self.error, ord=np.inf) / np.linalg.norm(self.y_mem_result, ord=np.inf)}")
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()
