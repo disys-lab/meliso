@@ -276,7 +276,7 @@ class Root:
             # Compute relative L-infinity norm error
             relative_error = (np.linalg.norm(self.error, ord=np.inf) /
                               np.linalg.norm(self.y_mem_result, ord=np.inf))
-            print(f"Relative L∞-norm Error: {relative_error}\n")
+            print(f"Relative Loo-norm Error: {relative_error}\n")
 
             # Store the computed relative L-infinity norm error
             with open(REPORT_PATH, "a+") as file:
