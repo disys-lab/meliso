@@ -1,3 +1,0 @@
-
-Experiment Configuration:
- {'turnOnHardware': 1, 'turnOnScaling': 0, 'errCorr': 1, 'matrix_name': 'add32.mtx', 'matrix_file': 'inputs/matrices/add32.mtx', 'distributed': {'decomposition_dir': '/tmp/', 'mca_rows': 8, 'mca_cols': 8}}
