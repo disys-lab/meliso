@@ -6,6 +6,7 @@
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
+
 # Exit immediately if a command exits with a non-zero status
 set -e
 
