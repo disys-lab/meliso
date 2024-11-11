@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p cascadelake
-#SBATCH -t 12:00:00
-#SBATCH -n 260
+#SBATCH -t 48:00:00
+#SBATCH -n 65
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
@@ -28,14 +28,13 @@ EXPIDs=("1" "2" "3" "4" "5" "6")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["Ag-aSi"]="config_files/virtualization/commercialized/Ag-aSi"
     ["AlOx-HfO2"]="config_files/virtualization/commercialized/AlOx-HfO2"
     ["EpiRAM"]="config_files/virtualization/commercialized/EpiRAM"
     ["TaOx-HfOx"]="config_files/virtualization/commercialized/TaOx-HfOx"
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(1 50 100)
+ITER_LIMITS=(50 100)
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
@@ -67,7 +66,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 10 python3 DistributedMatVec.py
+                mpiexec -n 65 python3 DistributedMatVec.py
             done
         done
     done

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p cascadelake
-#SBATCH -t 12:00:00
-#SBATCH -n 260
+#SBATCH -t 24:00:00
+#SBATCH -n 2
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
@@ -67,7 +67,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 2 python3 DistributedMatVec.py
+                mpiexec -n 10 python3 DistributedMatVec.py
             done
         done
     done
