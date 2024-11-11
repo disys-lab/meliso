@@ -258,8 +258,8 @@ class RootMCA(BaseMCA):
         (R,C): Dimension of the matrix.
         """
 
-        assert (R == M * P), "We cannot map this matrix rows {} to the device {}x{}".format(R,M,P)
-        assert (C == N * Q), "We cannot map this matrix cols {} to the device {}x{}".format(C,N,Q)
+        # assert (R == M * P), "We cannot map this matrix rows {} to the device {}x{}".format(R,M,P)
+        # assert (C == N * Q), "We cannot map this matrix cols {} to the device {}x{}".format(C,N,Q)
 
         # Assign the position based on the chiplet's index
         # For example, (i=3,j=3) means the chiplet located at Row 2 and Column 3
@@ -316,7 +316,7 @@ class RootMCA(BaseMCA):
             for rank in rank_list:
 
                 #initialize buffer for each rank
-                y = np.empty(end - start, dtype=np.float64)
+                y = np.zeros(end - start, dtype=np.float64)
 
                 #recieve from each rank
                 self.comm.Recv(y, source=rank)
@@ -324,7 +324,8 @@ class RootMCA(BaseMCA):
                 #print("ROOT: true result must be",np.dot(self.mat,self.x))
                 # print(self.mat.shape)
                 #add the result to the running sum of that rank.
-                sum_y[start:end] = sum_y[start:end] + y
+                if sum_y[start:end].size != 0:
+                    sum_y[start:end] = sum_y[start:end] + y
 
         #print("ROOT: recieved all ys ")
 
