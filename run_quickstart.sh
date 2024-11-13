@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p cascadelake
-#SBATCH -t 12:00:00
-#SBATCH -n 260
+#SBATCH -t 24:00:00
+#SBATCH -n 10
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
@@ -19,18 +19,53 @@ conda activate mpienv38
 # Set up environment variables
 export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
-export DT=1
-export OVERRIDE=1
-export ITER_LIMIT=1
-export XVEC_PATH="inputs/vectors/input_x.txt"
-export EXP_CONFIG_FILE="config_files/quickstart/exp1.yaml"
-export REPORT_PATH="reports/quickstart/exp1.txt"
 
-# Run the serial job
-python3 MelisoDriver.py
+# Number of replications
+REPS=10
 
-# Run the parallel job
-mpiexec -n 2 python3 DistributedMatVec.py
+# Experiment IDs
+EXPIDs=("1.1" "1.2")
 
-# Run the serial job
-python3 preprocessing.py
+# List of materials and corresponding config paths
+declare -A MATERIALS=(
+    ["Ag-aSi"]="config_files/quickstart/Ag-aSi"
+)
+
+# List of ITER_LIMIT values
+ITER_LIMITS=(1 50 100)
+
+# Common input vector path
+XVEC_PATH="inputs/vectors/input_x.txt"
+
+# Loop over each material and experiment ID, then run experiments
+for material in "${!MATERIALS[@]}"; do
+    CONFIG_PATH="${MATERIALS[$material]}"
+
+    for expid in "${EXPIDs[@]}"; do
+        EXP_CONFIG_FILE="${CONFIG_PATH}/exp${expid}.yaml"
+
+        # Loop over each ITER_LIMIT
+        for iter_limit in "${ITER_LIMITS[@]}"; do
+
+            # Run the experiment REPS times for each ITER_LIMIT
+            for ((i=1; i<=REPS; i++)); do
+                echo "Running ${material}, exp${expid} with ITER_LIMIT=${iter_limit}, repetition $i"
+                REPORT_PATH="reports/quickstart/${material}/exp${expid}_iter_${iter_limit}_rep_${i}.txt"
+
+                # Create the report directory if it doesn't exist
+                mkdir -p "$(dirname "$REPORT_PATH")"
+
+                # Remove old report file if it exists
+                if [ -f "$REPORT_PATH" ]; then
+                    echo "Removing old report file: $REPORT_PATH"
+                    rm "$REPORT_PATH"
+                fi
+
+                # Run the experiment
+                DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
+                EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
+                mpiexec -n 10 python3 DistributedMatVec.py
+            done
+        done
+    done
+done
