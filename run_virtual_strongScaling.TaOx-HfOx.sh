@@ -35,7 +35,7 @@ declare -A MATERIALS=(
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(50 100)
+ITER_LIMITS=(40)
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"

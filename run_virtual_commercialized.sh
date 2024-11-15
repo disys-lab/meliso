@@ -28,9 +28,7 @@ EXPIDs=("1" "2" "3" "4" "5" "6")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["AlOx-HfO2"]="config_files/virtualization/commercialized/AlOx-HfO2"
     ["EpiRAM"]="config_files/virtualization/commercialized/EpiRAM"
-    ["TaOx-HfOx"]="config_files/virtualization/commercialized/TaOx-HfOx"
 )
 
 # List of ITER_LIMIT values

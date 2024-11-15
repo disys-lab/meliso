@@ -28,14 +28,11 @@ EXPIDs=("1" "2" "3" "4" "5" "6")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["Ag-aSi"]="config_files/iterations/Ag-aSi"
     ["AlOx-HfO2"]="config_files/iterations/AlOx-HfO2"
-    ["EpiRAM"]="config_files/virtualization/strongScaling/EpiRAM"
-    ["TaOx-HfOx"]="config_files/iterations/TaOx-HfOx"
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(50 100)
+ITER_LIMITS=(40)
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
