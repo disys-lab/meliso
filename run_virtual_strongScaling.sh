@@ -28,10 +28,10 @@ EXPIDs=("1" "2" "3" "4" "5" "6")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["Ag-aSi"]="config_files/iterations/Ag-aSi"
-    ["AlOx-HfO2"]="config_files/iterations/AlOx-HfO2"
+    ["Ag-aSi"]="config_files/virtualization/strongScaling/Ag-aSi"
+    ["AlOx-HfO2"]="config_files/virtualization/strongScaling/AlOx-HfO2"
     ["EpiRAM"]="config_files/virtualization/strongScaling/EpiRAM"
-    ["TaOx-HfOx"]="config_files/iterations/TaOx-HfOx"
+    ["TaOx-HfOx"]="config_files/virtualization/strongScaling/TaOx-HfOx"
 )
 
 # List of ITER_LIMIT values
