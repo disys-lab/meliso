@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -p cascadelake
-#SBATCH -t 48:00:00
+#SBATCH -t 120:00:00
 #SBATCH -n 257
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
@@ -24,11 +24,11 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 REPS=10
 
 # Experiment IDs
-EXPIDs=("1" "2" "3" "4" "5" "6")
+EXPIDs=("1" "2" "3" "4" "5")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["Ag-aSi"]="config_files/iterations/Ag-aSi"
+    ["Ag-aSi"]="config_files/virtualization/strongScaling/Ag-aSi"
 )
 
 # List of ITER_LIMIT values
