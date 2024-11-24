@@ -1,7 +1,8 @@
 #!/bin/bash
 #SBATCH -p cascadelake
 #SBATCH -t 120:00:00
-#SBATCH -n 257
+#SBATCH --ntasks=257
+#SBATCH --ntasks-per-node=32
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
