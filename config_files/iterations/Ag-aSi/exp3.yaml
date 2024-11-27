@@ -1,9 +1,9 @@
 exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
-  errCorr: 1
-  matrix_name: "Iperturb"
-  matrix_file: "inputs/matrices/Iperturb.mtx"
+  errCorr: 0
+  matrix_name: "bcsstk02"
+  matrix_file: "inputs/matrices/bcsstk02.mtx"
   distributed:
     decomposition_dir: "/tmp/"
     mca_rows: 1
