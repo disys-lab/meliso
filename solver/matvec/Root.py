@@ -251,13 +251,17 @@ class Root:
             print("\nElement-wise Error: \n", self.error)
 
             # Compute relative L-infinity norm error
-            relative_error = (np.linalg.norm(self.error, ord=np.inf) /
+            Loo_relative_error = (np.linalg.norm(self.error, ord=np.inf) /
                               np.linalg.norm(self.y_mem_result, ord=np.inf))
-            print(f"Relative Loo-norm Error: {relative_error}\n")
+            L2_relative_error = (np.linalg.norm(self.error, ord=2) /
+                                  np.linalg.norm(self.y_mem_result, ord=2))
+            print(f"Relative Loo-norm Error: {Loo_relative_error}\n")
+            print(f"Relative L2-norm Error: {L2_relative_error}\n")
 
-            # Store the computed relative L-infinity norm error
+            # Store the computed relative errors
             with open(REPORT_PATH, "a+") as file:
-                file.write(f"Relative Loo-norm Error: {relative_error}\n")
+                file.write(f"Relative Loo-norm Error: {Loo_relative_error}\n")
+                file.write(f"Relative L2-norm Error: {L2_relative_error}\n")
         return None
 
     def benchmarkMatVecParallel(self, hardwareOn, scalingOn, correction= False)-> None:
@@ -274,13 +278,17 @@ class Root:
             print("\nElement-wise Error: \n", self.error)
 
             # Compute relative L-infinity norm error
-            relative_error = (np.linalg.norm(self.error, ord=np.inf) /
+            Loo_relative_error = (np.linalg.norm(self.error, ord=np.inf) /
                               np.linalg.norm(self.y_mem_result, ord=np.inf))
-            print(f"Relative Loo-norm Error: {relative_error}\n")
+            L2_relative_error = (np.linalg.norm(self.error, ord=2) /
+                                  np.linalg.norm(self.y_mem_result, ord=2))
+            print(f"Relative Loo-norm Error: {Loo_relative_error}\n")
+            print(f"Relative L2-norm Error: {L2_relative_error}\n")
 
-            # Store the computed relative L-infinity norm error
+            # Store the computed relative errors
             with open(REPORT_PATH, "a+") as file:
-                file.write(f"Relative Loo-norm Error: {relative_error}\n")
+                file.write(f"Relative Loo-norm Error: {Loo_relative_error}\n")
+                file.write(f"Relative L2-norm Error: {L2_relative_error}\n")
 
     def acquireMCAStats(self)-> None:
         """

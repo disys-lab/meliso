@@ -24,7 +24,7 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 REPS=10
 
 # Experiment IDs
-EXPIDs=("3" "4")
+EXPIDs=("1" "2" "3" "4")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
@@ -35,7 +35,7 @@ declare -A MATERIALS=(
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(1 10 20 30 40 50 60 70 80 90 100)
+ITER_LIMITS=(1 3 5 7 9 11 13 15 17 19 21)
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
