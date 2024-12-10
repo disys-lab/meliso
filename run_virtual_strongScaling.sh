@@ -2,8 +2,7 @@
 #SBATCH -p cascadelake
 #SBATCH -t 120:00:00
 #SBATCH --nodes=9
-#SBATCH --ntasks=288
-#SBATCH --ntasks-per-node=32
+#SBATCH --cores-per-socket=16
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null

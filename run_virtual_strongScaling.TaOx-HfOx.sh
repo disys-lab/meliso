@@ -2,8 +2,7 @@
 #SBATCH -p cascadelake
 #SBATCH -t 120:00:00
 #SBATCH --nodes=9
-#SBATCH --ntasks=288
-#SBATCH --ntasks-per-node=32
+#SBATCH --cores-per-socket=16
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
@@ -66,7 +65,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 257 python3 DistributedMatVec.py
+                mpiexec -n 257 -npersocket 16 python3 DistributedMatVec.py
             done
         done
     done
