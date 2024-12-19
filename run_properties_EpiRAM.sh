@@ -5,8 +5,6 @@
 #SBATCH --cores-per-socket=16
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
-#SBATCH --output=/dev/null
-#SBATCH --error=/dev/null
 
 # Exit immediately if a command exits with a non-zero status
 set -e
@@ -33,7 +31,7 @@ declare -A MATERIALS=(
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(20)
+ITER_LIMITS=(21)
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
@@ -51,7 +49,7 @@ for material in "${!MATERIALS[@]}"; do
             # Run the experiment REPS times for each ITER_LIMIT
             for ((i=1; i<=REPS; i++)); do
                 echo "Running ${material}, exp${expid} with ITER_LIMIT=${iter_limit}, repetition $i"
-                REPORT_PATH="reports/virtualization/strongScaling/${material}/exp${expid}_iter_${iter_limit}_rep_${i}.txt"
+                REPORT_PATH="reports/properties/${material}/exp${expid}_iter_${iter_limit}_rep_${i}.txt"
 
                 # Create the report directory if it doesn't exist
                 mkdir -p "$(dirname "$REPORT_PATH")"
@@ -65,7 +63,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 257 -npersocket 16 python3 DistributedMatVec.py
+                mpiexec -n 2 python3 DistributedMatVec.py
             done
         done
     done
