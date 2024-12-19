@@ -2,8 +2,8 @@ exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
   errCorr: 1
-  matrix_name: "Dubcova1"
-  matrix_file: "inputs/matrices/Dubcova1.mtx"
+  matrix_name: "wang2"
+  matrix_file: "inputs/matrices/wang2.mtx"
   distributed:
     decomposition_dir: "/tmp/"
     mca_rows: 16

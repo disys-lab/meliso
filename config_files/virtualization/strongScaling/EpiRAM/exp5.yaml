@@ -2,8 +2,8 @@ exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
   errCorr: 1
-  matrix_name: "kron_g500-logn18"
-  matrix_file: "inputs/matrices/kron_g500-logn18.mtx"
+  matrix_name: "helm3d01"
+  matrix_file: "inputs/matrices/helm3d01.mtx"
   distributed:
     decomposition_dir: "/tmp/"
     mca_rows: 16

@@ -1,23 +1,23 @@
 Device:
   ConductanceProperties:
-    maxConductance: 5.9172e-05 # To be dynamically determined or specified
-    minConductance: 1.3357e-05 # To be dynamically determined or specified
-    avgMaxConductance: maxConductance # To be dynamically determined or specified
-    avgMinConductance: minConductance # To be dynamically determined or specified
-    conductance: minConductance # This will be dynamically updated
-    conductancePrev: conductance # This will be dynamically updated
+    maxConductance: 5.9172e-05
+    minConductance: 1.3357e-05
+    avgMaxConductance: maxConductance
+    avgMinConductance: minConductance
+    conductance: minConductance
+    conductancePrev: conductance
   ReadProperties:
     readVoltage: 0.5
     readPulseWidth: 5e-9
   WriteProperties:
-    writeVoltageLTP: 0.9 # To be specified based on device type
-    writeVoltageLTD: -1 # To be specified based on device type
-    writePulseWidthLTP: 100e-6 # To be specified based on device type
-    writePulseWidthLTD: 100e-6 # To be specified based on device type
-    writeEnergy: 0 # This will be dynamically updated
-    maxNumLevelLTP: 40 # To be specified based on device type
-    maxNumLevelLTD: 40 # To be specified based on device type
-    numPulse: 0 # This will be dynamically updated
+    writeVoltageLTP: 0.9
+    writeVoltageLTD: -1
+    writePulseWidthLTP: 100e-6
+    writePulseWidthLTD: 100e-6
+    writeEnergy: 0
+    maxNumLevelLTP: 40
+    maxNumLevelLTD: 40
+    numPulse: 0
   DeviceConfiguration:
     cmosAccess: true
     FeFET: false
@@ -35,23 +35,23 @@ Device:
     PWstepLTP: 5e-9
     PWinitLTD: 75e-9
     PWstepLTD: 5e-9
-    writeVoltageSquareSum: 0 # Dynamic variable
+    writeVoltageSquareSum: 0
   ReadNoise:
-    enabled: true #false
-    sigmaReadNoise: 0 # Adjusted based on device specifics
+    enabled: true
+    sigmaReadNoise: 0
   ConductanceRangeVariation:
     enabled: false
     maxConductanceVar: 0
     minConductanceVar: 0
   PhysicalDimensions:
-    heightInFeatureSize: 4 # Depends on cmosAccess and potentially FeFET
-    widthInFeatureSize: 4 # Depends on cmosAccess and potentially FeFET
+    heightInFeatureSize: 4
+    widthInFeatureSize: 4
   DeviceMaterials:
-    material: AlOx/HfO2 # Placeholder for material specification (Ag:a-Si, etc.)
+    material: AlOx/HfO2
   NonlinearWrite:
-    enabled: false # Adjust according to device
+    enabled: false
   DeviceVariation:
-    NL_LTP: 1.94 # Specify if nonlinear write is enabled
-    NL_LTD: -0.61 # Specify if nonlinear write is enabled
-    sigmaDtoD: 0 # Sigma for device-to-device variation, specify if applicable
-    sigmaCtoC: 0.05 #* (maxConductance - minConductance) # Sigma for cycle-to-cycle variation, specify if applicable, may depend on memory window
+    NL_LTP: 1.94
+    NL_LTD: -0.61
+    sigmaDtoD: 0
+    sigmaCtoC: 0.05
