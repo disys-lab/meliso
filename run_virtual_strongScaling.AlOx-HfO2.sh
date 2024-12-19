@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -p cascadelake
+#SBATCH -p batch
 #SBATCH -t 120:00:00
 #SBATCH --nodes=9
 #SBATCH --cores-per-socket=16
@@ -25,7 +25,7 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 REPS=10
 
 # Experiment IDs
-EXPIDs=("1" "2" "3" "4" "5")
+EXPIDs=("1" "2" "3" "4" "5" "6")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(

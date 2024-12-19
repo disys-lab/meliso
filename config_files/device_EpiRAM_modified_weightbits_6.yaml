@@ -1,0 +1,57 @@
+Device:
+  ConductanceProperties:
+    maxConductance: 1.2345679012345678e-05
+    minConductance: 2.4592986080369874e-07
+    avgMaxConductance: maxConductance
+    avgMinConductance: minConductance
+    conductance: minConductance
+    conductancePrev: conductance
+  ReadProperties:
+    readVoltage: 0.5
+    readPulseWidth: 5e-9
+  WriteProperties:
+    writeVoltageLTP: 5
+    writeVoltageLTD: -3
+    writePulseWidthLTP: 5e-6
+    writePulseWidthLTD: 5e-6
+    writeEnergy: 0
+    maxNumLevelLTP: 1024
+    maxNumLevelLTD: 1024
+    numPulse: 0
+  DeviceConfiguration:
+    cmosAccess: true
+    FeFET: false
+    gateCapFeFET: 2.1717e-18
+    resistanceAccess: 15e3
+    nonlinearIV: false
+    nonIdenticalPulse: false
+    NL: 10
+  NonIdenticalPulseSettings:
+    VinitLTP: 2.85
+    VstepLTP: 0.05
+    VinitLTD: 2.1
+    VstepLTD: 0.05
+    PWinitLTP: 75e-9
+    PWstepLTP: 5e-9
+    PWinitLTD: 75e-9
+    PWstepLTD: 5e-9
+    writeVoltageSquareSum: 0
+  ReadNoise:
+    enabled: true
+    sigmaReadNoise: 0
+  ConductanceRangeVariation:
+    enabled: false
+    maxConductanceVar: 0
+    minConductanceVar: 0
+  PhysicalDimensions:
+    heightInFeatureSize: 4
+    widthInFeatureSize: 4
+  DeviceMaterials:
+    material: EpiRAM_Ag:SiGe
+  NonlinearWrite:
+    enabled: false
+  DeviceVariation:
+    NL_LTP: 0.5
+    NL_LTD: -0.5
+    sigmaDtoD: 0
+    sigmaCtoC: 0.02

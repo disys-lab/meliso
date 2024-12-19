@@ -2,8 +2,8 @@ exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
   errCorr: 1
-  matrix_name: "Dubcova2"
-  matrix_file: "inputs/matrices/Dubcova2.mtx"
+  matrix_name: "c-38"
+  matrix_file: "inputs/matrices/c-38.mtx"
   distributed:
     decomposition_dir: "/tmp/"
     mca_rows: 16

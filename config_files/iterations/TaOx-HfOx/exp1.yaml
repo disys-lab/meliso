@@ -1,7 +1,3 @@
-# Experiment Description:
-# Fixed Number of Iterations for Error Correction; 
-# Only applied Error Correction on Worst Device (a.k.a. excluding EpiRAM)
-
 exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
