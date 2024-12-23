@@ -29,7 +29,6 @@ EXPIDs=("1" "2" "3" "4" "5" "6")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    
     ["EpiRAM"]="config_files/virtualization/commercialized/EpiRAM"
 )
 
@@ -66,7 +65,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 65 python3 DistributedMatVec.py
+                mpirun python3 DistributedMatVec.py
             done
         done
     done
