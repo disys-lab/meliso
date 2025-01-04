@@ -1,8 +1,7 @@
 #!/bin/bash
 #SBATCH -p batch
 #SBATCH -t 120:00:00
-#SBATCH --nodes=9
-#SBATCH --ntasks=257
+#SBATCH -n 65
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
@@ -25,15 +24,15 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 REPS=100
 
 # Experiment IDs
-EXPIDs=("1" "2" "3" "4" "5" "6")
+EXPIDs=("4" "5" "6")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["TaOx-HfOx"]="config_files/virtualization/strongScaling/TaOx-HfOx"
+    ["Ag-aSi"]="config_files/virtualization/strongScaling/Ag-aSi"
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(40)
+ITER_LIMITS=(21)
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
