@@ -30,6 +30,9 @@ EXPIDs=("1" "2" "3" "4" "5" "6")
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
     ["Ag-aSi"]="config_files/virtualization/commercialized/Ag-aSi"
+    ["AlOx-HfO2"]="config_files/virtualization/strongScaling/AlOx-HfO2"
+    ["EpiRAM"]="config_files/virtualization/commercialized/EpiRAM"
+    ["TaOx-HfOx"]="config_files/virtualization/strongScaling/TaOx-HfOx"
 )
 
 # List of ITER_LIMIT values
@@ -65,7 +68,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpirun python3 DistributedMatVec.py
+                mpiexec -n 65 python3 DistributedMatVec.py
             done
         done
     done
