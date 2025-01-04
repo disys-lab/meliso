@@ -1,8 +1,7 @@
 #!/bin/bash
 #SBATCH -p batch
 #SBATCH -t 120:00:00
-#SBATCH --nodes=9
-#SBATCH --ntasks=257
+#SBATCH -n 65
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
@@ -25,11 +24,11 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 REPS=100
 
 # Experiment IDs
-EXPIDs=("1" "2" "3" "4" "5" "6")
+EXPIDs=("1" "2" "3")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["Ag-aSi"]="config_files/virtualization/strongScaling/Ag-aSi"
+    ["AlOx-HfO2"]="config_files/virtualization/strongScaling/AlOx-HfO2"
 )
 
 # List of ITER_LIMIT values
