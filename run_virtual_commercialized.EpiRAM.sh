@@ -1,7 +1,8 @@
 #!/bin/bash
-#SBATCH -p cascadelake
-#SBATCH -t 48:00:00
-#SBATCH -n 65
+#SBATCH -p batch
+#SBATCH -t 120:00:00
+#SBATCH --nodes=3
+#SBATCH --ntasks=65
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 #SBATCH --output=/dev/null
@@ -21,7 +22,7 @@ export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
 # Number of replications
-REPS=10
+REPS=100
 
 # Experiment IDs
 EXPIDs=("1" "2" "3" "4" "5" "6")
@@ -32,7 +33,7 @@ declare -A MATERIALS=(
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(50 100)
+ITER_LIMITS=(21)
 
 # Common input vector path
 XVEC_PATH="inputs/vectors/input_x.txt"
@@ -64,7 +65,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 65 python3 DistributedMatVec.py
+                mpirun python3 DistributedMatVec.py
             done
         done
     done
