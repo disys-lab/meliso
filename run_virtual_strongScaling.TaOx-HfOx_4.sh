@@ -24,7 +24,7 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 REPS=100
 
 # Experiment IDs
-EXPIDs=("3" "4")
+EXPIDs=("6")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(

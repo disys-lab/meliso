@@ -24,11 +24,11 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 REPS=100
 
 # Experiment IDs
-EXPIDs=("3" "4")
+EXPIDs=("5")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["TaOx-HfOx"]="config_files/virtualization/strongScaling/TaOx-HfOx"
+    ["AlOx-HfO2"]="config_files/virtualization/strongScaling/AlOx-HfO2"
 )
 
 # List of ITER_LIMIT values
