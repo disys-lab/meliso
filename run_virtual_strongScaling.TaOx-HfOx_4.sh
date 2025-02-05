@@ -4,6 +4,7 @@
 #SBATCH -n 65
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
+#SBATCH --mem=50GB
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
 
