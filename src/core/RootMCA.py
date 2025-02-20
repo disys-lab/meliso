@@ -95,7 +95,7 @@ class RootMCA(BaseMCA):
         self.matRows = mat.shape[0]
         self.matCols = mat.shape[1]
         self.mat = mat
-
+    
     def setMat(self,mat):
 
         #scale matrix
