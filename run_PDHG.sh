@@ -29,6 +29,9 @@ declare -A MATERIALS=(
     ["EpiRAM"]="config_files/iterations/EpiRAM"
 )
 
+# Common input vector path
+XVEC_PATH="inputs/vectors/input_x.txt"
+
 # List of ITER_LIMIT values
 ITER_LIMITS=(11)
 
@@ -57,9 +60,9 @@ for material in "${!MATERIALS[@]}"; do
                 fi
 
                 # Run the experiment
-                DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" \
+                DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 2 python3 DistributedMatVec.py
+                mpiexec -n 2 python3 solver/pdhg/PDHGSolver.py
             done
         done
     done
