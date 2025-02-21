@@ -29,7 +29,7 @@ class PDHGSolver:
         self.A_dim = self.A.shape  # e.g., (m, n)
         self.A_trans = self.A.T
         # Save A_trans for record if needed.
-        mmwrite("inputs/matrices/A_T.mtx", self.A_trans)
+        np.savetxt("A.T.csv", self.A_trans, delimiter=",")
         self.A_trans_dim = self.A_trans.shape  # (n, m)
         
         # Store PDHG variables and parameters.
@@ -81,14 +81,14 @@ def main():
     # According to your setup, we assume the Root process is rank = size - 1.
     if rank == size - 1:
         # Path to matrix A.
-        A_file = "inputs/matrices/A.csv"
+        A_file = "../A.csv"
         # Load A to determine its dimensions.
         A = np.loadtxt(A_file, delimiter=",")
         m, n = A.shape  # A is (m x n): mu has dimension (m,1) and x (n,1)
         
         # Path to bias vectors b and c.
-        b_file = "inputs/vectors/b.csv"
-        c_file = "inputs/vectors/c.csv"
+        b_file = "../b.csv"
+        c_file = "../c.csv"
         b = np.loadtxt(b_file, delimiter=",")
         c = np.loadtxt(c_file, delimiter=",")
 
