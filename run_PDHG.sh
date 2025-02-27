@@ -60,7 +60,7 @@ for material in "${!MATERIALS[@]}"; do
                 fi
 
                 # Run the experiment
-                DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
+                DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
                 mpiexec -n 2 python3 solver/pdhg/PDHGSolver.py
             done

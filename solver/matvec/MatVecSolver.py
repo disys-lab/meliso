@@ -23,7 +23,7 @@ class MatVecSolver:
 
     def matVec(self,correction=False):
         # print("\nRunning VMM Operation...\n")
-        self.solverObject.parallelMatVec(correction=correction)
+        self.solverObject.parallelMatVec(correction=False)
 
     # def centralizedBenchmarkMatVec(self):
     #     print("\nRunning Centralized VMM Operation...")
@@ -31,7 +31,7 @@ class MatVecSolver:
 
     def parallelizedBenchmarkMatVec(self, hardwareOn=1, scalingOn=0,correction=False):
         # print("Running Parallelized VMM Operation...\n")
-        self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn,correction=correction)
+        self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn,correction=False)
 
     def acquireMCAStats(self):
         # print("Acquring MCA Statistics...\n")

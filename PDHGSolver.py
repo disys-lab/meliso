@@ -55,14 +55,20 @@ class PDHGSolver:
             # --- x-update: x = max(x - eta1*(Aᵀ*mu + c), 0) ---
             # Set the accelerator’s matrix to A_trans for computing Aᵀ * mu.
             self.mv_solver.solverObject.initializeMat(self.A_trans)
-            A_trans_mu = self.mv_solver.matVec(self.mu)
+
+            self.mv_solver.matVec(self.mu)
+            A_trans_mu = np.loadtxt("y_mem_result.csv", delimiter =",")
+
             x_tilde = self.x - self.eta1 * (A_trans_mu + self.c)
             x_next = np.maximum(x_tilde, 0)
             
             # --- mu-update: mu = max(mu + eta2*(A*(2*x_next - x) - b), 0) ---
             temp_vec = 2 * x_next - self.x
             self.mv_solver.solverObject.initializeMat(self.A)  # switch back to A
-            A_temp = self.mv_solver.matVec(temp_vec)
+
+            self.mv_solver.matVec(temp_vec)
+            A_temp = np.loadtxt("y_mem_result.csv", delimiter =",")
+            
             self.mu = np.maximum(self.mu + self.eta2 * (A_temp - self.b), 0)
             
             self.x_iterates.append(x_next.copy())
@@ -81,25 +87,25 @@ def main():
     # According to your setup, we assume the Root process is rank = size - 1.
     if rank == size - 1:
         # Path to matrix A.
-        A_file = "../A.csv"
+        A_file = "A.csv"
         # Load A to determine its dimensions.
         A = np.loadtxt(A_file, delimiter=",")
         m, n = A.shape  # A is (m x n): mu has dimension (m,1) and x (n,1)
         
         # Path to bias vectors b and c.
-        b_file = "../b.csv"
-        c_file = "../c.csv"
+        b_file = "b.csv"
+        c_file = "c.csv"
         b = np.loadtxt(b_file, delimiter=",")
         c = np.loadtxt(c_file, delimiter=",")
 
         # Initialize variables.
-        x_init = np.random.rand(n, 1)
-        mu_init = np.random.rand(m, 1)
+        x_init = np.zeros(n)
+        mu_init = np.zeros(m)
         
         # PDHG parameters.
-        K = 100      # number of iterations
-        eta1 = 0.01  # step size for x-update
-        eta2 = 0.01  # step size for mu-update
+        K = 3000      # number of iterations
+        eta1 = 0.16  # step size for x-update
+        eta2 = 0.16  # step size for mu-update
         
         # Create and run the PDHG solver.
         solver = PDHGSolver(A_file, x_init, mu_init, b, c, K, eta1, eta2)
