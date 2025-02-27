@@ -1,124 +1,116 @@
 from mpi4py import MPI
 import numpy as np
+import os
 from scipy.io import mmread, mmwrite
 from solver.matvec.MatVecSolver import MatVecSolver
+from typing import List, Tuple
 
 class PDHGSolver:
-    def __init__(self, A_file, x_init, mu_init, b, c, K, eta1, eta2):
+    """
+    @author: vohuynhquangnguyen
+    Primal-Dual Hybrid Gradient (PDHG) solver for the problem:
+        min_x max_mu {<A*x, mu> - <b, mu> - <c, x> : x >= 0, mu >= 0}. 
+    """
+    RESULT_FILENAME = "y_mem_result.csv"
+    X_ITERATES_FILENAME = "x_iterates.csv"
+
+    def __init__(self, A: np.ndarray, x_init: np.ndarray, mu_init: np.ndarray, b: np.ndarray, c: np.ndarray,
+                 num_iterations: int, primal_step: float, dual_step: float) -> None:        
         """
-        PDHG solver constructor.
-        
         Parameters:
-          A_file  : str
-                    Path to the input matrix (CSV format).  
-          x_init  : np.ndarray
-                    Initial x vector (primal variable).
-          mu_init : np.ndarray
-                    Initial mu vector (dual variable).
-          b, c    : np.ndarray
-                    Bias vectors (with appropriate dimensions).
-          K       : int
-                    Number of PDHG iterations.
-          eta1    : float
-                    Step size for x-update.
-          eta2    : float
-                    Step size for mu-update.
+          A            : Input matrix for the problem.
+          x_init       : Initial primal variable.
+          mu_init      : Initial dual variable.
+          b, c         : Bias vectors.
+          num_iterations: Number of PDHG iterations.
+          primal_step  : Step size for primal updates.
+          dual_step    : Step size for dual updates.
         """
-        # Load matrix A and compute/store its transpose.
-        self.A = np.loadtxt(A_file, delimiter=",")
-        self.A_dim = self.A.shape  # e.g., (m, n)
+        self.A = A
         self.A_trans = self.A.T
-        # Save A_trans for record if needed.
-        np.savetxt("A.T.csv", self.A_trans, delimiter=",")
-        self.A_trans_dim = self.A_trans.shape  # (n, m)
-        
-        # Store PDHG variables and parameters.
         self.x = x_init
         self.mu = mu_init
         self.b = b
         self.c = c
-        self.K = K
-        self.eta1 = eta1
-        self.eta2 = eta2
-        self.x_iterates = []
-        
-        # Instantiate the distributed accelerator.
+        self.num_iterations = num_iterations
+        self.primal_step = primal_step
+        self.dual_step = dual_step
+        self.x_iterates: List[np.ndarray] = []
+
+        # Instantiate the MatVecSolver object.
         self.mv_solver = MatVecSolver()
+        
+        # Save transpose matrix for external systems if required.
+        np.savetxt("A.T.csv", self.A_trans, delimiter=",")
 
-    def solve(self):
-        """
-        Run the PDHG iterations. For the x-update, we require Aᵀ*mu.
-        To do that we instruct the accelerator to use A_trans.
-        For the mu-update, we switch back to A.
-        """
-        for k in range(self.K):
-            # --- x-update: x = max(x - eta1*(Aᵀ*mu + c), 0) ---
-            # Set the accelerator’s matrix to A_trans for computing Aᵀ * mu.
-            self.mv_solver.solverObject.initializeMat(self.A_trans)
+    def _compute_matvec(self, matrix: np.ndarray, vector: np.ndarray) -> np.ndarray:
+        """Helper method to compute matrix-vector product using external solver."""
+        self.mv_solver.solverObject.initializeMat(matrix)
+        self.mv_solver.matVec(vector)
+        return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
+    
+    def solve(self) -> Tuple[np.ndarray, np.ndarray]:
+        """Run the PDHG iterations and return final and averaged solutions."""
 
-            self.mv_solver.matVec(self.mu)
-            A_trans_mu = np.loadtxt("y_mem_result.csv", delimiter =",")
+        for _ in range(self.num_iterations):
+            # --- Primal update: x_next = max(x - eta_p*(A.T*mu + c), 0) ---
+            # Set the accelerator's matrix to A.T for computing A.T * mu.
+            A_trans_mu = self._compute_matvec(self.A_trans, self.mu)
 
-            x_tilde = self.x - self.eta1 * (A_trans_mu + self.c)
+            # Update x using the PDHG update rule.
+            x_tilde = self.x - self.primal_step * (A_trans_mu + self.c)
             x_next = np.maximum(x_tilde, 0)
             
-            # --- mu-update: mu = max(mu + eta2*(A*(2*x_next - x) - b), 0) ---
+            # --- Dual-update: mu = max(mu + eta_d*(A*(2*x_next - x) - b), 0) ---
+            # Set the accelerator's matrix to A for computing A * (2*x_next - x).
             temp_vec = 2 * x_next - self.x
-            self.mv_solver.solverObject.initializeMat(self.A)  # switch back to A
+            A_temp = self._compute_matvec(self.A, temp_vec)
 
-            self.mv_solver.matVec(temp_vec)
-            A_temp = np.loadtxt("y_mem_result.csv", delimiter =",")
-            
-            self.mu = np.maximum(self.mu + self.eta2 * (A_temp - self.b), 0)
-            
+            # Update mu using the PDHG update rule.
+            self.mu = np.maximum(self.mu + self.dual_step * (A_temp - self.b), 0)
             self.x_iterates.append(x_next.copy())
-            self.x = x_next  # update for next iteration
-        
-        x_last = self.x
+            self.x = x_next
+            
+        # --- Save all iterates once after optimization completes ---
+        np.savetxt(self.X_ITERATES_FILENAME, np.array(self.x_iterates), delimiter=",")
         x_avg = np.mean(self.x_iterates, axis=0)
-        return x_last, x_avg
+        return self.x, x_avg
 
-def main():
+def main() -> None:
+    """Main execution block with MPI context management."""
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
+    root_rank = size - 1
     
-    # The PDHG algorithm is executed only on the designated Root process.
-    # According to your setup, we assume the Root process is rank = size - 1.
-    if rank == size - 1:
-        # Path to matrix A.
-        A_file = "A.csv"
-        # Load A to determine its dimensions.
+    # --- The PDHG algorithm is executed only on the designated Root process ---
+    if rank == root_rank:
+        # Load input data from environment variables
+        A_file = os.environ["A_FILE"]
+        b_file = os.environ["B_FILE"]
+        c_file = os.environ["C_FILE"]
+
         A = np.loadtxt(A_file, delimiter=",")
-        m, n = A.shape  # A is (m x n): mu has dimension (m,1) and x (n,1)
-        
-        # Path to bias vectors b and c.
-        b_file = "b.csv"
-        c_file = "c.csv"
         b = np.loadtxt(b_file, delimiter=",")
         c = np.loadtxt(c_file, delimiter=",")
 
-        # Initialize variables.
-        x_init = np.zeros(n)
-        mu_init = np.zeros(m)
-        
-        # PDHG parameters.
-        K = 3000      # number of iterations
-        eta1 = 0.16  # step size for x-update
-        eta2 = 0.16  # step size for mu-update
-        
-        # Create and run the PDHG solver.
-        solver = PDHGSolver(A_file, x_init, mu_init, b, c, K, eta1, eta2)
+        # Initialize variables based on matrix dimensions
+        x_init = np.zeros(A.shape[1])
+        mu_init = np.zeros(A.shape[0])
+
+        # Configure solver parameters
+        solver = PDHGSolver(A=A, x_init=x_init,mu_init=mu_init,b=b,c=c,
+                            num_iterations=3000,primal_step=0.16,dual_step=0.16)
+
+        # Execute optimization
         x_last, x_avg = solver.solve()
-        
-        print("Last iterate x_K:")
-        print(x_last)
-        print("\nAverage of iterates:")
-        print(x_avg)
+
+        print(f"Last iterate x_K: {x_last}")
+        print(f"Average of iterates: {x_avg}")
+
     else:
-        # Non-root processes run the accelerator service.
-        mv_solver = MatVecSolver()
-        mv_solver.matVec(correction=False)
+        # Worker processes handle matrix-vector operations
+        MatVecSolver().matVec(correction=False)
 
 if __name__ == "__main__":
     main()
