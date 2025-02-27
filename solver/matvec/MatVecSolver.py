@@ -1,12 +1,15 @@
 from mpi4py import MPI
 import numpy as np
-import os,sys
+import os
+from typing import Optional
 
 from .Root import Root
 from .NonRoot import NonRoot
 
 class MatVecSolver:
-    def __init__(self,xvec= None):
+    """MPI-based distributed matrix-vector multiplication solver."""
+
+    def __init__(self, xvec: Optional[np.ndarray] = None) -> None:
 
         if MPI.COMM_WORLD.Get_rank() == MPI.COMM_WORLD.Get_size() - 1:
             self.solverObject = Root(MPI.COMM_WORLD)
