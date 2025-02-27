@@ -19,14 +19,14 @@ export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
 # Number of replications
-REPS=11
+REPS=1
 
 # Experiment IDs
 EXPIDs=("1")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["EpiRAM"]="config_files/iterations/EpiRAM"
+    ["TaOx-HfOx"]="config_files/iterations/TaOx-HfOx"
 )
 
 # Common input vector path
@@ -62,7 +62,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 2 python3 solver/pdhg/PDHGSolver.py
+                mpiexec -n 2 python3 PDHGSolver.py
             done
         done
     done

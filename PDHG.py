@@ -17,7 +17,7 @@ class PDHGSolver:
     def __init__(self, A: np.ndarray, x_init: np.ndarray, mu_init: np.ndarray, b: np.ndarray, c: np.ndarray,
                  num_iterations: int, primal_step: float, dual_step: float) -> None:        
         """
-        Parameters:
+        Args:
           A            : Input matrix for the problem.
           x_init       : Initial primal variable.
           mu_init      : Initial dual variable.
