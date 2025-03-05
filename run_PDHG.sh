@@ -35,6 +35,8 @@ XVEC_PATH="inputs/vectors/input_x.txt"
 # List of ITER_LIMIT values
 ITER_LIMITS=(11)
 
+# 
+
 # Loop over each material and experiment ID, then run experiments
 for material in "${!MATERIALS[@]}"; do
     CONFIG_PATH="${MATERIALS[$material]}"
@@ -62,6 +64,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
+
                 mpiexec -n 2 python3 PDHGSolver.py
             done
         done
