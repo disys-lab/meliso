@@ -14,7 +14,8 @@ class PDHGSolver:
     RESULT_FILENAME = "y_mem_result.csv"
     X_ITERATES_FILENAME = "x_iterates.csv"
 
-    def __init__(self, A: np.ndarray, x_init: np.ndarray, mu_init: np.ndarray, b: np.ndarray, c: np.ndarray,
+    def __init__(self, A: np.ndarray, b: np.ndarray, c: np.ndarray,
+                 x_init: np.ndarray, mu_init: np.ndarray, 
                  num_iterations: int, primal_step: float, dual_step: float) -> None:        
         """
         Args:
@@ -37,16 +38,18 @@ class PDHGSolver:
         self.dual_step = dual_step
         self.x_iterates: List[np.ndarray] = []
 
-        # Instantiate the MatVecSolver object.
+        # --- Instantiate the MatVecSolver object. ---
         self.mv_solver = MatVecSolver()
         
-        # Save transpose matrix for external systems if required.
+        # --- Save transpose matrix for external systems if required. ---
         np.savetxt("A.T.csv", self.A_trans, delimiter=",")
 
+    # --- Matrix-Vector Multiplication (MVM) ---
     def _compute_matvec(self, matrix: np.ndarray, vector: np.ndarray) -> np.ndarray:
         """Helper method to compute matrix-vector product using external solver."""
         self.mv_solver.solverObject.initializeMat(matrix)
-        self.mv_solver.matVec(vector)
+        self.mv_solver.solverObject.initializeX(vector)
+        self.mv_solver.matVec(correction=True)
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
     def solve(self) -> Tuple[np.ndarray, np.ndarray]:
