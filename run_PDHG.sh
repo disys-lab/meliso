@@ -14,9 +14,17 @@ module load gcc/7.5.0
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate mpienv38
 
-# Set up environment variables
+# Set up environment variables for library paths
 export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
+
+# Set paths for input files required by PDHG.py
+export A_FILE="inputs/matrices/A.csv"
+export B_FILE="inputs/vectors/b.csv"
+export C_FILE="inputs/vectors/c.csv"
+
+# Common input vector path used by MatVecSolver
+export XVEC_PATH="inputs/vectors/input_x.txt"
 
 # Number of replications
 REPS=1
@@ -29,13 +37,8 @@ declare -A MATERIALS=(
     ["TaOx-HfOx"]="config_files/iterations/TaOx-HfOx"
 )
 
-# Common input vector path
-XVEC_PATH="inputs/vectors/input_x.txt"
-
 # List of ITER_LIMIT values
 ITER_LIMITS=(11)
-
-# 
 
 # Loop over each material and experiment ID, then run experiments
 for material in "${!MATERIALS[@]}"; do
@@ -64,8 +67,8 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment
                 DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-
-                mpiexec -n 2 python3 PDHGSolver.py
+                A_FILE="$A_FILE" B_FILE="$B_FILE" C_FILE="$C_FILE" \
+                mpiexec -n 2 python3 PDHG.py
             done
         done
     done
