@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -p cascadelake
-#SBATCH -t 24:00:00
+#SBATCH -t 12:00:00
 #SBATCH -n 2
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
@@ -19,9 +19,9 @@ export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
 # Set paths for input files required by PDHG.py
-export A_FILE="inputs/matrices/A.csv"
-export B_FILE="inputs/vectors/b.csv"
-export C_FILE="inputs/vectors/c.csv"
+export A_FILE="A.csv"
+export B_FILE="b.csv"
+export C_FILE="c.csv"
 
 # Common input vector path used by MatVecSolver
 export XVEC_PATH="inputs/vectors/input_x.txt"
@@ -65,7 +65,7 @@ for material in "${!MATERIALS[@]}"; do
                 fi
 
                 # Run the experiment
-                DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
+                DT=0 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
                 A_FILE="$A_FILE" B_FILE="$B_FILE" C_FILE="$C_FILE" \
                 mpiexec -n 2 python3 PDHG.py
