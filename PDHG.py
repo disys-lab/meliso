@@ -52,8 +52,18 @@ class PDHGSolver:
         self.mv_solver.matVec(correction=True)
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
+    def _compute_stepsize(self) -> None:
+        """Helper method to compute theoretical step size"""
+        spectral_norm = np.linalg.norm(self.A, ord=2)
+        max_step = 1.0 / spectral_norm
+
+        if (self.primal_step * self.dual_step > max_step):
+            self.primal_step = self.dual_step = max_step
+
     def solve(self) -> Tuple[np.ndarray, np.ndarray]:
         """Run the PDHG iterations and return final and averaged solutions."""
+        # --- Compute theoretical step size ---
+        self._compute_stepsize()
 
         for _ in range(self.num_iterations):
             # --- Primal update: x_next = max(x - eta_p*(A.T*mu + c), 0) ---
@@ -73,7 +83,11 @@ class PDHGSolver:
             self.mu = np.maximum(self.mu + self.dual_step * (A_temp - self.b), 0)
             self.x_iterates.append(x_next.copy())
             self.x = x_next
-            
+
+            # --- Save the log file of x ---
+            with open("x_log.txt", "a+") as file:
+                file.write(f"{self.x} \n")
+                
         # --- Save all iterates once after optimization completes ---
         np.savetxt(self.X_ITERATES_FILENAME, np.array(self.x_iterates), delimiter=",")
         x_avg = np.mean(self.x_iterates, axis=0)
