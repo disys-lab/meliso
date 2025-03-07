@@ -13,6 +13,7 @@ class PDHGSolver:
     """
     RESULT_FILENAME = "y_mem_result.csv"
     X_ITERATES_FILENAME = "x_iterates.csv"
+    LOG_FILENAME = "x_log.txt"
 
     def __init__(self, A: np.ndarray, b: np.ndarray, c: np.ndarray,
                  x_init: np.ndarray, mu_init: np.ndarray, 
@@ -62,6 +63,11 @@ class PDHGSolver:
 
     def solve(self) -> Tuple[np.ndarray, np.ndarray]:
         """Run the PDHG iterations and return final and averaged solutions."""
+        
+        # --- Remove existing log file (if any) before starting the iterations ---
+        if os.path.exists(self.LOG_FILENAME):
+            os.remove(self.LOG_FILENAME)
+
         # --- Compute theoretical step size ---
         self._compute_stepsize()
 
@@ -84,13 +90,16 @@ class PDHGSolver:
             self.x_iterates.append(x_next.copy())
             self.x = x_next
 
-            # --- Save the log file of x ---
-            with open("x_log.txt", "a+") as file:
-                file.write(f"{self.x} \n")
+            # --- Append current iterate of x to the log file ---
+            with open(self.LOG_FILENAME, "a+") as file:
+                file.write(f"{self.x}")
                 
-        # --- Save all iterates once after optimization completes ---
+        # --- Remove previous all-iterates file (if any) before saving ---
+        if os.path.exists(self.X_ITERATES_FILENAME):
+            os.remove(self.X_ITERATES_FILENAME)        
         np.savetxt(self.X_ITERATES_FILENAME, np.array(self.x_iterates), delimiter=",")
         x_avg = np.mean(self.x_iterates, axis=0)
+        
         return self.x, x_avg
 
 def main() -> None:
@@ -117,7 +126,7 @@ def main() -> None:
 
         # Configure solver parameters
         solver = PDHGSolver(A=A, x_init=x_init,mu_init=mu_init,b=b,c=c,
-                            num_iterations=3000,primal_step=0.16,dual_step=0.16)
+                            num_iterations=100000,primal_step=0.16,dual_step=0.16)
 
         # Execute optimization
         x_last, x_avg = solver.solve()
@@ -127,7 +136,7 @@ def main() -> None:
 
     else:
         # Worker processes handle matrix-vector operations
-        MatVecSolver().matVec(correction=False)
+        MatVecSolver().matVec(correction=True)
 
 if __name__ == "__main__":
     main()
