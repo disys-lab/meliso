@@ -86,20 +86,21 @@ class PDHGSolver:
             A_temp = self._compute_matvec(self.A, temp_vec)
 
             # Update mu using the PDHG update rule.
-            self.mu = np.maximum(self.mu + self.dual_step * (A_temp - self.b), 0)
+            # self.mu = np.maximum(self.mu + self.dual_step * (A_temp - self.b), 0)
+            self.mu = self.mu + self.dual_step * (A_temp - self.b)
             self.x_iterates.append(x_next.copy())
             self.x = x_next
 
             # --- Append current iterate of x to the log file ---
             with open(self.LOG_FILENAME, "a+") as file:
-                file.write(f"{self.x}")
+                file.write(f"{self.x}\n")
                 
         # --- Remove previous all-iterates file (if any) before saving ---
         if os.path.exists(self.X_ITERATES_FILENAME):
             os.remove(self.X_ITERATES_FILENAME)        
         np.savetxt(self.X_ITERATES_FILENAME, np.array(self.x_iterates), delimiter=",")
         x_avg = np.mean(self.x_iterates, axis=0)
-        
+
         return self.x, x_avg
 
 def main() -> None:
