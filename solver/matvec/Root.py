@@ -233,7 +233,7 @@ class Root:
             np.savetxt("y_benchmark_result.csv", self.y_mem_result, delimiter=",")
         else:
             # Adjust the result based on device type
-            self.y_mem_result = (self.deviceType + 1) * np.copy(self.y)
+            self.y_mem_result = (self.deviceType + 0) * np.copy(self.y)
             print(f"\nMultiplication Result: \n{self.y_mem_result}")
             np.savetxt("y_mem_result.csv", self.y_mem_result, delimiter=",")
         return None
