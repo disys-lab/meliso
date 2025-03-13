@@ -89,7 +89,7 @@ def main():
             file.write(f"{dominant_eigenvalue}")
 
         end_time = time.time()
-        print(f"Elapsed time: {start_time - end_time}")
+        print(f"Elapsed time: {end_time - start_time}")
     else:
         # Worker processes perform their assigned matrix-vector operations.
         MatVecSolver().matVec(correction=True)

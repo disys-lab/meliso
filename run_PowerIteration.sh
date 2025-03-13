@@ -20,8 +20,6 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
 # Set paths for input files required by PowerIteration.py
 export A_FILE="A.csv"
-export B_FILE="b.csv"
-export C_FILE="c.csv"
 
 # Common input vector path used by MatVecSolver
 export XVEC_PATH="inputs/vectors/input_x.txt"
