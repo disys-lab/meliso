@@ -2,7 +2,6 @@ import os
 import time
 from mpi4py import MPI
 import numpy as np
-from scipy.io import mmread, mmwrite
 from solver.matvec.MatVecSolver import MatVecSolver
 from typing import List, Tuple
 
@@ -97,7 +96,7 @@ class PDHGSolver:
 
             # --- Dual update using extrapolated x_bar ---
             # Set the accelerator's matrix to A for computing A * x_bar
-            mv_result = self._compute_matvec(self.A, x_bar)
+            mv_result = self._compute_matvec(self.A, self.x_bar)
             mu_tilde = mu + dual_step * (mv_result - self.b)
             mu_next = self._project_dual(mu_tilde)
 
@@ -108,7 +107,7 @@ class PDHGSolver:
             x_next = self._project_primal(x_grad)
 
             # --- Extrapolation for next x_bar ---
-            x_bar = x_next + self.theta * (x_next - x)
+            self.x_bar = x_next + self.theta * (x_next - x)
 
             # --- Check convergence (primal residual) ---
             if np.linalg.norm(x_next - x) < self.tol:
