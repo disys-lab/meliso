@@ -1,6 +1,7 @@
+import os
+import time
 from mpi4py import MPI
 import numpy as np
-import os
 from scipy.io import mmread, mmwrite
 from solver.matvec.MatVecSolver import MatVecSolver
 from typing import List, Tuple
@@ -8,88 +9,116 @@ from typing import List, Tuple
 class PDHGSolver:
     """
     @author: vohuynhquangnguyen
-    Primal-Dual Hybrid Gradient (PDHG) solver for the problem:
-        min_x max_mu {<A*x, mu> - <b, mu> - <c, x> : x >= 0, mu >= 0}. 
+    Primal-Dual Hybrid Gradient (PDHG) solver for linear problems.
     """
     RESULT_FILENAME = "y_mem_result.csv"
     X_ITERATES_FILENAME = "x_iterates.csv"
     LOG_FILENAME = "x_log.txt"
 
-    def __init__(self, A: np.ndarray, b: np.ndarray, c: np.ndarray,
-                 x_init: np.ndarray, mu_init: np.ndarray, 
-                 num_iterations: int, primal_step: float, dual_step: float) -> None:        
+    def __init__(self, A: np.ndarray, b: np.ndarray, c: np.ndarray, num_iterations: int) -> None:        
         """
         Args:
-          A            : Input matrix for the problem.
-          x_init       : Initial primal variable.
-          mu_init      : Initial dual variable.
-          b, c         : Bias vectors.
+          A             : Constraint matrix for the problem.
+          b             : RHS vector for the problem.
+          c             : Objecive cost for the problem.
           num_iterations: Number of PDHG iterations.
-          primal_step  : Step size for primal updates.
-          dual_step    : Step size for dual updates.
         """
         self.A = A
-        self.A_trans = self.A.T
-        self.x = x_init
-        self.mu = mu_init
         self.b = b
         self.c = c
+
+        self.n_primal = A.shape[1]
+        self.n_dual = A.shape[0]
+        
+        self.tol = 1e-6
+        self.theta = 1.0
         self.num_iterations = num_iterations
-        self.primal_step = primal_step
-        self.dual_step = dual_step
+
         self.x_iterates: List[np.ndarray] = []
+        self.x_bar = None
+        self.x_avg = None
 
         # --- Instantiate the MatVecSolver object. ---
         self.mv_solver = MatVecSolver()
         
-        # --- Save transpose matrix for external systems if required. ---
-        np.savetxt("A.T.csv", self.A_trans, delimiter=",")
-
     # --- Matrix-Vector Multiplication (MVM) ---
     def _compute_matvec(self, matrix: np.ndarray, vector: np.ndarray) -> np.ndarray:
-        """Helper method to compute matrix-vector product using external solver."""
+        """
+        Helper method to compute matrix-vector product using external solver.
+        """
         self.mv_solver.solverObject.initializeMat(matrix)
         self.mv_solver.solverObject.initializeX(vector)
         self.mv_solver.matVec(correction=True)
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
-    def _compute_stepsize(self) -> None:
-        """Helper method to compute theoretical step size"""
-        spectral_norm = np.linalg.norm(self.A, ord=2)
-        max_step = 1.0 / spectral_norm
+    # --- 
+    @staticmethod
+    def _project_dual(mu: np.ndarray) -> np.ndarray:
+        """
+        Helper method to project dual variables to be non-negative.
+        """
+        return np.maximum(mu, 0)
+    
+    @staticmethod
+    def _project_primal(x: np.ndarray) -> np.ndarray:
+        """
+        Helper method to project primal variables to be non-negative.
+        """
+        return np.maximum(x, 0)
 
-        if (self.primal_step * self.dual_step > max_step):
-            self.primal_step = self.dual_step = max_step
+    @staticmethod
+    def _compute_stepsize(A):
+        """
+        Helper method to compute primal and dual steps.
+        """
+        maximum_step = 1 / np.linalg.norm(A, ord = 2)
+        primal_step = maximum_step
+        dual_step = maximum_step
+        return primal_step, dual_step   
 
     def solve(self) -> Tuple[np.ndarray, np.ndarray]:
-        """Run the PDHG iterations and return final and averaged solutions."""
+        """
+        Run the PDHG iterations and return final and averaged solutions.
+        """
         
         # --- Remove existing log file (if any) before starting the iterations ---
         if os.path.exists(self.LOG_FILENAME):
             os.remove(self.LOG_FILENAME)
 
-        # --- Compute theoretical step size ---
-        self._compute_stepsize()
+        # --- Compute step size ---
+        primal_step, dual_step = self._compute_stepsize(self.A)
 
-        for _ in range(self.num_iterations):
-            # --- Primal update: x_next = max(x - eta_p*(A.T*mu + c), 0) ---
-            # Set the accelerator's matrix to A.T for computing A.T * mu.
-            A_trans_mu = self._compute_matvec(self.A_trans, self.mu)
+        # --- Initialize x and mu ---
+        x = np.zeros(self.n_primal)
+        mu = np.zeros(self.n_dual)
+        self.x_bar = x.copy()
+    
+        for k in range(self.num_iterations):
 
-            # Update x using the PDHG update rule.
-            x_tilde = self.x - self.primal_step * (A_trans_mu + self.c)
-            x_next = np.maximum(x_tilde, 0)
+            # --- Dual update using extrapolated x_bar ---
+            # Set the accelerator's matrix to A for computing A * x_bar
+            mv_result = self._compute_matvec(self.A, x_bar)
+            mu_tilde = mu + dual_step * (mv_result - self.b)
+            mu_next = self._project_dual(mu_tilde)
+
+            # --- Primal update ---
+            # Set the accelerator's matrix to A for computing A.T @ mu_next
+            mv_result = self._compute_matvec(self.A.T, mu_next)
+            x_grad = x - primal_step * (mv_result + self.c)
+            x_next = self._project_primal(x_grad)
+
+            # --- Extrapolation for next x_bar ---
+            x_bar = x_next + self.theta * (x_next - x)
+
+            # --- Check convergence (primal residual) ---
+            if np.linalg.norm(x_next - x) < self.tol:
+                print(f"Terminated after {k} iterations.")
+                break
             
-            # --- Dual-update: mu = max(mu + eta_d*(A*(2*x_next - x) - b), 0) ---
-            # Set the accelerator's matrix to A for computing A * (2*x_next - x).
-            temp_vec = 2 * x_next - self.x
-            A_temp = self._compute_matvec(self.A, temp_vec)
-
-            # Update mu using the PDHG update rule.
-            # self.mu = np.maximum(self.mu + self.dual_step * (A_temp - self.b), 0)
-            self.mu = self.mu + self.dual_step * (A_temp - self.b)
+            # --- Update primals and duals for next iteration.
             self.x_iterates.append(x_next.copy())
-            self.x = x_next
+            x = x_next
+            mu = mu_next
 
             # --- Append current iterate of x to the log file ---
             with open(self.LOG_FILENAME, "a+") as file:
@@ -99,10 +128,10 @@ class PDHGSolver:
         if os.path.exists(self.X_ITERATES_FILENAME):
             os.remove(self.X_ITERATES_FILENAME)        
         np.savetxt(self.X_ITERATES_FILENAME, np.array(self.x_iterates), delimiter=",")
-        x_avg = np.mean(self.x_iterates, axis=0)
+        self.x_avg = np.mean(self.x_iterates, axis=0)
 
-        return self.x, x_avg
-
+        return self.x_bar, self.x_avg
+    
 def main() -> None:
     """Main execution block with MPI context management."""
     comm = MPI.COMM_WORLD
@@ -112,6 +141,8 @@ def main() -> None:
     
     # --- The PDHG algorithm is executed only on the designated Root process ---
     if rank == root_rank:
+        start_time = time.time()
+
         # Load input data from environment variables
         A_file = os.environ["A_FILE"]
         b_file = os.environ["B_FILE"]
@@ -121,23 +152,29 @@ def main() -> None:
         b = np.loadtxt(b_file, delimiter=",")
         c = np.loadtxt(c_file, delimiter=",")
 
-        # Initialize variables based on matrix dimensions
-        x_init = np.zeros(A.shape[1])
-        mu_init = np.zeros(A.shape[0])
-
         # Configure solver parameters
-        solver = PDHGSolver(A=A, x_init=x_init,mu_init=mu_init,b=b,c=c,
-                            num_iterations=100000,primal_step=0.16,dual_step=0.16)
+        solver = PDHGSolver(A=A, b=b, c=c, num_iterations=100000)
 
         # Execute optimization
-        x_last, x_avg = solver.solve()
+        x_final, _ = solver.solve()
 
-        print(f"Last iterate x_K: {x_last}")
-        print(f"Average of iterates: {x_avg}")
+        print(f"Optimal solution: {x_final}")
+        print(f"Objective value: {-np.dot(c, x_final):.2f}")
+
+        end_time = time.time()
+        print(f"Elapsed time: {end_time - start_time}")
+
+        # Broadcast termination signal to all workers
+        comm.bcast(True, root=root_rank)
 
     else:
-        # Worker processes handle matrix-vector operations
-        MatVecSolver().matVec(correction=True)
+        # Worker processes loop until termination signal is received
+        while True:
+            # Wait for broadcast from main process
+            done = comm.bcast(None, root=size-1)
+            if done:
+                break
+            MatVecSolver().matVec(correction=True)
 
 if __name__ == "__main__":
     main()
