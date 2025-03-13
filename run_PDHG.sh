@@ -34,7 +34,7 @@ EXPIDs=("1")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["TaOx-HfOx"]="config_files/iterations/TaOx-HfOx"
+    ["EpiRAM"]="config_files/pdhg/EpiRAM"
 )
 
 # List of ITER_LIMIT values
@@ -65,7 +65,7 @@ for material in "${!MATERIALS[@]}"; do
                 fi
 
                 # Run the experiment
-                DT=0 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
+                DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
                 A_FILE="$A_FILE" B_FILE="$B_FILE" C_FILE="$C_FILE" \
                 mpiexec -n 2 python3 PDHG.py
