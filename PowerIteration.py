@@ -97,16 +97,8 @@ def main():
         end_time = time.time()
         print(f"Elapsed time: {end_time - start_time}")
         
-        # --- Broadcast termination signal to all workers ---
-        comm.bcast(True, root=size - 1)
-
     else: # Worker processes perform their assigned MVM.
-        while True:
-            terminate = comm.bcast(None, root=size - 1)
-            if terminate:
-                break
-            else:
-                MatVecSolver().matVec(correction=True)
+        MatVecSolver().matVec(correction=True)
 
 if __name__ == "__main__":
     main()
