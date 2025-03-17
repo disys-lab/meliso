@@ -1,9 +1,9 @@
+import os
+import time
 from mpi4py import MPI
 import numpy as np
-import os
 from solver.matvec.MatVecSolver import MatVecSolver
 from typing import List, Tuple
-import time
 
 class PowerIteration:
     """
@@ -11,60 +11,65 @@ class PowerIteration:
     """
     RESULT_FILENAME = "y_mem_result.csv"
 
-    def __init__(self, A: np.ndarray, x_init: np.ndarray, lam_init: float,
-                 num_iterations: int, tol: float) -> None:
+    def __init__(self, A: np.ndarray, num_iterations: int, tol: float, matrix_name:str = None):
         self.A = A
-        self.A_trans = self.A.T
-        self.x = x_init
-        self.lam = lam_init
         self.num_iterations = num_iterations
         self.tol = tol
+        self.matrix_name = matrix_name
 
         # --- Instantiate the MatVecSolver object. ---
         self.mv_solver = MatVecSolver()
 
         # --- Save transpose matrix for external systems if required. ---
-        np.savetxt("A.T.csv", self.A_trans, delimiter=",")
+        np.savetxt("A.T.csv", self.A.T, delimiter=",")
 
+    @staticmethod
+    def _normalized_vector(x: np.ndarray) -> Tuple[float, np.ndarray]:
+        """
+        Helper method to normalize a vector.
+        """
+        norm_x = np.linalg.norm(x)
+        x_normalized = x / norm_x if norm_x > 0 else x
+        return norm_x, x_normalized
+    
     def _compute_matvec(self, matrix: np.ndarray, vector: np.ndarray) -> np.ndarray:
         """
-        Helper method to compute matrix-vector product using the external solver.
+        Helper method to compute matrix-vector product using the MELISO matvec solver.
         """
         self.mv_solver.solverObject.initializeMat(matrix)
         self.mv_solver.solverObject.initializeX(vector)
         self.mv_solver.matVec(correction=True)
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
-
+    
     def solve(self) -> float:
         """
         Perform the two-sided power iteration and return the approximate spectral norm.
         """
         # --- Normalize the initial vector ---
-        v_k = self.x.astype(float)
-        v_norm = np.linalg.norm(v_k)
-        if v_norm == 0:
-            raise ValueError("Initial vector x_init has zero norm, cannot normalize.")
-        v_k /= v_norm
+        v = np.random.rand(self.A.shape[1])
+        _ , v = self._normalized_vector(v)
+        last_v = v.copy()
 
-        for _ in range(self.num_iterations):
-            # --- Iteratively approximate left singular vector ---
-            # w_k = A @ v_k
-            w_k = self._compute_matvec(self.A, v_k)
-            norm_w = np.linalg.norm(w_k)
+        for i in range(self.num_iterations):
+            # --- Iteratively approximate left singular vector (w_k = A @ v_k) ---
+            w = self._compute_matvec(self.A, v)
+            norm_w, w = self._normalized_vector(w)
             if norm_w < self.tol:
+                print(f"Iteration {i}: Convergence reached with norm_w = {norm_w}")
                 break
-            w_k /= norm_w
 
-            # --- Iteratively approximate right singular vector ---
-            # v_{k+1} = A.T @ w_k = (A.T @ A) @ k
-            v_next = self._compute_matvec(self.A.T, w_k)
-            norm_v_next = np.linalg.norm(v_next)
+            # --- Iteratively approximate right singular vector (v_{k+1} = A.T @ w_k = (A.T @ A) @ k) ---
+            v_next = self._compute_matvec(self.A.T, w)
+            norm_v_next, v_next = self._normalized_vector(v_next)
             if norm_v_next < self.tol:
+                print(f"Iteration {i}: Convergence reached with norm_v_next = {norm_v_next}")
                 break
-            v_k = v_next / norm_v_next
+
+            last_v = v_next.copy()  # Update last valid vector
+            v = v_next.copy()
 
         # --- Approximate the spectral norm by ||A @ v_k||_2 ---
-        w_final = self._compute_matvec(self.A, v_k)
+        w_final = self._compute_matvec(self.A, last_v)
         spectral_norm_est = np.linalg.norm(w_final)
 
         return spectral_norm_est
@@ -73,16 +78,17 @@ def main():
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
-    if rank == size - 1:
+
+    if rank == size - 1: # Root process performs the power iteration.
         start_time = time.time()
-        # Load or define matrix A, initial vector x_init, and initial eigenvalue lam_init.
+
+        # --- Load the matrix A ---
         A = np.loadtxt("A.csv", delimiter=",")
-        x_init = np.random.rand(A.shape[1])
-        lam_init = 0.0
         num_iterations = 1000
         tol = 1e-6
 
-        power_solver = PowerIteration(A, x_init, lam_init, num_iterations, tol)
+        # --- Perform the power iteration ---
+        power_solver = PowerIteration(A, num_iterations, tol)
         dominant_eigenvalue = power_solver.solve()
         print("Dominant eigenvalue:", dominant_eigenvalue)
         with open("lambda.txt", "w+") as file:
@@ -90,9 +96,17 @@ def main():
 
         end_time = time.time()
         print(f"Elapsed time: {end_time - start_time}")
-    else:
-        # Worker processes perform their assigned matrix-vector operations.
-        MatVecSolver().matVec(correction=True)
+        
+        # --- Broadcast termination signal to all workers ---
+        comm.bcast(True, root=size - 1)
+
+    else: # Worker processes perform their assigned MVM.
+        while True:
+            terminate = comm.bcast(None, root=size - 1)
+            if terminate:
+                break
+            else:
+                MatVecSolver().matVec(correction=True)
 
 if __name__ == "__main__":
     main()
