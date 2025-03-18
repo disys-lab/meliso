@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p cascadelake
 #SBATCH -t 12:00:00
-#SBATCH -n 2
+#SBATCH -n 17
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 
@@ -19,7 +19,7 @@ export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
 # Set paths for input files required by PowerIteration.py
-export A_FILE="A.csv"
+export A_FILE="./inputs/matrices/add32.mtx"
 
 # Common input vector path used by MatVecSolver
 export XVEC_PATH="inputs/vectors/input_x.txt"
@@ -32,7 +32,7 @@ EXPIDs=("1")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["TaOx-HfOx"]="config_files/iterations/TaOx-HfOx"
+    ["TaOx-HfOx"]="config_files/PowerIteration/TaOx-HfOx"
 )
 
 # List of ITER_LIMIT values
@@ -63,10 +63,10 @@ for material in "${!MATERIALS[@]}"; do
                 fi
 
                 # Run the experiment
-                DT=0 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
+                DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                A_FILE="$A_FILE" B_FILE="$B_FILE" C_FILE="$C_FILE" \
-                mpiexec -n 2 python3 PowerIteration.py
+                A_FILE="$A_FILE" \
+                mpiexec -n 17 python3 PowerIteration.py
             done
         done
     done
