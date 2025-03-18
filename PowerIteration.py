@@ -4,6 +4,7 @@ from mpi4py import MPI
 import numpy as np
 from solver.matvec.MatVecSolver import MatVecSolver
 from typing import List, Tuple
+from scipy.io import mmread
 
 class PowerIteration:
     """
@@ -83,7 +84,7 @@ def main():
         start_time = time.time()
 
         # --- Load the matrix A ---
-        A = np.loadtxt("A.csv", delimiter=",")
+        A = mmread("./inputs/matrices/add32.mtx").toarray()
         num_iterations = 1000
         tol = 1e-6
 
