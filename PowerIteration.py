@@ -84,7 +84,7 @@ def main():
         start_time = time.time()
 
         # --- Load the matrix A ---
-        A = mmread("./inputs/matrices/add32.mtx").toarray()
+        A = mmread(os.getenv("A_FILE", "inputs/matrices/A.mtx")).toarray()
         num_iterations = 1000
         tol = 1e-6
 
