@@ -1,5 +1,6 @@
 from .BaseMCA import BaseMCA
 from scipy.io import mmread
+from scipy.sparse import issparse
 import numpy as np
 import os,sys,time
 
@@ -152,14 +153,21 @@ class RootMCA(BaseMCA):
         if not os.path.isdir(decomp_folder_name):
             os.makedirs(decomp_folder_name, exist_ok=True)
 
-    def scaleMatrix(self,mat):
+    def scaleMatrix(self, mat):
+
+        # --- Convert sparse matrices to dense arrays ---
+        if issparse(mat):
+            mat = mat.toarray()
+        
         mat = mat.astype(np.float64)
         mat_row_sum = np.sum(mat, axis=1)
         mat_min = mat.min()
-        mat -= mat_min
+        mat = mat - mat_min # Use a new variable instead of in-place subtraction to avoid sparse arithmetic issues
         mat_max = mat.ptp()
-        mat /= mat_max
-        return mat,mat_min,mat_max,mat_row_sum
+        if mat_max == 0:
+            raise ValueError("Matrix range is zero, cannot scale")
+        mat = mat / mat_max
+        return mat, mat_min, mat_max, mat_row_sum
 
     def padMatrix(self,mat):
         rows = self.origMatRows = mat.shape[0]
