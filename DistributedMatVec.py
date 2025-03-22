@@ -3,8 +3,9 @@
 DistributedMatVec Module
 
 This script demonstrates the usage of the MPI-based distributed matrix-vector multiplication
-(MVM) solver. It initializes the solver, runs a matrix-vector multiplication, finalizes the solver,
-acquires MCA statistics, runs a benchmark, and then finalizes again.
+(MVM) solver on MELISO. It initializes the solver, runs a 
+matrix-vector multiplication, finalizes the solver, acquires MCA statistics, runs a 
+benchmark, and then finalizes again.
 
 Usage:
     Run this script in an MPI environment.
@@ -16,8 +17,8 @@ from solver.matvec.MatVecSolver import MatVecSolver
 
 def main():
     # --- Global constants ---
-    correction = False
-    A = mmread("inputs/matrices/bcsstk02.mtx")
+    correction = True
+    A = mmread("inputs/matrices/Iperturb.mtx")
     x = np.loadtxt("inputs/vectors/input_x.txt")
 
     start_time = time.time()

@@ -4,9 +4,6 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=2
 #SBATCH --mem=64G
-#SBATCH --job-name=PowerIteration
-#SBATCH --output=logs/PowerIteration_%j.out
-#SBATCH --error=logs/PowerIteration_%j.err
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 
@@ -24,24 +21,22 @@ export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
 # Set paths for input files required by PowerIteration.py
-export A_FILE="inputs/matrices/bcsstk02.mtx"
 
 # Common input vector path used by MatVecSolver
-export XVEC_PATH="inputs/vectors/input_x.txt"
 
 # Number of replications
 REPS=1
 
 # Experiment IDs
-EXPIDs=("1")
+EXPIDs=("1.1")
 
 # List of materials and corresponding config paths
 declare -A MATERIALS=(
-    ["TaOx-HfOx"]="config_files/PowerIteration/TaOx-HfOx"
+    ["TaOx-HfOx"]="config_files/quickstart/TaOx-HfOx"
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(11)
+ITER_LIMITS=(5)
 
 # Loop over each material and experiment ID, then run experiments
 for material in "${!MATERIALS[@]}"; do
