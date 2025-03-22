@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -p cascadelake
-#SBATCH -t 12:00:00
+#SBATCH -t 24:00:00
 #SBATCH -n 17
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
@@ -19,7 +19,7 @@ export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
 # Set paths for input files required by PowerIteration.py
-export A_FILE="./inputs/matrices/add32.mtx"
+export A_FILE="inputs/matrices/A.mtx"
 
 # Common input vector path used by MatVecSolver
 export XVEC_PATH="inputs/vectors/input_x.txt"
