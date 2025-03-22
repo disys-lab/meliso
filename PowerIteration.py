@@ -1,6 +1,5 @@
 import os
 import time
-from mpi4py import MPI
 import numpy as np
 from solver.matvec.MatVecSolver import MatVecSolver
 from typing import List, Tuple
@@ -37,13 +36,11 @@ class PowerIteration:
         """
         Helper method to compute matrix-vector product using the MELISO matvec solver.
         """
-        self.mv_solver.solverObject.initializeMat(matrix)
-        self.mv_solver.solverObject.initializeX(vector)
+        self.mv_solver.initializeMat(matrix)
+        self.mv_solver.initializeX(vector)
         self.mv_solver.matVec(correction=True)
         self.mv_solver.finalize()
         self.mv_solver.acquireMCAStats()
-        self.mv_solver.parallelizedBenchmarkMatVec(0, 0, correction=True)
-        self.mv_solver.finalize()
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
     def solve(self) -> float:
@@ -80,30 +77,22 @@ class PowerIteration:
         return spectral_norm_est
 
 def main():
-    comm = MPI.COMM_WORLD
-    rank = comm.Get_rank()
-    size = comm.Get_size()
+    start_time = time.time()
 
-    if rank == size - 1: # Root process performs the power iteration.
-        start_time = time.time()
+    # --- Load the matrix A ---
+    A = mmread(os.getenv("A_FILE", "inputs/matrices/A.mtx")).toarray()
+    num_iterations = 1000
+    tol = 1e-6
 
-        # --- Load the matrix A ---
-        A = mmread(os.getenv("A_FILE", "inputs/matrices/A.mtx")).toarray()
-        num_iterations = 1000
-        tol = 1e-6
+    # --- Perform the power iteration ---
+    power_solver = PowerIteration(A, num_iterations, tol)
+    dominant_eigenvalue = power_solver.solve()
+    print("Dominant eigenvalue:", dominant_eigenvalue)
+    with open("lambda.txt", "w+") as file:
+        file.write(f"{dominant_eigenvalue}")
 
-        # --- Perform the power iteration ---
-        power_solver = PowerIteration(A, num_iterations, tol)
-        dominant_eigenvalue = power_solver.solve()
-        print("Dominant eigenvalue:", dominant_eigenvalue)
-        with open("lambda.txt", "w+") as file:
-            file.write(f"{dominant_eigenvalue}")
-
-        end_time = time.time()
-        print(f"Elapsed time: {end_time - start_time}")
-        
-    else: # Worker processes perform their assigned MVM.
-        MatVecSolver().matVec(correction=True)
+    end_time = time.time()
+    print(f"Elapsed time: {end_time - start_time}")
 
 if __name__ == "__main__":
     main()
