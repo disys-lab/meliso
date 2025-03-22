@@ -1,7 +1,12 @@
 #!/bin/bash
-#SBATCH -p cascadelake
+#SBATCH -p batch
 #SBATCH -t 24:00:00
-#SBATCH -n 17
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=2
+#SBATCH --mem=64G
+#SBATCH --job-name=PowerIteration
+#SBATCH --output=logs/PowerIteration_%j.out
+#SBATCH --error=logs/PowerIteration_%j.err
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 
@@ -19,7 +24,7 @@ export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
 # Set paths for input files required by PowerIteration.py
-export A_FILE="inputs/matrices/A.mtx"
+export A_FILE="inputs/matrices/bcsstk02.mtx"
 
 # Common input vector path used by MatVecSolver
 export XVEC_PATH="inputs/vectors/input_x.txt"
@@ -66,7 +71,7 @@ for material in "${!MATERIALS[@]}"; do
                 DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
                 A_FILE="$A_FILE" \
-                mpiexec -n 17 python3 PowerIteration.py
+                mpiexec -n 2 python3 PowerIteration.py
             done
         done
     done
