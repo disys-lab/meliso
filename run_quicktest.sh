@@ -32,7 +32,7 @@ declare -A MATERIALS=(
 )
 
 # List of ITER_LIMIT values
-ITER_LIMITS=(5)
+ITER_LIMITS=(11)
 
 # Loop over each material and experiment ID, then run experiments
 for material in "${!MATERIALS[@]}"; do
@@ -61,7 +61,7 @@ for material in "${!MATERIALS[@]}"; do
                 # Run the experiment using mpiexec
                 DT=1 OVERRIDE=1 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 10 python3 DistributedMatVec.py
+                mpiexec -n 2 python3 DistributedMatVec.py
             done
         done
     done

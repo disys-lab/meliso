@@ -1,9 +1,18 @@
-import os
+"""
+@author: Huynh Quang Nguyen Vo
+Power Iteration Module
+
+This script demonstrates the usage of the MPI-based distributed power iteration method on MELISO.
+
+Usage:
+    Run this script in an MPI environment.
+"""
+
 import time
 import numpy as np
-from solver.matvec.MatVecSolver import MatVecSolver
-from typing import List, Tuple
 from scipy.io import mmread
+from solver.matvec.MatVecSolver import MatVecSolver
+from typing import Tuple
 
 class PowerIteration:
     """
@@ -20,9 +29,6 @@ class PowerIteration:
         # --- Instantiate the MatVecSolver object. ---
         self.mv_solver = MatVecSolver()
 
-        # --- Save transpose matrix for external systems if required. ---
-        np.savetxt("A.T.csv", self.A.T, delimiter=",")
-
     @staticmethod
     def _normalized_vector(x: np.ndarray) -> Tuple[float, np.ndarray]:
         """
@@ -36,11 +42,10 @@ class PowerIteration:
         """
         Helper method to compute matrix-vector product using the MELISO matvec solver.
         """
-        self.mv_solver.initializeMat(matrix)
-        self.mv_solver.initializeX(vector)
-        self.mv_solver.matVec(correction=True)
+        self.mv_solver.initialize_data(matrix, vector)
+        self.mv_solver.matvec_mul(correction=True)
         self.mv_solver.finalize()
-        self.mv_solver.acquireMCAStats()
+        self.mv_solver.acquire_mca_stats()
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
     def solve(self) -> float:
@@ -80,7 +85,7 @@ def main():
     start_time = time.time()
 
     # --- Load the matrix A ---
-    A = mmread(os.getenv("A_FILE", "inputs/matrices/A.mtx")).toarray()
+    A = mmread("inputs/matrices/bcsstk02.mtx").toarray()
     num_iterations = 1000
     tol = 1e-6
 
