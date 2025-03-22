@@ -40,6 +40,10 @@ class PowerIteration:
         self.mv_solver.solverObject.initializeMat(matrix)
         self.mv_solver.solverObject.initializeX(vector)
         self.mv_solver.matVec(correction=True)
+        self.mv_solver.finalize()
+        self.mv_solver.acquireMCAStats()
+        self.mv_solver.parallelizedBenchmarkMatVec(0, 0, correction=True)
+        self.mv_solver.finalize()
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
     def solve(self) -> float:

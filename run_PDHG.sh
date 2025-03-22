@@ -1,9 +1,11 @@
 #!/bin/bash
 #SBATCH -p cascadelake
 #SBATCH -t 12:00:00
-#SBATCH -n 2
+#SBATCH -n 17
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
+#SBATCH --output=/dev/null
+#SBATCH --error=/dev/null
 
 # Exit immediately if a command exits with a non-zero status
 set -e
@@ -68,7 +70,7 @@ for material in "${!MATERIALS[@]}"; do
                 DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
                 A_FILE="$A_FILE" B_FILE="$B_FILE" C_FILE="$C_FILE" \
-                mpiexec -n 2 python3 PDHG.py
+                mpiexec -n 17 python3 PDHG.py
             done
         done
     done
