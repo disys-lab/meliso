@@ -28,65 +28,57 @@ class PowerIteration:
 
         # --- Instantiate the MatVecSolver object. ---
         self.mv_solver = MatVecSolver()
-
-    @staticmethod
-    def _normalized_vector(x: np.ndarray) -> Tuple[float, np.ndarray]:
-        """
-        Helper method to normalize a vector.
-        """
-        norm_x = np.linalg.norm(x)
-        x_normalized = x / norm_x if norm_x > 0 else x
-        return norm_x, x_normalized
     
     def _compute_matvec(self, matrix: np.ndarray, vector: np.ndarray) -> np.ndarray:
         """
-        Helper method to compute matrix-vector product using the MELISO matvec solver.
+        Helper method to compute matrix-vector product using the MELISO MatVecSolver.
         """
         self.mv_solver.initialize_data(matrix, vector)
         self.mv_solver.matvec_mul(correction=True)
         self.mv_solver.finalize()
-        self.mv_solver.acquire_mca_stats()
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
     def solve(self) -> float:
         """
         Perform the two-sided power iteration and return the approximate spectral norm.
         """
-        # --- Normalize the initial vector ---
+        # --- Initialize a normalized random vector ---
         v = np.random.rand(self.A.shape[1])
-        _ , v = self._normalized_vector(v)
-        last_v = v.copy()
+        v /= np.linalg.norm(v)
 
-        for i in range(self.num_iterations):
-            # --- Iteratively approximate left singular vector (w_k = A @ v_k) ---
+        # --- Power Iteration algorithm ---
+        for iteration in range(self.num_iterations):
+
+            # Compute Av (left singular vector)
             w = self._compute_matvec(self.A, v)
-            norm_w, w = self._normalized_vector(w)
-            if norm_w < self.tol:
-                print(f"Iteration {i}: Convergence reached with norm_w = {norm_w}")
+            w_norm = np.linalg.norm(w)
+            if w_norm < self.tol:
+                print(f"Converged at iteration {iteration}")
                 break
+            w /= w_norm
 
-            # --- Iteratively approximate right singular vector (v_{k+1} = A.T @ w_k = (A.T @ A) @ k) ---
+            # --- Compute A^T w (right singular vector) ---
             v_next = self._compute_matvec(self.A.T, w)
-            norm_v_next, v_next = self._normalized_vector(v_next)
-            if norm_v_next < self.tol:
-                print(f"Iteration {i}: Convergence reached with norm_v_next = {norm_v_next}")
+            v_next_norm = np.linalg.norm(v_next)
+            if v_next_norm < self.tol or np.linalg.norm(v_next / v_next_norm - v) < self.tol:
+                v = v_next / v_next_norm
+                print(f"Converged at iteration {iteration}")
                 break
 
-            last_v = v_next.copy()  # Update last valid vector
-            v = v_next.copy()
+            v = v_next / v_next_norm
+
 
         # --- Approximate the spectral norm by ||A @ v_k||_2 ---
-        w_final = self._compute_matvec(self.A, last_v)
-        spectral_norm_est = np.linalg.norm(w_final)
+        singular_value_est = np.linalg.norm(self._compute_matvec(self.A, v))
 
-        return spectral_norm_est
+        return singular_value_est
 
 def main():
     start_time = time.time()
 
     # --- Load the matrix A ---
     A = mmread("inputs/matrices/bcsstk02.mtx").toarray()
-    num_iterations = 1000
+    num_iterations = 1000000
     tol = 1e-6
 
     # --- Perform the power iteration ---
