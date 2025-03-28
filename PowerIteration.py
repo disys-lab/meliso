@@ -36,6 +36,7 @@ class PowerIteration:
         self.mv_solver.initialize_data(matrix, vector)
         self.mv_solver.matvec_mul(correction=True)
         self.mv_solver.finalize()
+        self.mv_solver.acquire_mca_stats()
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
     def solve(self) -> float:
@@ -77,7 +78,11 @@ def main():
     start_time = time.time()
 
     # --- Load the matrix A ---
-    A = mmread("inputs/matrices/bcsstk02.mtx").toarray()
+    A = np.array([
+        [3, 1, 0],
+        [1, 2, 1],
+        [0, 1, 3]
+    ])
     num_iterations = 1000000
     tol = 1e-6
 

@@ -342,18 +342,18 @@ class RootMCA(BaseMCA):
     def getMCAStats(self):
         mcaStats = np.zeros((self.num_mca_stats,1),dtype=float)
         self.comm.Gather(mcaStats, self.allMCAStats, root=self.ROOT_PROCESS_RANK)
-        for rank in range(self.size):
-            print("MCAStats for Rank {}".format(rank))
+        # for rank in range(self.size): # Only Non-root MCAs
+        #     print("MCAStats for Rank {}".format(rank))
             
-            print("\t totalSubArrayArea = {}".format(self.allMCAStats[rank][0][0]))
-            print("\t totalNeuronAreaIH = {}".format(self.allMCAStats[rank][1][0]))
-            print("\t subArrayIHLeakage = {}".format(self.allMCAStats[rank][2][0]))
-            print("\t leakageNeuronIH = {}".format(self.allMCAStats[rank][3][0]))
+        #     print("\t totalSubArrayArea = {}".format(self.allMCAStats[rank][0][0]))
+        #     print("\t totalNeuronAreaIH = {}".format(self.allMCAStats[rank][1][0]))
+        #     print("\t subArrayIHLeakage = {}".format(self.allMCAStats[rank][2][0]))
+        #     print("\t leakageNeuronIH = {}".format(self.allMCAStats[rank][3][0]))
 
-            print("\t subArrayIH->writeLatency = {}".format(self.allMCAStats[rank][4][0]))
-            print("\t arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy = {}".format(self.allMCAStats[rank][5][0]))
-            print("\t subArrayIH->readLatency = {}".format(self.allMCAStats[rank][6][0]))
-            print("\t arrayIH->readEnergy + subArrayIH->readDynamicEnergy = {}".format(self.allMCAStats[rank][7][0]))
+        #     print("\t subArrayIH->writeLatency = {}".format(self.allMCAStats[rank][4][0]))
+        #     print("\t arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy = {}".format(self.allMCAStats[rank][5][0]))
+        #     print("\t subArrayIH->readLatency = {}".format(self.allMCAStats[rank][6][0]))
+        #     print("\t arrayIH->readEnergy + subArrayIH->readDynamicEnergy = {}".format(self.allMCAStats[rank][7][0]))
 
         self.allMCAStats = self.allMCAStats.reshape((self.size,self.num_mca_stats))
 
