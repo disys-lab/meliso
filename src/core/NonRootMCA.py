@@ -250,7 +250,7 @@ class NonRootMCA(BaseMCA):
         else:
             x = np.empty(self.locCols, dtype=np.float64)
             self.comm.Recv(x, source=self.ROOT_PROCESS_RANK)
-            self.setWeights(self.A)
+            # self.setWeights(self.A)
 
             start_time = time.time()
             self.y = self.localMatVec(x)
