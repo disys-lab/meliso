@@ -5,8 +5,9 @@ import pandas as pd
 import numpy as np
 import scipy.io
 import scipy.sparse
+from typing import List, Dict, Any
 
-def extract_data(top_dir, output_csv_filename) -> None:
+def extract_data(top_dir: str, output_csv_filename: str) -> None:
     """
     Extracts data from text files in a directory structure and saves them to a CSV file.
 
@@ -116,6 +117,24 @@ def extract_data(top_dir, output_csv_filename) -> None:
         for data in data_list:
             writer.writerow(data)
 
+def preprocess_data(data: pd.DataFrame, save_path: str, experiment_ids: List, 
+                    iterations: List, materials: List, quantities: List):
+    """
+    Preprocesses the data by filtering and grouping it, then saves it to a CSV file.
+    """
+    filtered_data = data[
+    (data['iteration'].isin(iterations)) & 
+    (data['material'].isin(materials)) & 
+    (data['exp_id'].isin(experiment_ids))
+    ]
+    
+    # --- Group data by material, experiment, and iteration ---
+    grouped_data = filtered_data.groupby(['material', 'exp_id', 'iteration'])\
+        [quantities].mean().reset_index()
+
+    # --- Save the processed data to an Excel file ---
+    grouped_data.to_csv(save_path, index=False, header=True)
+    return None
+
 if __name__ == "__main__":
     extract_data("./reports/iterations", "varied_iterations.csv")
-    extract_data("./reports/replications", "varied_replications.csv")
