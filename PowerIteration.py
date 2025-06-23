@@ -91,7 +91,7 @@ def main():
     dominant_eigenvalue = power_solver.solve()
     print("Dominant eigenvalue:", dominant_eigenvalue)
     with open("lambda.txt", "w+") as file:
-        file.write(f"{dominant_eigenvalue}")
+        file.write(f"{dominant_eigenvalue}\n")
 
     end_time = time.time()
     print(f"Elapsed time: {end_time - start_time}")
