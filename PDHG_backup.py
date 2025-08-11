@@ -43,12 +43,15 @@ class PDHGSolver:
     # --- Matrix-Vector Multiplication (MVM) ---
     def _compute_matvec(self, matrix: np.ndarray, vector: np.ndarray) -> np.ndarray:
         """
-        Helper method to compute matrix-vector product using the MELISO MatVecSolver.
+        Helper method to compute matrix-vector product using external solver.
         """
-        self.mv_solver.initialize_data(matrix, vector)
-        self.mv_solver.matvec_mul(correction=True)
+        self.mv_solver.solverObject.initializeMat(matrix)
+        self.mv_solver.solverObject.initializeX(vector)
+        self.mv_solver.matVec(correction=True)
         self.mv_solver.finalize()
-        self.mv_solver.acquire_mca_stats()
+        self.mv_solver.acquireMCAStats()
+        self.mv_solver.parallelizedBenchmarkMatVec(0, 0, correction=True)
+        self.mv_solver.finalize()
         return np.loadtxt(self.RESULT_FILENAME, delimiter=",")
     
     @staticmethod
@@ -121,7 +124,7 @@ class PDHGSolver:
 
             # --- Append current iterate of x to the log file ---
             with open(self.LOG_FILENAME, "a+") as file:
-                file.write(f"{x}\n")
+                file.write(f"{self.x}\n")
                 
         # --- Remove previous all-iterates file (if any) before saving ---
         if os.path.exists(self.X_ITERATES_FILENAME):
@@ -130,21 +133,50 @@ class PDHGSolver:
         self.x_avg = np.mean(self.x_iterates, axis=0)
 
         return self.x_bar, self.x_avg
-
+    
 def main() -> None:
-    A = np.array([
-        [6, 3, 1, 0, 0],
-        [3, -1, 0, 1, 0],
-        [1, 0.25, 0, 0, 1]])
+    """Main execution block with MPI context management."""
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
+    root_rank = size - 1
+    
+    # --- The PDHG algorithm is executed only on the designated Root process ---
+    if rank == root_rank:
+        start_time = time.time()
 
-    b = np.array([40, 0, 4])
-    c = np.array([-30, -10, 0, 0, 0])
+        # Load input data from environment variables
+        A_file = os.environ["A_FILE"]
+        b_file = os.environ["B_FILE"]
+        c_file = os.environ["C_FILE"]
 
-    solver = PDHGSolver(A=A, b=b, c=c, num_iterations=100000)
-    x_final, _ = solver.solve()
+        A = np.loadtxt(A_file, delimiter=",")
+        b = np.loadtxt(b_file, delimiter=",")
+        c = np.loadtxt(c_file, delimiter=",")
 
-    print(f"Optimal solution: {x_final}")
-    print(f"Objective value: {-np.dot(c, x_final):.2f}")
+        # Configure solver parameters
+        solver = PDHGSolver(A=A, b=b, c=c, num_iterations=100000)
+
+        # Execute optimization
+        x_final, _ = solver.solve()
+
+        print(f"Optimal solution: {x_final}")
+        print(f"Objective value: {-np.dot(c, x_final):.2f}")
+
+        end_time = time.time()
+        print(f"Elapsed time: {end_time - start_time}")
+
+        # Broadcast termination signal to all workers
+        comm.bcast(True, root=root_rank)
+
+    else:
+        # Worker processes loop until termination signal is received
+        while True:
+            # Wait for broadcast from main process
+            done = comm.bcast(None, root=size-1)
+            if done:
+                break
+            MatVecSolver().matVec(correction=True)
 
 if __name__ == "__main__":
     main()
