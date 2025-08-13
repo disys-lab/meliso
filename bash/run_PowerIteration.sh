@@ -57,6 +57,7 @@ MAX_ITERS_LIST=(${MAX_ITERS_LIST:-2000})
 TOL=${TOL:-1e-6}
 USE_CORRECTION=${USE_CORRECTION:-1}   # Default to 1 -> apply error correction methods
 SEED_LIST=(${SEED_LIST:-0}) # Default to seed 0
+SELFTEST=${SELFTEST:-0} # Default to 0 -> do not run self-tests
 
 # --- Problems to process (space-separated list) ---
 # Adjust the path as needed
@@ -64,6 +65,11 @@ NPZ_FILES=(${NPZ_FILES:-inputs/problems/converted/relaxed_gen-ip002.npz})
 
 # --- MPI tasks (defaults to SLURM request) ---
 NTASKS=${NTASKS:-${SLURM_NTASKS:-2}}
+
+# --- If self-test is enabled, run once with a dummy placeholder (no matrix needed) ---
+if [[ "$SELFTEST" -eq 1 ]]; then
+  NPZ_FILES=("__selftest__")
+fi
 
 # ============================
 # Main Execution
@@ -103,17 +109,27 @@ for material in "${!MATERIALS[@]}"; do
           export EXP_CONFIG_FILE REPORT_PATH
 
           # --- Compose arguments ---
-          ARGS=(
-            --matrix "$npz"
-            --max-iter "$max_iter"
-            --tol "$TOL"
-            --reports-dir "$BASE_DIR"
-            --seed "$seed"
-            --save-temp-vectors
-            --tmpvec-dir "$TMPVEC_DIR"
-          )
-          if [[ "$USE_CORRECTION" -eq 1 ]]; then
-            ARGS+=(--correction)
+          if [[ "$SELFTEST" -eq 1 ]]; then
+            ARGS=(
+              --selftest
+              --reports-dir "$BASE_DIR"
+            )
+            if [[ "$USE_CORRECTION" -eq 1 ]]; then
+              ARGS+=(--correction)
+            fi
+          else
+            ARGS=(
+              --matrix "$npz"
+              --max-iter "$max_iter"
+              --tol "$TOL"
+              --reports-dir "$BASE_DIR"
+              --seed "$seed"
+              --save-temp-vectors
+              --tmpvec-dir "$TMPVEC_DIR"
+            )
+            if [[ "$USE_CORRECTION" -eq 1 ]]; then
+              ARGS+=(--correction)
+            fi
           fi
 
           # --- Launch (the root process is last rank in MELISO+) ---
