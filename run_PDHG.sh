@@ -11,68 +11,52 @@
 # Exit immediately on error
 set -e
 
-# ============================
-# Modules and Conda Distribution
-# ============================
+# --- Modules & Conda ---
 module load anaconda3/2022.10
 module load gcc/7.5.0
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate mpienv38
 
-# ============================
-# Paths and Environments for MELISO+ & MLP+NeuroSim Backend
-# ============================
+# --- Paths / Env for MELISO & C++ backend ---
 export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
-# ============================
 # Device / simulation options used by MELISO+
-#  DT         : Device Type seen by MELISO+ (0=Ideal, 1=Real)
-#  OVERRIDE   : Write-and-verify behavior for synaptic weights (0=adaptive stop, 1=force ITER_LIMIT)
-#  ITER_LIMIT : Maximum write-and-verify iterations per crossbar array
-#  PRECISION  : Programming granularity; residual tolerance ~ PRECISION^2
-# ============================
-export DT=${DT:-1}  # Default to Real Device
-export OVERRIDE=${OVERRIDE:-0} # Default to adaptive stop
-export ITER_LIMIT=${ITER_LIMIT:-21} # Default to 21 iterations
-export PRECISION=${PRECISION:-1e-4} # Default to 1e-4 precision
+export DT=${DT:-1}             # device type seen by MELISO+ (1 = RealDevice in your stack)
+export OVERRIDE=${OVERRIDE:-0} # write and verify seen by MELISO+ (0 = Stop the process when the residuals are too small)
+export ITER_LIMIT=${ITER_LIMIT:-100}   # max programming iterations per tile
+export PRECISION=${PRECISION:-1e-8}    # programming step; residual tol ~ PRECISION^2
 
-# ============================
-# Experiment grid
-# ============================
+# === Experiment grid ===
+# Number of replications
+REPS=${REPS:-1}
 
-# --- Number of replications for the experiment (to account for the memristor's stochastic behaviours) ---
-REPS=${REPS:-1} # Default to 1 replication
-
-# --- Experiment IDs (to match YAML names like exp1.yaml) ---
+# Experiment IDs (match YAML names like exp1.yaml)
 EXPIDs=(${EXPIDs:-"1"})
 
-# --- Materials mapping to a directory holding exp*.yaml config files ---
+# Materials -> config dir
 declare -A MATERIALS=(
     ["EpiRAM"]="${MATERIALS_EpiRAM:-config_files/pdhg/EpiRAM}"
-    )
+)
 
-# --- PDHG options ---
+# PDHG options
 MAX_ITERS_LIST=(${MAX_ITERS_LIST:-200000})
 TOL=${TOL:-1e-6}
 THETA=${THETA:-1.0}
 NORM_ITERS=${NORM_ITERS:-200}
 PATIENCE_LIST=(${PATIENCE_LIST:-5000})
-MONITOR=${MONITOR:-gap}          # Options: gap | primal_dual | kkt
+MONITOR=${MONITOR:-gap}          # gap | primal_dual | kkt
 MIN_DELTA=${MIN_DELTA:-0.0}
 PLOT_EVERY=${PLOT_EVERY:-500}
-USE_CORRECTION=${USE_CORRECTION:-1}  # Default to 1 -> apply error correction methods
+USE_CORRECTION=${USE_CORRECTION:-1}  # 1 -> pass --correction
 
-# --- Problems to process (space-separated list) ---
-# Adjust the path as needed
+# Problems (NPZ files). Space-separated list; customize as needed.
 NPZ_FILES=(${NPZ_FILES:-inputs/problems/converted/relaxed_gen-ip002.npz})
 
-# --- MPI tasks (defaults to SLURM request) ---
+# MPI tasks (defaults to Slurm request)
 NTASKS=${NTASKS:-${SLURM_NTASKS:-2}}
 
-# ============================
-# Main Execution
-# ============================
+# --- Run ---
 for material in "${!MATERIALS[@]}"; do
     CONFIG_PATH="${MATERIALS[$material]}"
 
@@ -83,7 +67,7 @@ for material in "${!MATERIALS[@]}"; do
           for patience in "${PATIENCE_LIST[@]}"; do
             for npz in "${NPZ_FILES[@]}"; do
 
-                # --- Build output locations ---
+                # Build output locations
                 tag="$(basename "${npz%.*}")_mi${max_iter}_pat${patience}_${MONITOR}"
                 BASE_DIR="reports/PDHG/${material}/exp${expid}/${tag}"
                 mkdir -p "${BASE_DIR}"
@@ -93,7 +77,7 @@ for material in "${!MATERIALS[@]}"; do
                 SOL_PATH="${BASE_DIR}/x.npy"
                 PLOT_PREFIX="${BASE_DIR}/diag"
 
-                # --- Clean old report (optional) ---
+                # Clean old report (optional)
                 [ -f "$REPORT_PATH" ] && rm -f "$REPORT_PATH"
 
                 echo "============================================================"
@@ -105,10 +89,10 @@ for material in "${!MATERIALS[@]}"; do
                 echo "Plots/logs: ${BASE_DIR}"
                 echo "============================================================"
 
-                # --- Export MELISO+-related environment for the backend ---
+                # Export MELISO-related env for the MCA backend
                 export EXP_CONFIG_FILE REPORT_PATH
 
-                # --- Compose arguments ---
+                # Compose arguments
                 ARGS=(
                   --npz "$npz"
                   --max_iter "$max_iter"
@@ -127,7 +111,7 @@ for material in "${!MATERIALS[@]}"; do
                     ARGS+=(--correction)
                 fi
 
-                # --- Launch (the root process is last rank in MELISO+) ---
+                # Launch (root is last rank in your MELISO code path)
                 mpiexec -n "$NTASKS" python3 pdhg_memristor_tweak.py "${ARGS[@]}"
             done
           done
