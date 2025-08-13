@@ -2,72 +2,124 @@
 #SBATCH -p batch
 #SBATCH -t 24:00:00
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=2
+#SBATCH --ntasks-per-node=10
+#SBATCH --cpus-per-task=1
 #SBATCH --mem=64G
 #SBATCH --mail-user=lucius.vo@okstate.edu
 #SBATCH --mail-type=END
 
-# Exit immediately if a command exits with a non-zero status
+# Exit immediately on error
 set -e
 
-# Setup
+# ============================
+# Modules and Conda Distribution
+# ============================
 module load anaconda3/2022.10
 module load gcc/7.5.0
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate mpienv38
 
-# Set up environment variables for library paths
+# ============================
+# Paths and Environments for MELISO+ & MLP+NeuroSim Backend
+# ============================
 export PYTHONPATH="${PYTHONPATH:-}:./build"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}:./build/"
 
-# Set paths for input files required by PowerIteration.py
+# ============================
+# Device / simulation options used by MELISO+
+#  DT         : Device Type seen by MELISO+ (0=Ideal, 1=Real)
+#  OVERRIDE   : Write-and-verify behavior for synaptic weights (0=adaptive stop, 1=force ITER_LIMIT)
+#  ITER_LIMIT : Maximum write-and-verify iterations per crossbar array
+#  PRECISION  : Programming granularity; residual tolerance ~ PRECISION^2
+# ============================
+export DT=${DT:-1}  # Default to Real Device
+export OVERRIDE=${OVERRIDE:-0} # Default to adaptive stop
+export ITER_LIMIT=${ITER_LIMIT:-21} # Default to 21 iterations
+export PRECISION=${PRECISION:-1e-4} # Default to 1e-4 precision
 
-# Common input vector path used by MatVecSolver
+# ============================
+# Experiment grid
+# ============================
 
-# Number of replications
-REPS=1
+# --- Number of replications for the experiment (to account for the memristor's stochastic behaviours) ---
+REPS=${REPS:-1} # Default to 1 replication
 
-# Experiment IDs
-EXPIDs=("1.1")
+# --- Experiment IDs (to match YAML names like exp1.yaml) ---
+EXPIDs=(${EXPIDs:-"1"})
 
-# List of materials and corresponding config paths
+# --- Materials mapping to a directory holding exp*.yaml config files ---
 declare -A MATERIALS=(
-    ["TaOx-HfOx"]="config_files/quickstart/TaOx-HfOx"
-)
+  ["EpiRAM"]="${MATERIALS_EpiRAM:-config_files/pdhg/EpiRAM}"
+  )
 
-# List of ITER_LIMIT values
-ITER_LIMITS=(5)
+# --- Power Iteration options ---
+MAX_ITERS_LIST=(${MAX_ITERS_LIST:-2000})
+TOL=${TOL:-1e-6}
+USE_CORRECTION=${USE_CORRECTION:-1}   # Default to 1 -> apply error correction methods
+SEED_LIST=(${SEED_LIST:-0}) # Default to seed 0
 
-# Loop over each material and experiment ID, then run experiments
+# --- Problems to process (space-separated list) ---
+# Adjust the path as needed
+NPZ_FILES=(${NPZ_FILES:-inputs/problems/converted/relaxed_gen-ip002.npz})
+
+# --- MPI tasks (defaults to SLURM request) ---
+NTASKS=${NTASKS:-${SLURM_NTASKS:-2}}
+
+# ============================
+# Main Execution
+# ============================
 for material in "${!MATERIALS[@]}"; do
-    CONFIG_PATH="${MATERIALS[$material]}"
+  CONFIG_DIR="${MATERIALS[$material]}"
 
-    for expid in "${EXPIDs[@]}"; do
-        EXP_CONFIG_FILE="${CONFIG_PATH}/exp${expid}.yaml"
+  for expid in "${EXPIDs[@]}"; do
+    EXP_CONFIG_FILE="${CONFIG_DIR}/exp${expid}.yaml"
 
-        # Loop over each ITER_LIMIT
-        for iter_limit in "${ITER_LIMITS[@]}"; do
+    for max_iter in "${MAX_ITERS_LIST[@]}"; do
+      for seed in "${SEED_LIST[@]}"; do
+        for npz in "${NPZ_FILES[@]}"; do
 
-            # Run the experiment REPS times for each ITER_LIMIT
-            for ((i=1; i<=REPS; i++)); do
-                echo "Running ${material}, exp${expid} with ITER_LIMIT=${iter_limit}, repetition $i"
-                REPORT_PATH="reports/PowerIteration/${material}/exp${expid}_iter_${iter_limit}_rep_${i}.txt"
+          # --- Build output locations ---
+          tag="$(basename "${npz%.*}")_mi${max_iter}_seed${seed}"
+          BASE_DIR="reports/PowerIteration/${material}/exp${expid}/${tag}"
+          mkdir -p "${BASE_DIR}"
 
-                # Create the report directory if it doesn't exist
-                mkdir -p "$(dirname "$REPORT_PATH")"
+          REPORT_PATH="${BASE_DIR}/meliso_report.txt"
+          CSV_AGG="${BASE_DIR}/power_iteration_results.csv"
+          TMPVEC_DIR="${BASE_DIR}/tmpvec_job${SLURM_JOB_ID}"
 
-                # Remove old report file if it exists
-                if [ -f "$REPORT_PATH" ]; then
-                    echo "Removing old report file: $REPORT_PATH"
-                    rm "$REPORT_PATH"
-                fi
+          # --- Clean old report (optional) ---
+          [ -f "$REPORT_PATH" ] && rm -f "$REPORT_PATH"
 
-                # Run the experiment
-                DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$XVEC_PATH" \
-                EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                A_FILE="$A_FILE" \
-                mpiexec -n 2 python3 PowerIteration.py
-            done
+          echo "============================================================"
+          echo "Material:   ${material}"
+          echo "Config:     ${EXP_CONFIG_FILE}"
+          echo "Problem:    ${npz}"
+          echo "Max iters:  ${max_iter}"
+          echo "Seed:       ${seed}"
+          echo "Output dir: ${BASE_DIR}"
+          echo "============================================================"
+
+          # --- Export MELISO+-related environment for the backend ---
+          export EXP_CONFIG_FILE REPORT_PATH
+
+          # --- Compose arguments ---
+          ARGS=(
+            --matrix "$npz"
+            --max-iter "$max_iter"
+            --tol "$TOL"
+            --reports-dir "$BASE_DIR"
+            --seed "$seed"
+            --save-temp-vectors
+            --tmpvec-dir "$TMPVEC_DIR"
+          )
+          if [[ "$USE_CORRECTION" -eq 1 ]]; then
+            ARGS+=(--correction)
+          fi
+
+          # --- Launch (the root process is last rank in MELISO+) ---
+          mpiexec -n "$NTASKS" python3 PowerIteration_memristor.py "${ARGS[@]}"
         done
+      done
     done
+  done
 done

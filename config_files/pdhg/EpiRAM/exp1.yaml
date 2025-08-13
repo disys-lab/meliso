@@ -6,12 +6,12 @@ exp_params:
   matrix_file: "inputs/matrices/A.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 1
-    mca_cols: 1
+    mca_rows: 3
+    mca_cols: 3
 
 device_config:
   root: "config_files/"
-  cell_rows: 32
-  cell_cols: 32
+  cell_rows: 64
+  cell_cols: 64
   assignment:
     device_EpiRAM.yaml: [[-1]]
