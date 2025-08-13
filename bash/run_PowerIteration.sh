@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH -p batch
-#SBATCH -t 24:00:00
+#SBATCH -p express
+#SBATCH -t 1:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=10
 #SBATCH --cpus-per-task=1
@@ -49,7 +49,7 @@ EXPIDs=(${EXPIDs:-"1"})
 
 # --- Materials mapping to a directory holding exp*.yaml config files ---
 declare -A MATERIALS=(
-  ["EpiRAM"]="${MATERIALS_EpiRAM:-config_files/pdhg/EpiRAM}"
+  ["EpiRAM"]="${MATERIALS_EpiRAM:-config_files/power_iteration/EpiRAM}"
   )
 
 # --- Power Iteration options ---

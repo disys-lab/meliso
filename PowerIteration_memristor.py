@@ -4,49 +4,24 @@
 Power Iteration on Memristor-based Systems via MELISO (MPI)
 ----------------------------------------------------------------
 
-Purpose
--------
-Estimate the operator norm (‖A‖₂, the largest singular value) of matrices
-used in optimization problems, by replacing ALL matrix–vector (matvec)
-operations with MELISO's distributed memristor-based MVM.
+Usage (examples):
+  mpiexec -n <K+1> python PowerIteration_memristor.py \
+      --matrix inputs/problems/converted/relaxed_gen-ip002.npz \
+      --max-iter 2000 --tol 1e-6 --correction \
+      --reports-dir reports/PowerIteration --seed 0
 
-MELISO/MPI conventions
-----------------------
-MELISO uses MPI with *the last rank as the "root"* (controller). The number of
-worker ranks must match your MCA grid: size-1 == mca_rows * mca_cols (from config).
-Set your device/distribution parameters via the same EXP_CONFIG_FILE YAML used in PDHG.
+  mpiexec -n <K+1> python PowerIteration_memristor.py \
+      --batch inputs/problems/converted/batch_list.txt \
+      --max-iter 2000 --tol 1e-6 --correction \
+      --reports-dir reports/PowerIteration --seed 0
 
-Requirements (environment)
---------------------------
-- EXP_CONFIG_FILE: path to the YAML experiment config (required by MELISO).
-- REPORT_PATH: a writable file path where MELISO appends experiment logs.
-               If not set, this script will set it to reports/PowerIteration/meliso_report.log
-- MELISO_SRC_PATH: (optional) if you have a non-standard src layout.
+Quick sanity check:
+  mpiexec -n <K+1> python PowerIteration_memristor.py --selftest
 
-Usage examples
---------------
-Single matrix:
-    mpirun -n <K+1> python PowerIteration_memristor.py \
-        --matrix inputs/problems/converted/relaxed_gen-ip002.npz \
-        --max-iter 2000 --tol 1e-6 --correction \
-        --reports-dir reports/PowerIteration --seed 0
-
-Batch of matrices (one path per line):
-    mpirun -n <K+1> python PowerIteration_memristor.py \
-        --batch inputs/problems/converted/batch_list.txt \
-        --max-iter 2000 --tol 1e-6 --correction \
-        --reports-dir reports/PowerIteration --seed 0
-
-Self-test (quick single MVM sanity check using MELISO's matvec; see notes):
-    mpirun -n <K+1> python PowerIteration_memristor.py --selftest
-
-Notes on "selftest":
-- It performs a single A@x and compares with NumPy on the *root rank output*
-  to detect obvious wiring/config issues. It requires a valid EXP_CONFIG_FILE.
-- This is not a comprehensive hardware-accuracy test; it's a functional check.
-
-Author: Vo, Huynh Quang Nguyen.
-Date: 2025-08-12
+Env required:
+  EXP_CONFIG_FILE (MELISO YAML). REPORT_PATH optional (we set default).
+Root rank convention:
+  MELISO uses the LAST MPI rank as the root (controller).
 """
 from __future__ import annotations
 
@@ -72,7 +47,6 @@ except Exception as e:
           file=sys.stderr)
     raise
 
-
 # =============================================================================
 # Utilities
 # =============================================================================
@@ -81,42 +55,24 @@ def _ensure_reports_dir(path: str, is_root: bool) -> None:
     if is_root:
         os.makedirs(path, exist_ok=True)
 
-
 def _set_default_report_path(reports_dir: str, is_root: bool) -> None:
-    """
-    MELISO's RootMCA reads REPORT_PATH unconditionally. Provide a safe default.
-    """
-    default_path = os.path.join(reports_dir, "meliso_report.log")
+    default_path = os.path.join(reports_dir, "MELISO_report.log")
     if "REPORT_PATH" not in os.environ or not os.environ["REPORT_PATH"]:
-        # Set for all ranks to avoid KeyError in NonRoot/Root code paths
         os.environ["REPORT_PATH"] = default_path
         if is_root:
             print(f"[root] REPORT_PATH not set; defaulting to {default_path}")
 
-
 def _require_exp_config(is_root: bool) -> None:
     if "EXP_CONFIG_FILE" not in os.environ or not os.environ["EXP_CONFIG_FILE"]:
         if is_root:
-            print("ERROR: EXP_CONFIG_FILE environment variable is not set. "
-                  "Point it to your MELISO YAML configuration.", file=sys.stderr)
-        # Synchronize and exit cleanly for all ranks
+            print("ERROR: EXP_CONFIG_FILE is not set. Point it to your MELISO YAML.", file=sys.stderr)
         MPI.COMM_WORLD.Barrier()
         sys.exit(2)
-
 
 def _basename_wo_ext(p: str) -> str:
     return os.path.splitext(os.path.basename(p))[0]
 
-
 def _load_matrix(path: str) -> np.ndarray:
-    """
-    Load matrix A from supported formats:
-    - .npz with keys A_row, A_col, A_data, A_shape  (COO sparse)
-    - .mtx (Matrix Market)
-    - .npy (dense)
-    - .csv/.txt (dense via np.loadtxt)
-    Returns dense float64 ndarray (MELISO expects float64).
-    """
     ext = os.path.splitext(path)[1].lower()
     if ext == ".npz":
         data = np.load(path)
@@ -132,31 +88,17 @@ def _load_matrix(path: str) -> np.ndarray:
     elif ext == ".npy":
         A = np.load(path).astype(np.float64)
     else:
-        # try csv/txt dense
         A = np.loadtxt(path, delimiter=",").astype(np.float64)
     return A
 
-
 def _nondegenerate_unit_rand(n: int, rng: np.random.Generator) -> np.ndarray:
-    """
-    Tiny random positive vector (avoids zero/degenerate starts), normalized.
-    Mirrors PDHG's safer init philosophy.
-    """
     v = rng.random(n) + 1e-12
     v /= np.linalg.norm(v) + 1e-18
     return v
 
-
 def _read_y_from_solver(solver: MatVecSolver, fallback_file: str = "y_mem_result.csv") -> np.ndarray:
-    """
-    Robustly retrieve y from MELISO:
-    - Prefer attribute on the underlying solver object if exposed
-    - Fall back to the CSV that RootMCA writes
-    """
-    # The underlying object is called "solver_object" in MatVecSolver
     y = None
     try:
-        # Root exposes y_mem_result after parallelMatVec()
         y = np.array(solver.solver_object.y_mem_result, dtype=np.float64).reshape(-1)
     except Exception:
         pass
@@ -164,41 +106,29 @@ def _read_y_from_solver(solver: MatVecSolver, fallback_file: str = "y_mem_result
         y = np.loadtxt(fallback_file, delimiter=",").astype(np.float64).reshape(-1)
     return y
 
-
 # =============================================================================
-# MatVec wrapper (thin, re-usable)
+# MatVec wrapper
 # =============================================================================
 
 class MELISOMatVec:
-    """
-    A minimal, robust wrapper that calls MELISO for A@x and A^T@y.
-
-    - Instantiated once per process
-    - Each call initializes matrix & vector on the MELISO side
-    - Reads result from solver (attribute if available; CSV as fallback)
-    - Finalizes after each call to keep the lifecycle simple & leak-free
-    """
+    """Wrapper that executes A@x and A^T@y via MELISO (last rank is root)."""
     def __init__(self, correction: bool) -> None:
         self.solver = MatVecSolver()
         self.correction = bool(correction)
         self.comm = MPI.COMM_WORLD
         self.rank = self.comm.Get_rank()
-        self.root = self.comm.Get_size() - 1  # MELISO uses the last rank as root
+        self.root = self.comm.Get_size() - 1
 
     def Av(self, A: np.ndarray, v: np.ndarray) -> np.ndarray:
-        # Initialize on root; other ranks no-op inside initialize_data()
         self.solver.initialize_data(A, v)
         self.solver.matvec_mul(correction=self.correction)
         y = _read_y_from_solver(self.solver)
-        # Ensure all ranks see the same y
         y = self.comm.bcast(y if self.rank == self.root else None, root=self.root)
-        # Wrap-up (safe to call on all ranks)
         self.solver.finalize()
         self.solver.acquire_mca_stats()
         return y
 
     def ATu(self, AT: np.ndarray, u: np.ndarray) -> np.ndarray:
-        # identical to Av but with A^T as the matrix
         self.solver.initialize_data(AT, u)
         self.solver.matvec_mul(correction=self.correction)
         z = _read_y_from_solver(self.solver)
@@ -206,7 +136,6 @@ class MELISOMatVec:
         self.solver.finalize()
         self.solver.acquire_mca_stats()
         return z
-
 
 # =============================================================================
 # Power iteration
@@ -219,31 +148,49 @@ class PIConfig:
     correction: bool = True
     seed: int = 0
 
-
-def power_iteration_norm(A: np.ndarray, mv: MELISOMatVec, cfg: PIConfig,
-                         is_root: bool) -> Tuple[float, int]:
+def power_iteration_norm(
+    A: np.ndarray,
+    mv: MELISOMatVec,
+    cfg: PIConfig,
+    is_root: bool,
+    save_temp: bool = True,
+    tmpvec_dir: Optional[str] = None,
+    job_id: Optional[str] = None,
+) -> Tuple[float, int]:
     """
     Two-sided power iteration for ‖A‖₂ (largest singular value).
-    Returns (norm_estimate, iterations_used).
+    Saves forward/adjoint vectors if save_temp=True (root rank only).
     """
     m, n = A.shape
     rng = np.random.default_rng(cfg.seed)
     v = _nondegenerate_unit_rand(n, rng)
 
+    # Temp-vector saver (root only)
+    def _maybe_save(arr: np.ndarray, phase: str, it: int) -> None:
+        if not (save_temp and is_root):
+            return
+        if tmpvec_dir is None:
+            return
+        os.makedirs(tmpvec_dir, exist_ok=True)
+        fname = f"{phase}_it{it:06d}_job{job_id if job_id else 'local'}.csv"
+        fpath = os.path.join(tmpvec_dir, fname)
+        np.savetxt(fpath, arr.reshape(-1), delimiter=",")
+
     # Iterate
     for k in range(1, cfg.max_iter + 1):
-        # 1) u ← A v / ‖A v‖
+        # Forward: u ← A v / ‖A v‖
         w = mv.Av(A, v)
+        _maybe_save(w, "fwd", k)
         w_norm = np.linalg.norm(w)
         if w_norm < cfg.tol:
             if is_root:
                 print(f"[root] Converged at iter {k} (‖A v‖ ≈ 0).")
-            # zero-ish matrix
             return 0.0, k
         u = w / (w_norm + 1e-18)
 
-        # 2) v_new ← Aᵀ u / ‖Aᵀ u‖
+        # Adjoint: v_new ← Aᵀ u / ‖Aᵀ u‖
         z = mv.ATu(A.T, u)
+        _maybe_save(z, "adj", k)
         z_norm = np.linalg.norm(z)
         if z_norm < cfg.tol:
             if is_root:
@@ -251,7 +198,7 @@ def power_iteration_norm(A: np.ndarray, mv: MELISOMatVec, cfg: PIConfig,
             return 0.0, k
         v_new = z / (z_norm + 1e-18)
 
-        # 3) Check vector change
+        # Check vector change
         if np.linalg.norm(v_new - v) < cfg.tol:
             v = v_new
             if is_root:
@@ -259,58 +206,55 @@ def power_iteration_norm(A: np.ndarray, mv: MELISOMatVec, cfg: PIConfig,
             break
         v = v_new
 
-    # One final multiply to get ‖A v‖
+    # Final multiply for ‖A v‖
     norm_est = float(np.linalg.norm(mv.Av(A, v)))
     return norm_est, k
-
 
 # =============================================================================
 # I/O helpers
 # =============================================================================
 
-def write_result_files(reports_dir: str, matrix_path: str, norm_est: float,
-                       iters: int, cfg: PIConfig, A_shape: Tuple[int, int],
-                       is_root: bool) -> None:
-    """
-    - Per-matrix text file: <matrix_name>_norm.txt
-    - Aggregated CSV: power_iteration_results.csv (append)
-    """
+def write_result_files(
+    reports_dir: str,
+    matrix_path: str,
+    norm_est: float,
+    iters: int,
+    cfg: PIConfig,
+    A_shape: Tuple[int, int],
+    is_root: bool,
+) -> None:
     if not is_root:
         return
     name = _basename_wo_ext(matrix_path)
-    # Per-matrix file
     out_txt = os.path.join(reports_dir, f"{name}_norm.txt")
     with open(out_txt, "w") as f:
         f.write(f"{norm_est}\n")
 
-    # Aggregated CSV
     csv_path = os.path.join(reports_dir, "power_iteration_results.csv")
     write_header = not os.path.exists(csv_path)
     with open(csv_path, "a", newline="") as f:
         w = csv.writer(f)
         if write_header:
-            w.writerow(["timestamp", "matrix", "rows", "cols",
-                        "max_iter", "tol", "correction", "seed",
-                        "norm_estimate", "iterations_used"])
-        w.writerow([time.strftime("%Y-%m-%d %H:%M:%S"),
-                    os.path.relpath(matrix_path),
-                    A_shape[0], A_shape[1],
-                    cfg.max_iter, cfg.tol, int(cfg.correction), cfg.seed,
-                    norm_est, iters])
+            w.writerow([
+                "timestamp", "matrix", "rows", "cols",
+                "max_iter", "tol", "correction", "seed",
+                "norm_estimate", "iterations_used"
+            ])
+        w.writerow([
+            time.strftime("%Y-%m-%d %H:%M:%S"),
+            os.path.relpath(matrix_path),
+            A_shape[0], A_shape[1],
+            cfg.max_iter, cfg.tol, int(cfg.correction), cfg.seed,
+            norm_est, iters
+        ])
     print(f"[root] Saved: {out_txt}")
     print(f"[root] Appended: {csv_path}")
 
-
 # =============================================================================
-# Self-test (optional, quick functional check)
+# Self-test (optional)
 # =============================================================================
 
 def selftest(mv: MELISOMatVec, is_root: bool) -> int:
-    """
-    Perform one MELISO A@x multiply on a small dense matrix and compare to NumPy.
-    This requires a valid EXP_CONFIG_FILE and REPORT_PATH.
-    Returns 0 on (rough) success, non-zero otherwise.
-    """
     A = np.array([[3.0, 1.0, 0.0],
                   [1.0, 2.0, 1.0],
                   [0.0, 1.0, 3.0]], dtype=np.float64)
@@ -319,10 +263,8 @@ def selftest(mv: MELISOMatVec, is_root: bool) -> int:
     y_np = A @ x
     err = np.linalg.norm(y_hw - y_np) / (np.linalg.norm(y_np) + 1e-18)
     if is_root:
-        print(f"[selftest] relative L2 error ≈ {err:.3e} (expect small if hardware/scaling/correction "
-              f"are configured appropriately)")
+        print(f"[selftest] relative L2 error ≈ {err:.3e} (expect small if config is aligned)")
     return 0
-
 
 # =============================================================================
 # Main
@@ -330,51 +272,67 @@ def selftest(mv: MELISOMatVec, is_root: bool) -> int:
 
 def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Power Iteration using MELISO (memristor-based MVM)")
+
     g_in = p.add_argument_group("Input selection")
     g_in.add_argument("--matrix", "-m", type=str, help="Path to a single matrix file (.npz/.mtx/.npy/.csv).")
-    g_in.add_argument("--batch", "-b", type=str, help="Path to a text file containing a list of matrices (one per line).")
+    g_in.add_argument("--batch", "-b", type=str, help="Text file of matrix paths (one per line).")
 
     g_run = p.add_argument_group("Run configuration")
-    g_run.add_argument("--max-iter", type=int, default=2000, help="Maximum iterations for power iteration.")
+    g_run.add_argument("--max-iter", type=int, default=2000, help="Maximum iterations.")
     g_run.add_argument("--tol", type=float, default=1e-6, help="Convergence tolerance on vector change.")
     g_run.add_argument("--correction", action="store_true", help="Enable MELISO output correction.")
-    g_run.add_argument("--seed", type=int, default=0, help="Random seed for the initial vector.")
+    g_run.add_argument("--seed", type=int, default=0, help="Random seed for initialization.")
 
     g_io = p.add_argument_group("I/O")
     g_io.add_argument("--reports-dir", type=str, default="reports/PowerIteration",
                       help="Where to write <matrix>_norm.txt and power_iteration_results.csv")
     g_io.add_argument("--config", "-c", type=str, help="Path to MELISO YAML config (sets EXP_CONFIG_FILE).")
 
-    p.add_argument("--selftest", action="store_true", help="Run a quick MELISO matvec check and exit.")
-    return p.parse_args(argv)
+    # Temp vectors: default on; can disable
+    p.add_argument("--save-temp-vectors", dest="save_temp_vectors", action="store_true",
+                   help="Save intermediate matvec outputs (CSV) with job-ID-based names (default).")
+    p.add_argument("--no-save-temp-vectors", dest="save_temp_vectors", action="store_false",
+                   help="Disable saving of intermediate matvec outputs.")
+    p.add_argument("--tmpvec-dir", type=str, default=None,
+                   help="Directory for temporary vectors (default: <reports-dir>/tmpvec_job<JOBID>).")
 
+    p.add_argument("--selftest", action="store_true", help="Run a quick MELISO matvec check and exit.")
+
+    # Defaults
+    p.set_defaults(save_temp_vectors=True)
+    return p.parse_args(argv)
 
 def main(argv: Optional[List[str]] = None) -> None:
     args = parse_args(argv)
 
-    # MPI layout
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
-    root = size - 1  # MELISO expects the last rank to be root
+    root = size - 1
     is_root = (rank == root)
 
-    # Reports dir + REPORT_PATH default
     _ensure_reports_dir(args.reports_dir, is_root=is_root)
     _set_default_report_path(args.reports_dir, is_root=is_root)
 
-    # EXP_CONFIG_FILE (must be set before invoking MELISO classes)
     if args.config:
         os.environ["EXP_CONFIG_FILE"] = args.config
     _require_exp_config(is_root=is_root)
 
-    # Create matvec helper
+    # Job ID for unique filenames
+    job_id = os.environ.get("SLURM_JOB_ID")
+    if not job_id:
+        job_id = time.strftime("%Y%m%d-%H%M%S") + f"-{os.getpid()}"
+
+    # Temp vectors directory
+    if args.tmpvec_dir:
+        tmpvec_dir = args.tmpvec_dir
+    else:
+        tmpvec_dir = os.path.join(args.reports_dir, f"tmpvec_job{job_id}")
+
     mv = MELISOMatVec(correction=args.correction)
 
-    # Optional self-test
     if args.selftest:
         rc = selftest(mv, is_root=is_root)
-        # Ensure all ranks exit together
         comm.Barrier()
         sys.exit(rc)
 
@@ -393,13 +351,10 @@ def main(argv: Optional[List[str]] = None) -> None:
         comm.Barrier()
         sys.exit(2)
 
-    # Run config
     cfg = PIConfig(max_iter=args.max_iter, tol=args.tol,
                    correction=args.correction, seed=args.seed)
 
-    # Process each matrix
     for mat_path in tasks:
-        # Root loads matrix then broadcasts dense array to all
         if is_root:
             print(f"\n=== Power Iteration: {mat_path} ===")
             A = _load_matrix(mat_path)
@@ -408,27 +363,27 @@ def main(argv: Optional[List[str]] = None) -> None:
         else:
             A = None
             shape = None
-        shape = MPI.COMM_WORLD.bcast(shape if is_root else None, root=root)
+        shape = comm.bcast(shape if is_root else None, root=root)
         if not is_root:
             A = np.empty(shape, dtype=np.float64)
-        MPI.COMM_WORLD.Bcast([A, MPI.DOUBLE], root=root)
+        comm.Bcast([A, MPI.DOUBLE], root=root)
 
-        # Compute norm
         t0 = time.time()
-        norm_est, iters = power_iteration_norm(A, mv, cfg, is_root=is_root)
+        norm_est, iters = power_iteration_norm(
+            A, mv, cfg, is_root=is_root,
+            save_temp=args.save_temp_vectors,
+            tmpvec_dir=tmpvec_dir,
+            job_id=job_id
+        )
         t1 = time.time()
         if is_root:
             print(f"[root] ‖A‖₂ ≈ {norm_est:.6e}  (iters={iters}, time={t1 - t0:.3f}s)")
 
-        # Save outputs (root only)
         write_result_files(args.reports_dir, mat_path, norm_est, iters, cfg, A.shape, is_root=is_root)
 
-    # Final sync + end
-    MPI.COMM_WORLD.Barrier()
+    comm.Barrier()
     if is_root:
         print("\nAll tasks complete.")
-    return
-
 
 if __name__ == "__main__":
     main()
