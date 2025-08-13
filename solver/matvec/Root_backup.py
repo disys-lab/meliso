@@ -39,23 +39,6 @@ class Root:
         self.y_benchmark_result = None
         self.error = None
 
-        # Directory to store temporary result vectors (y_mem_result.csv, etc.)
-        # Priority: MELISO_TMP_DIR > TMPVEC_DIR > /tmp/<SLURM_JOB_ID> > ./tmpvec
-        tmp_dir_env = os.environ.get("MELISO_TMP_DIR") or os.environ.get("TMPVEC_DIR")
-        if tmp_dir_env and isinstance(tmp_dir_env, str) and tmp_dir_env.strip():
-            self.tmp_out_dir = tmp_dir_env
-        else:
-            slurm_job = os.environ.get("SLURM_JOB_ID")
-            if slurm_job:
-                self.tmp_out_dir = os.path.join("/tmp", slurm_job)
-            else:
-                self.tmp_out_dir = os.path.join(os.getcwd(), "tmpvec")
-        try:
-            os.makedirs(self.tmp_out_dir, exist_ok=True)
-        except Exception:
-            # Fallback to current working directory on failure
-            self.tmp_out_dir = os.getcwd()
-
         # Placeholders for original input matrix dimensions
         self.origMat = None
         self.origMatRows = None
@@ -247,8 +230,7 @@ class Root:
         if type == "benchmark":
             self.y_benchmark_result = np.copy(self.y)
             print(f"\nBenchmarked Result: \n{self.y_benchmark_result}")
-            np.savetxt(os.path.join(self.tmp_out_dir, "y_benchmark_result.csv"),
-                       self.y_benchmark_result, delimiter=",")
+            np.savetxt("y_benchmark_result.csv", self.y_mem_result, delimiter=",")
         else:
             # Adjust the result based on device type
             if self.deviceType == 1:
@@ -256,8 +238,7 @@ class Root:
             else:
                 self.y_mem_result = (self.deviceType + 1) * np.copy(self.y)
             print(f"\nMultiplication Result: \n{self.y_mem_result}")
-            np.savetxt(os.path.join(self.tmp_out_dir, "y_mem_result.csv"),
-                       self.y_mem_result, delimiter=",")
+            np.savetxt("y_mem_result.csv", self.y_mem_result, delimiter=",")
         return None
 
     def benchmarkMatVec(self)-> None:
