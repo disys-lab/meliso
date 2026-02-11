@@ -30,6 +30,8 @@ class MatVecSolver:
             self.solverObject.initializeMat(self.mat)
 
     def matVec(self,correction=False):
+        self.initializeVec()
+        self.initializeMat()
         self.solverObject.parallelMatVec(correction=correction)
 
     def parallelizedBenchmarkMatVec(self, hardwareOn=1, scalingOn=0,correction=False):

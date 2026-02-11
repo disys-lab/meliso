@@ -165,17 +165,15 @@ class Root:
                     self.virtualizer[i, j]["x"] = np.copy(self.x.reshape(self.x.shape[0], 1)[sc:ec,:])
 
     def virtualParallelMatVec(self,i,j):
-        #set the matrix
+        # Set the matrix
         data = np.array([i,j], dtype=np.float64)
         self.comm.Bcast(data, root=self.mca.ROOT_PROCESS_RANK)
         #print("ROOT: broadcasted {} {}".format(i, j))
 
         self.mca.setMat(self.virtualizer[i,j]["mat"])
-
         self.mca.setX(self.virtualizer[i,j]["x"])
 
         y = self.mca.parallelMatVec()
-
         #print("ROOT: after parallelMatvec {} {}".format(i, j))
 
         self.virtualizer[i]["y"] = self.virtualizer[i]["y"] + y
