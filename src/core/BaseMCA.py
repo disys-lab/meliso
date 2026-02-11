@@ -41,7 +41,7 @@ class BaseMCA:
         #acquire from experiment config file
         self.ROOT_PROCESS_RANK = self.size-1
         self.exp_config =None
-        self.decomposition_dir = "/tmp/"
+        self.decomposition_dir = os.environ.get("TMPDIR", "/tmp/")
         self.distributed = 0
         self.mcaRows = 1
         self.mcaCols = 1
@@ -94,13 +94,14 @@ class BaseMCA:
 
         if "distributed" in self.exp_config["exp_params"].keys():
             self.distributed = 1
-
-            if "decomposition_dir" not in self.exp_config["exp_params"]["distributed"].keys():
-                print(
-                    "ExperimentConfigFileWarning: decomposition_dir not found/specified, using /tmp/ as default")
-            else:
-
+            # prefer env override; otherwise honor YAML; otherwise keep default.
+            env_decomp = os.environ.get("TMPDIR")
+            if env_decomp:
+                self.decomposition_dir = env_decomp
+            elif "decomposition_dir" in self.exp_config["exp_params"]["distributed"].keys():
                 self.decomposition_dir = self.exp_config["exp_params"]["distributed"]["decomposition_dir"]
+            else:
+                print("ExperimentConfigFileWarning: decomposition_dir not found; using {}".format(self.decomposition_dir))
 
             if "mca_rows" not in self.exp_config["exp_params"]["distributed"].keys():
                 raise Exception(

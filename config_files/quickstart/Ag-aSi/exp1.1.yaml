@@ -1,16 +1,16 @@
 exp_params:
   turnOnHardware: 1
   turnOnScaling: 0
-  matrix_name: "Iperturb"
-  matrix_file: "inputs/matrices/Iperturb.mtx"
+  matrix_name: "add32"
+  matrix_file: "inputs/matrices/add32.mtx"
   distributed:
     decomposition_dir: "/tmp/"
-    mca_rows: 1
-    mca_cols: 1
+    mca_rows: 3
+    mca_cols: 3
 
 device_config:
   root: "config_files/"
-  cell_rows: 66
-  cell_cols: 66
+  cell_rows: 512
+  cell_cols: 512
   assignment:
     device_Ag-aSi.yaml: [[-1]]
