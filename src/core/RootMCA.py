@@ -1,11 +1,21 @@
 from .BaseMCA import BaseMCA
 from scipy.io import mmread
-from scipy.sparse import issparse
 import numpy as np
 import os,sys,time
 
-REPORT_PATH = os.environ["REPORT_PATH"]
+#===================================================================================================
+# Utility functions
+#===================================================================================================
+def _out_path(name: str) -> str:
+    base = os.environ.get("TMPDIR")
+    if base:
+        os.makedirs(base, exist_ok=True)
+        return os.path.join(base, name)
+    return name
 
+#===================================================================================================
+# CLASS DEFINITION
+#===================================================================================================
 class RootMCA(BaseMCA):
     def __init__(self,comm):
         super().__init__(comm)
@@ -27,7 +37,9 @@ class RootMCA(BaseMCA):
         self.origMatRows=0
         self.origMatCols=0
         self.mat = None
+        self.globalMat = None
         self.x = None
+        self.globalX = None
 
         self.mat_min = None
         self.mat_max = None
@@ -45,11 +57,9 @@ class RootMCA(BaseMCA):
         #     self.setMat(self.mat)
     
     def printConfiguration(self):
-        print("\nExperiment Configuration:")
+        print("\nExperiment Configuration")
         print(self.exp_config["exp_params"])
-        
-        with open(REPORT_PATH, "a+") as file:
-            file.write(f'\nExperiment Configuration:\n {self.exp_config["exp_params"]}\n')
+
 
     def initializeMatrix(self,mat):
         if mat is None:
@@ -81,22 +91,30 @@ class RootMCA(BaseMCA):
 
     def readMatrix(self,filename):
         if not os.path.isfile(filename):
-            raise Exception("MatrixFileNotFoundError:The file %s does not exist or is invalid".format(filename))
-        mat = mmread(filename)
+            raise Exception(f"MatrixFileNotFoundError:The file {filename} \
+                            does not exist or is invalid")
+        
+        mat = None
+        if filename.endswith('.mtx'):
+            mat = mmread(filename)
+            if not isinstance(mat, np.ndarray):
+                mat = mat.toarray()
+        elif filename.endswith('.npy'):
+            mat = np.load(filename)
+        else:
+            raise Exception("MatrixFileFormatError: The file format is not supported. \
+                            Current supported formats are .mtx and .npy")
 
-        if not isinstance(mat, np.ndarray):
-            mat = mat.toarray()
-
-        #preprocess and set the matrix
-        #self.setMat(mat)
-
-        #capture original rows and cols
+        # Capture original rows and cols
         self.origMatRows = mat.shape[0]
         self.origMatCols = mat.shape[1]
         self.matRows = mat.shape[0]
         self.matCols = mat.shape[1]
         self.mat = mat
-    
+        self.globalMat = mat
+        np.savetxt(_out_path('global_input_matrix.txt'), self.globalMat, delimiter=',')
+
+
     def setMat(self,mat):
 
         #scale matrix
@@ -146,28 +164,22 @@ class RootMCA(BaseMCA):
             raise Exception("The Padded X vector rows {} exceed Padded Matrix Columns {}".format(
                 x.shape[0], self.matCols))
 
-        self.x = x #,self.x_min,self.x_max = self.scaleMatrix(x)
+        self.x = x
+
 
     def createDecompositionDir(self):
         decomp_folder_name = self.getDecompositionDir()
         if not os.path.isdir(decomp_folder_name):
             os.makedirs(decomp_folder_name, exist_ok=True)
 
-    def scaleMatrix(self, mat):
-
-        # --- Convert sparse matrices to dense arrays ---
-        if issparse(mat):
-            mat = mat.toarray()
-        
+    def scaleMatrix(self,mat):
         mat = mat.astype(np.float64)
         mat_row_sum = np.sum(mat, axis=1)
         mat_min = mat.min()
-        mat = mat - mat_min # Use a new variable instead of in-place subtraction to avoid sparse arithmetic issues
+        mat -= mat_min
         mat_max = mat.ptp()
-        if mat_max == 0:
-            raise ValueError("Matrix range is zero, cannot scale")
-        mat = mat / mat_max
-        return mat, mat_min, mat_max, mat_row_sum
+        mat /= mat_max
+        return mat,mat_min,mat_max,mat_row_sum
 
     def padMatrix(self,mat):
         rows = self.origMatRows = mat.shape[0]
@@ -266,8 +278,8 @@ class RootMCA(BaseMCA):
         (R,C): Dimension of the matrix.
         """
 
-        # assert (R == M * P), "We cannot map this matrix rows {} to the device {}x{}".format(R,M,P)
-        # assert (C == N * Q), "We cannot map this matrix cols {} to the device {}x{}".format(C,N,Q)
+        assert (R == M * P), "We cannot map this matrix rows {} to the device {}x{}".format(R,M,P)
+        assert (C == N * Q), "We cannot map this matrix cols {} to the device {}x{}".format(C,N,Q)
 
         # Assign the position based on the chiplet's index
         # For example, (i=3,j=3) means the chiplet located at Row 2 and Column 3
@@ -324,7 +336,7 @@ class RootMCA(BaseMCA):
             for rank in rank_list:
 
                 #initialize buffer for each rank
-                y = np.zeros(end - start, dtype=np.float64)
+                y = np.empty(end - start, dtype=np.float64)
 
                 #recieve from each rank
                 self.comm.Recv(y, source=rank)
@@ -332,8 +344,7 @@ class RootMCA(BaseMCA):
                 #print("ROOT: true result must be",np.dot(self.mat,self.x))
                 # print(self.mat.shape)
                 #add the result to the running sum of that rank.
-                if sum_y[start:end].size != 0:
-                    sum_y[start:end] = sum_y[start:end] + y
+                sum_y[start:end] = sum_y[start:end] + y
 
         #print("ROOT: recieved all ys ")
 
@@ -342,18 +353,18 @@ class RootMCA(BaseMCA):
     def getMCAStats(self):
         mcaStats = np.zeros((self.num_mca_stats,1),dtype=float)
         self.comm.Gather(mcaStats, self.allMCAStats, root=self.ROOT_PROCESS_RANK)
-        # for rank in range(self.size): # Only Non-root MCAs
-        #     print("MCAStats for Rank {}".format(rank))
+        for rank in range(self.size):
+            print("MCAStats for Rank {}".format(rank))
             
-        #     print("\t totalSubArrayArea = {}".format(self.allMCAStats[rank][0][0]))
-        #     print("\t totalNeuronAreaIH = {}".format(self.allMCAStats[rank][1][0]))
-        #     print("\t subArrayIHLeakage = {}".format(self.allMCAStats[rank][2][0]))
-        #     print("\t leakageNeuronIH = {}".format(self.allMCAStats[rank][3][0]))
+            print("\t totalSubArrayArea = {}".format(self.allMCAStats[rank][0][0]))
+            print("\t totalNeuronAreaIH = {}".format(self.allMCAStats[rank][1][0]))
+            print("\t subArrayIHLeakage = {}".format(self.allMCAStats[rank][2][0]))
+            print("\t leakageNeuronIH = {}".format(self.allMCAStats[rank][3][0]))
 
-        #     print("\t subArrayIH->writeLatency = {}".format(self.allMCAStats[rank][4][0]))
-        #     print("\t arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy = {}".format(self.allMCAStats[rank][5][0]))
-        #     print("\t subArrayIH->readLatency = {}".format(self.allMCAStats[rank][6][0]))
-        #     print("\t arrayIH->readEnergy + subArrayIH->readDynamicEnergy = {}".format(self.allMCAStats[rank][7][0]))
+            print("\t subArrayIH->writeLatency = {}".format(self.allMCAStats[rank][4][0]))
+            print("\t arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy = {}".format(self.allMCAStats[rank][5][0]))
+            print("\t subArrayIH->readLatency = {}".format(self.allMCAStats[rank][6][0]))
+            print("\t arrayIH->readEnergy + subArrayIH->readDynamicEnergy = {}".format(self.allMCAStats[rank][7][0]))
 
         self.allMCAStats = self.allMCAStats.reshape((self.size,self.num_mca_stats))
 
@@ -367,12 +378,6 @@ class RootMCA(BaseMCA):
         print("EC= {}; writeEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(writeEnergy), np.std(writeEnergy)))
         print("EC= {}; readLatency mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readLat), np.std(readLat)))
         print("EC= {}; readEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readEnergy), np.std(readEnergy)))
-
-        with open(REPORT_PATH, "a+") as file:
-            file.write(f"EC= {self.ERR_CORR}; writeLatency mean = {np.mean(writeLat)}, std_dev = {np.std(writeLat)}\n")
-            file.write(f"EC= {self.ERR_CORR}; writeEnergy mean = {np.mean(writeEnergy)}, std_dev = {np.std(writeEnergy)}\n")
-            file.write(f"EC= {self.ERR_CORR}; readLatency mean = {np.mean(readLat)}, std_dev = {np.std(readLat)}\n")
-            file.write(f"EC= {self.ERR_CORR}; readEnergy mean = {np.mean(readEnergy)}, std_dev = {np.std(readEnergy)}\n")
 
     def globalMatVec(self):
         return None

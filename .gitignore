@@ -11,6 +11,3 @@ inputs/
 reports/
 *.csv
 *.zip
-/documents
-*.pdf
-*.mtx
