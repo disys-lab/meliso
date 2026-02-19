@@ -6,6 +6,7 @@ correction=True
 mv = MatVecSolver()
 mv.matVec(correction=correction)
 mv.finalize()
+mv.acquireMCAStats()
 
 mv.parallelizedBenchmarkMatVec(0,0,correction=correction)
 mv.finalize()
