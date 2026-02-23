@@ -24,14 +24,12 @@
 # SLURM DIRECTIVES -- Job scheduler settings
 #===================================================================================================
 #SBATCH --partition long                          # Partition (queue) to submit the job to
-#SBATCH --time 120:00:00                          # Maximum runtime in HH:MM:SS format
-#SBATCH --nodes=1                                 # Number of nodes requested
-#SBATCH --ntasks=2                                # Total MPI ranks
-#SBATCH --ntasks-per-node=2                       # MPI ranks per node
+#SBATCH --time 500:00:00                          # Maximum runtime in HH:MM:SS format
+#SBATCH --ntasks=65                               # Total MPI ranks
 #SBATCH --mem=72GB                                # Total memory required for the job
 #SBATCH --mail-user=lucius.vo@okstate.edu         # Email address for job notifications
 #SBATCH --mail-type=END                           # Send an email when the job finishes
-#SBATCH --job-name=MLP_Inference                  # Job name for easier identification
+#SBATCH --job-name=strongScalingMatVec              # Job name for easier identification
 #===================================================================================================
 
 
@@ -70,16 +68,21 @@ set -euo pipefail
 #===================================================================================================
 # EXPERIMENT CONFIGURATION
 #===================================================================================================
-NUM_REPLICATIONS=1      # Number of repetitions for each experiment configuration
-EXPERIMENT_IDS=("1")    # A list of experiment IDs to run. Example: ("1" "2" "3")
-ITERATION_LIMITS=(21)    # A list of iteration limits for the write-and-verify. Example: (1 21)
+EXPERIMENT_NAME="strongScaling"           # A name for this set of experiments, used in report paths.
+NUM_PROCESSES=65                        # Total number of MPI processes to use for each run.
+DEVICE_TYPE=1                           # Device type to use for the experiments.
+NUM_REPLICATIONS=100                    # Number of repetitions for each experiment configuration
+EXPERIMENT_IDS=("1" "2" "3" "4" "5" "6")    # A list of experiment IDs to run.
+ITERATION_LIMITS=(21)                       # A list of iteration limits for the write-and-verify.
+ENABLE_OVERRIDE=0                           # Whether to enable the override feature for iteration limits
 INPUT_VECTOR_PATH="inputs/vectors/input_x.txt" # The file path for the common input vector.
-export TMPDIR="${SLURM_TMPDIR:-$PWD/reports/MLP_Inference/SLURM_${SLURM_JOB_ID}}"
-mkdir -p "$TMPDIR/logs"
 
 # Define the materials to be tested and the paths to their configuration directories.
 declare -A MATERIAL_CONFIGS=(
-    ["EpiRAM"]="config_files/MLP/EpiRAM"
+    ["Ag-aSi"]="config_files/${EXPERIMENT_NAME}/Ag-aSi"
+    ["AlOx-HfO2"]="config_files/${EXPERIMENT_NAME}/AlOx-HfO2"
+    ["EpiRAM"]="config_files/${EXPERIMENT_NAME}/EpiRAM"
+    ["TaOx-HfO2"]="config_files/${EXPERIMENT_NAME}/TaOx-HfO2"
     )
 
 
