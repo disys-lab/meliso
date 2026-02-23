@@ -3,9 +3,10 @@
 #===================================================================================================
 # SCRIPT DESCRIPTION
 #===================================================================================================
+# @author: Huynh Quang Nguyen Vo
 # This script automates running a series of computational experiments using the
-# 'MELISO_MLP.py' Python script. It is designed to be submitted to a Slurm workload
-# manager.
+# 'DistributedMatVec.py' Python script for strong-scaling experiments. It is designed to be submitted 
+# to a Slurm workload manager.
 #
 # The script iterates through a predefined set of materials, experiment IDs, and
 # iteration limits. For each unique combination, it runs the simulation multiple times

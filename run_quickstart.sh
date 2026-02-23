@@ -4,6 +4,7 @@
 #===================================================================================================
 # SCRIPT DESCRIPTION
 #===================================================================================================
+# @author: Huynh Quang Nguyen Vo
 # This script automates running a series of computational experiments using the
 # 'DistributedMatVec.py' Python script. It is designed to be submitted to a Slurm workload
 # manager.
