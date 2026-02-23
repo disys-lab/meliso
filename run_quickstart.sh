@@ -78,7 +78,7 @@ DEVICE_TYPE=1                       # Device type to use for the experiments.
 NUM_REPLICATIONS=1                  # Number of repetitions for each experiment configuration
 EXPERIMENT_IDS=("1")                # A list of experiment IDs to run. Example: ("1" "2" "3")
 ITERATION_LIMITS=(21)               # A list of iteration limits for the write-and-verify. Example: (1 21)
-ENABLE_OVERRIDE=1                   # Whether to enable the override feature for iteration limits (1 for true, 0 for false).
+ENABLE_OVERRIDE=0                   # Whether to enable the override feature for iteration limits (1 for true, 0 for false).
 INPUT_VECTOR_PATH="inputs/vectors/input_x.txt" # The file path for the common input vector.
 
 # Define the materials to be tested and the paths to their configuration directories.
