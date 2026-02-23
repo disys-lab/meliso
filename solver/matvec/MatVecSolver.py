@@ -15,9 +15,8 @@ class MatVecSolver:
         self.xvec = xvec
         self.mat = mat
         
-        # Use rank 0 for the root process (standard convention)
         if MPI.COMM_WORLD.Get_rank() == MPI.COMM_WORLD.Get_size() - 1:
-            self.solverObject = Root(MPI.COMM_WORLD)
+            self.solverObject = Root(MPI.COMM_WORLD, x=self.xvec, mat=self.mat)
         else:
             self.solverObject = NonRoot(MPI.COMM_WORLD)
 
@@ -30,8 +29,6 @@ class MatVecSolver:
             self.solverObject.initializeMat(self.mat)
 
     def matVec(self,correction=False):
-        self.initializeVec()
-        self.initializeMat()
         self.solverObject.parallelMatVec(correction=correction)
 
     def parallelizedBenchmarkMatVec(self, hardwareOn=1, scalingOn=0,correction=False):
