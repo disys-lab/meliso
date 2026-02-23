@@ -72,14 +72,18 @@ set -euo pipefail
 #===================================================================================================
 # EXPERIMENT CONFIGURATION
 #===================================================================================================
-NUM_REPLICATIONS=1      # Number of repetitions for each experiment configuration
-EXPERIMENT_IDS=("1")    # A list of experiment IDs to run. Example: ("1" "2" "3")
-ITERATION_LIMITS=(21)    # A list of iteration limits for the write-and-verify. Example: (1 21)
+EXPERIMENT_NAME="quickstart"        # A name for this set of experiments, used in report paths.
+NUM_PROCESSES=2                     # Total number of MPI processes to use for each run.
+DEVICE_TYPE=1                       # Device type to use for the experiments.
+NUM_REPLICATIONS=1                  # Number of repetitions for each experiment configuration
+EXPERIMENT_IDS=("1")                # A list of experiment IDs to run. Example: ("1" "2" "3")
+ITERATION_LIMITS=(21)               # A list of iteration limits for the write-and-verify. Example: (1 21)
+ENABLE_OVERRIDE=1                   # Whether to enable the override feature for iteration limits (1 for true, 0 for false).
 INPUT_VECTOR_PATH="inputs/vectors/input_x.txt" # The file path for the common input vector.
 
 # Define the materials to be tested and the paths to their configuration directories.
 declare -A MATERIAL_CONFIGS=(
-    ["EpiRAM"]="config_files/quickstart/EpiRAM"
+    ["EpiRAM"]="config_files/${EXPERIMENT_NAME}/EpiRAM"
     )
 
 
@@ -103,10 +107,11 @@ for material in "${!MATERIAL_CONFIGS[@]}"; do
             for ((rep=1; rep<=NUM_REPLICATIONS; rep++)); do
 
                 # --- PREPARE FOR THIS RUN ---
+                echo "[INFO] RUNNING: Device_Type='${DEVICE_TYPE}', Experiment_name='${EXPERIMENT_NAME}', Override='${ENABLE_OVERRIDE}'"
                 echo "[INFO] RUNNING: Material='${material}', Exp_ID='${expid}', Iter_Limit='${iter_limit}', Repetition='${rep}'"
 
                 # Define the output path for the report file for this specific run.
-                REPORT_PATH="reports/MLP/${material}/exp${expid}_iter_${iter_limit}_rep_${rep}.txt"
+                REPORT_PATH="reports/${EXPERIMENT_NAME}/${material}/exp${expid}_iter_${iter_limit}_rep_${rep}.txt"
 
                 # Create the directory structure for the report file if it does not already exist.
                 mkdir -p "$(dirname "$REPORT_PATH")"
@@ -124,9 +129,10 @@ for material in "${!MATERIAL_CONFIGS[@]}"; do
 
                 # Set environment variables for the Python script and run it with mpiexec.
                 # These variables are only set for the duration of this single command.
-                DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$INPUT_VECTOR_PATH" \
+                DT=${DEVICE_TYPE} OVERRIDE=${ENABLE_OVERRIDE} \
+                ITER_LIMIT="$iter_limit" XVEC_PATH="$INPUT_VECTOR_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n 2 python3 DistributedMatVec.py
+                mpiexec -n ${NUM_PROCESSES} python3 distributedMatVec.py
 
                 echo "[INFO] DONE: Repetition ${rep} finished."
                 echo -e "\n"
