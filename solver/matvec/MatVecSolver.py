@@ -41,7 +41,7 @@ class MatVecSolver:
 
         self.xvec = xvec
         self.mat = mat
-        self.y = None
+        self.y = np.zeros_like(xvec) # Placeholder for the MVM result
         
         # MPI Handler
         self.comm = MPI.COMM_WORLD
@@ -87,6 +87,8 @@ class MatVecSolver:
             correction (bool, optional): A flag indicating whether to apply a min-max scaling 
             reversion during the MVM. Defaults to False.
         """
+        self.initializeVec() # Ensure the input vector is initialized before performing MVM
+        self.initializeMat() # Ensure the input matrix is initialized before performing MVM
         self.solverObject.parallelMatVec(correction=correction)
 
     def parallelizedBenchmarkMatVec(self, hardwareOn=1, scalingOn=0, correction=False):
@@ -119,6 +121,16 @@ class MatVecSolver:
         any necessary cleanup, memory deallocation, or termination procedures are properly executed.
         """
         self.solverObject.finalize()
+        self.comm.Barrier() # Ensure all processes reach this point before proceeding to stop communication
+
+    def stopCommunication(self):
+        """
+        Stops the MPI communication.
+
+        This method calls `MPI.Finalize()` to cleanly terminate the MPI environment, ensuring that all 
+        processes are properly synchronized and that resources are released.
+        """
+        MPI.Finalize()
 
     def acquireResults(self):
         """

@@ -81,6 +81,7 @@ EXPERIMENT_IDS=("1")                # A list of experiment IDs to run. Example: 
 ITERATION_LIMITS=(21)               # A list of iteration limits for the write-and-verify. Example: (1 21)
 ENABLE_OVERRIDE=0                   # Whether to enable the override feature for iteration limits (1 for true, 0 for false).
 INPUT_VECTOR_PATH="inputs/vectors/input_x.txt" # The file path for the common input vector.
+TMPDIR="tmp/"                       # Temporary directory for intermediate files (if needed). 
 
 # Define the materials to be tested and the paths to their configuration directories.
 declare -A MATERIAL_CONFIGS=(

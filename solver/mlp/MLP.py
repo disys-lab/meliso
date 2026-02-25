@@ -27,7 +27,7 @@ class MLP:
             z2 = np.dot(self.W2, a1) + self.B2
             a2 = self.__softmax__(z2)
             
-            return a2
+            return z1, z2, a1,a2
     
     #-----------------------------------------------------------------------------------------------
     # Internal methods for the MLP class

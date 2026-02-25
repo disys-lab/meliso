@@ -316,12 +316,16 @@ class Root:
                           x_min, x_max, x_sum)
             self.y_mem_result = np.copy(self.y_orig)
             print(f"[INFO] MELISO+ Result (with normalization reversal): \n {self.y_mem_result}")
+            
+            # Save the memristive MVM result (with normalization reversal)
+            np.savetxt(('./y_mem_result.txt'), self.y_mem_result, delimiter=',')
         else:
             self.y_mem_result = np.copy(self.y)
             print(f"[INFO] MELISO+ Result (without normalization reversal): \n {self.y_mem_result}")
+            # Save the memristive MVM result (without normalization reversal)
+            np.savetxt(('./y_mem_result.txt'), self.y_mem_result, delimiter=',')
 
-        # Save the memristive MVM result
-        np.savetxt(__out_path__('y_mem_result.txt'), self.y_mem_result, delimiter=',')
+
 
     def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0, correction=False):
         """
