@@ -1,7 +1,6 @@
 # Tutorials for MELISO+
 
-Created by: Lucius Vo
-Category: Tutorials
+Created by: Huynh Quang Nguyen Vo
 Last updated time: February 23, 2026 1:28 PM
 
 # Distributed Matrix-Vector Multiplication (distributedMVM)
