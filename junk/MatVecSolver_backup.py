@@ -2,8 +2,8 @@ from mpi4py import MPI
 import numpy as np
 import os,sys
 
-from .Root import Root
-from .NonRoot import NonRoot
+from ..solver.matvec.Root import Root
+from ..solver.matvec.NonRoot import NonRoot
 
 class MatVecSolver:
     """

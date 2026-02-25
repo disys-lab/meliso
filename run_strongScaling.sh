@@ -1,13 +1,12 @@
 #!/bin/bash
 
-
 #===================================================================================================
 # SCRIPT DESCRIPTION
 #===================================================================================================
 # @author: Huynh Quang Nguyen Vo
 # This script automates running a series of computational experiments using the
-# 'DistributedMatVec.py' Python script for experiments with varied iterations enforced to the 
-# write-and-verify process. It is designed to be submitted to a Slurm workload manager.
+# 'DistributedMatVec.py' Python script for strong-scaling experiments. It is designed to be submitted 
+# to a Slurm workload manager.
 #
 # The script iterates through a predefined set of materials, experiment IDs, and
 # iteration limits. For each unique combination, it runs the simulation multiple times
@@ -25,16 +24,13 @@
 #===================================================================================================
 # SLURM DIRECTIVES -- Job scheduler settings
 #===================================================================================================
-#SBATCH --partition batch                         # Partition (queue) to submit the job to
-#SBATCH --time 12:00:00                           # Maximum runtime in HH:MM:SS format
-#SBATCH --nodes=1                                 # Number of nodes requested
-#SBATCH --ntasks=2                                # Total MPI ranks
-#SBATCH --ntasks-per-node=2                       # MPI ranks per node
-#SBATCH --mem=32GB                                # Total memory required for the job
+#SBATCH --partition long                          # Partition (queue) to submit the job to
+#SBATCH --time 500:00:00                          # Maximum runtime in HH:MM:SS format
+#SBATCH --ntasks=65                               # Total MPI ranks
+#SBATCH --mem=72GB                                # Total memory required for the job
 #SBATCH --mail-user=lucius.vo@okstate.edu         # Email address for job notifications
 #SBATCH --mail-type=END                           # Send an email when the job finishes
-#SBATCH --output=logs/VariedIterationsMatVec%j.out
-#SBATCH --job-name=VariedIterationsMatVec         # Job name for easier identification
+#SBATCH --job-name=strongScalingMatVec              # Job name for easier identification
 #===================================================================================================
 
 
@@ -73,13 +69,13 @@ set -euo pipefail
 #===================================================================================================
 # EXPERIMENT CONFIGURATION
 #===================================================================================================
-EXPERIMENT_NAME="iterations"        # A name for this set of experiments, used in report paths.
-NUM_PROCESSES=2                     # Total number of MPI processes to use for each run.
-DEVICE_TYPE=1                       # Device type to use for the experiments.
-NUM_REPLICATIONS=100                # Number of repetitions for each experiment configuration
-EXPERIMENT_IDS=("1" "2" "3" "4")    # A list of experiment IDs to run.
-ITERATION_LIMITS=(21)               # A list of iteration limits for the write-and-verify.
-ENABLE_OVERRIDE=1                   # Whether to enable the override feature for iteration limits
+EXPERIMENT_NAME="strongScaling"           # A name for this set of experiments, used in report paths.
+NUM_PROCESSES=65                        # Total number of MPI processes to use for each run.
+DEVICE_TYPE=1                           # Device type to use for the experiments.
+NUM_REPLICATIONS=100                    # Number of repetitions for each experiment configuration
+EXPERIMENT_IDS=("1" "2" "3" "4" "5" "6")    # A list of experiment IDs to run.
+ITERATION_LIMITS=(21)                       # A list of iteration limits for the write-and-verify.
+ENABLE_OVERRIDE=0                           # Whether to enable the override feature for iteration limits
 INPUT_VECTOR_PATH="inputs/vectors/input_x.txt" # The file path for the common input vector.
 
 # Define the materials to be tested and the paths to their configuration directories.
@@ -111,32 +107,20 @@ for material in "${!MATERIAL_CONFIGS[@]}"; do
             for ((rep=1; rep<=NUM_REPLICATIONS; rep++)); do
 
                 # --- PREPARE FOR THIS RUN ---
-                echo "[INFO] RUNNING: Device_Type='${DEVICE_TYPE}', Experiment_name='${EXPERIMENT_NAME}', Override='${ENABLE_OVERRIDE}'"
                 echo "[INFO] RUNNING: Material='${material}', Exp_ID='${expid}', Iter_Limit='${iter_limit}', Repetition='${rep}'"
 
-                # Define the output path for the report file for this specific run.
-                REPORT_PATH="reports/${EXPERIMENT_NAME}/${material}/exp${expid}_iter_${iter_limit}_rep_${rep}.txt"
-
-                # Create the directory structure for the report file if it does not already exist.
-                mkdir -p "$(dirname "$REPORT_PATH")"
-
-                # For a clean run, remove the report file from a previous run if it exists.
-                if [ -f "$REPORT_PATH" ]; then
-                    echo "[INFO] WARNING: Removing old report file: $REPORT_PATH"
-                    rm "$REPORT_PATH"
-                fi
 
                 # --- EXECUTE THE SIMULATION ---
-                echo "[INFO] Executing 'mpiexec' ..."
+                RUN_TAG="${material}_exp${expid}_it${iter_limit}_rep${rep}"
+                REPORT_PATH="$TMPDIR/logs/${RUN_TAG}.log"
                 echo "[INFO]   - Config File: ${EXP_CONFIG_FILE}"
                 echo "[INFO]   - Report File: ${REPORT_PATH}"
 
                 # Set environment variables for the Python script and run it with mpiexec.
                 # These variables are only set for the duration of this single command.
-                DT=${DEVICE_TYPE} OVERRIDE=${ENABLE_OVERRIDE} \
-                ITER_LIMIT="$iter_limit" XVEC_PATH="$INPUT_VECTOR_PATH" \
+                DT=1 OVERRIDE=0 ITER_LIMIT="$iter_limit" XVEC_PATH="$INPUT_VECTOR_PATH" \
                 EXP_CONFIG_FILE="$EXP_CONFIG_FILE" REPORT_PATH="$REPORT_PATH" \
-                mpiexec -n ${NUM_PROCESSES} python3 distributedMatVec.py
+                mpiexec -n 2 python3 MELISO_MLP.py
 
                 echo "[INFO] DONE: Repetition ${rep} finished."
                 echo -e "\n"

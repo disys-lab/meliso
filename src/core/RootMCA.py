@@ -1,17 +1,30 @@
+import os
+import numpy as np
+from pathlib import Path
 from .BaseMCA import BaseMCA
 from scipy.io import mmread
-import numpy as np
-import os,sys,time
+
 
 #===================================================================================================
 # Utility functions
 #===================================================================================================
-def _out_path(name: str) -> str:
-    base = os.environ.get("TMPDIR")
-    if base:
-        os.makedirs(base, exist_ok=True)
-        return os.path.join(base, name)
-    return name
+def __report_path__(fallback_name: str = "default_report.txt") -> Path:
+    env_path = os.environ.get("REPORT_PATH")
+    
+    if env_path:    # Use the exact path provided by `REPORT_PATH` environment variable if it exists
+        path = Path(env_path)
+    else:           # Fallback for manual testing outside of the bash script
+        path = Path(fallback_name)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return path
+
+def __write_report__(content: str):
+    path = __report_path__()
+    
+    with path.open('a+') as f:
+        f.write(content + '\n')
+        
+    return None
 
 #===================================================================================================
 # CLASS DEFINITION
@@ -20,17 +33,15 @@ class RootMCA(BaseMCA):
     def __init__(self,comm):
         super().__init__(comm)
 
+        # Dictionary containing the column start and end indices for each rank's matrix chunk.
+        # This is used to determine which portion of the input vector `x`` to send to each rank during the parallel MVM.
+        # Dictionary format: {rank: [col_start_index, col_end_index]}
         self.col_parts = {}
-        #dict containing something like rank:[start_col,end_col]
-                                        # eg:
-                                        # 0 : [0,2]
-                                        # 1 : [3,5]
+
+        # Dictionary containing the row start indices and the corresponding ranks that have that row decomposition.
+        # This is used to determine which ranks to receive the partial results from during the parallel MVM and how to sum them up to get the final output vector `y`.
+        # Dictionary format: {row_start_index: [ranks that have this row decomposition]}
         self.row_parts_ranks = {}
-        # dict containing something like {start_row:[ranks that have this row decomposition]}
-                                    #eg: [
-                                      #   0:[0,1,2,3,4,5],
-                                      #   4:[6,7,8,9,10,11]
-                                      # ]
 
         self.matRows = 0
         self.matCols = 0
@@ -50,46 +61,63 @@ class RootMCA(BaseMCA):
         self.x_sum = None
 
         self.allMCAStats = np.zeros((self.size,self.num_mca_stats,1),dtype=float)
-
-        #self.initializeMatrix(mat)
-
-        # if set_mat:
-        #     self.setMat(self.mat)
     
     def printConfiguration(self):
+        """
+        Display the current experimental settings for an instance of the `RootMCA` class. 
+        This includes all parameters defined in the experiment configuration file in.
+        The configuration file should be located at `config_files/<experiment_name>/<material_name>/` directory.
+        """
+        assert self.exp_config is not None, \
+            "ExperimentConfigError: Experiment configuration is not set for this RootMCA instance."
         print("\nExperiment Configuration")
         print(self.exp_config["exp_params"])
 
+        # Write the configuration to the report file
+        string_builder = []
+        string_builder.append("\nExperiment Configuration")
+        string_builder.append(str(self.exp_config["exp_params"]))
+        __write_report__("\n".join(string_builder))
+
 
     def initializeMatrix(self,mat):
+        """Initialize the matrix for the MVM operation."""
         if mat is None:
             self.matrix_file = None
             
             self.printConfiguration()
-            if "matrix_file" not in self.exp_config["exp_params"].keys():
-                raise Exception("ExperimentConfigFileError: Matrix file not specified in %s".format(self.expConfigFile))
-
-            self.matrix_file = self.exp_config["exp_params"]["matrix_file"]
-            self.processMatrixFile()
+            if self.exp_config is not None:
+                if "matrix_file" not in self.exp_config["exp_params"].keys():
+                    raise Exception(f"ExperimentConfigFileError: Matrix file not specified in {self.expConfigFile}")
+                else:
+                    self.matrix_file = self.exp_config["exp_params"]["matrix_file"]
+                    self.processMatrixFile()
 
         else:
             self.mat = mat
-            # capture original rows and cols
+
+            # Capture original rows and cols of the matrix before any scaling or padding is applied
             self.origMatRows = mat.shape[0]
             self.origMatCols = mat.shape[1]
             self.matRows = mat.shape[0]
             self.matCols = mat.shape[1]
 
         self.mat, self.mat_min, self.mat_max, self.mat_row_sum = self.scaleMatrix(self.mat)
-        
-        self.hardwareOn = self.exp_config["exp_params"]["turnOnHardware"]
-        self.scalingOn = self.exp_config["exp_params"]["turnOnScaling"]
+
+        if self.exp_config is not None:
+            self.hardwareOn = self.exp_config["exp_params"]["turnOnHardware"]
+            self.scalingOn = self.exp_config["exp_params"]["turnOnScaling"]
 
     def processMatrixFile(self):
-        #read the matrix from file
+        """Load the external data into the `RootMCA` instance."""
         self.readMatrix(self.matrix_file)
 
     def readMatrix(self,filename):
+        """
+        Read the matrix from the specified file and store it in the `RootMCA` instance.
+        Supported file formats include .mtx, .npy, .csv, and .txt. The method also captures the 
+        original dimensions of the matrix before any scaling or padding is applied.
+        """
         if not os.path.isfile(filename):
             raise Exception(f"MatrixFileNotFoundError:The file {filename} \
                             does not exist or is invalid")
@@ -101,18 +129,21 @@ class RootMCA(BaseMCA):
                 mat = mat.toarray()
         elif filename.endswith('.npy'):
             mat = np.load(filename)
+        elif filename.endswith('.csv'):
+            mat = np.loadtxt(filename, delimiter=',')
+        elif filename.endswith('.txt'):
+            mat = np.loadtxt(filename, delimiter=',')
         else:
             raise Exception("MatrixFileFormatError: The file format is not supported. \
                             Current supported formats are .mtx and .npy")
 
-        # Capture original rows and cols
+        # Capture original rows and cols of the matrix before any scaling or padding is applied
         self.origMatRows = mat.shape[0]
         self.origMatCols = mat.shape[1]
         self.matRows = mat.shape[0]
         self.matCols = mat.shape[1]
         self.mat = mat
         self.globalMat = mat
-        np.savetxt(_out_path('global_input_matrix.txt'), self.globalMat, delimiter=',')
 
 
     def setMat(self,mat):
@@ -137,13 +168,10 @@ class RootMCA(BaseMCA):
         x_row = x.shape[0]
 
         if x_row < self.origMatCols:
-            print(
-                "WARNING: The X vector rows {} are not the same as Original Matrix Columns {}".format(
-                    x_row,self.origMatCols))
+            print(f"WARNING: The X vector rows {x_row} are not the same as Original Matrix Columns {self.origMatCols}")
 
         if x_row > self.matCols:
-            raise Exception ("The X vector rows {} exceed Padded Matrix Columns {}".format(
-                    x_row,self.matCols))
+            raise Exception(f"The X vector rows {x_row} exceed Padded Matrix Columns {self.matCols}")
 
         cols = self.origMatCols
         mca_cols = self.mcaCols
@@ -151,18 +179,16 @@ class RootMCA(BaseMCA):
 
         if mca_cols * cell_cols - cols < 0:
             raise Exception(
-                "MatrixMCADimensionMismatch: Cannot encode Matrix (MCA cols {} x Cell cols {}) - Matrix cols {} < 0".format(
-                    mca_cols, cell_cols, cols))
+                f"MatrixMCADimensionMismatch: Cannot encode Matrix (MCA cols {mca_cols} x Cell cols {cell_cols}) - Matrix cols {cols} < 0")
         if abs(mca_cols * cell_cols - cols) != cell_cols:
             col_padding_size = abs(mca_cols * cell_cols - cols)
             col_padding = np.zeros((col_padding_size,1), dtype=float)
 
-            print("Adding zero col padding of size ({},{})".format(col_padding_size,1))
+            print(f"Adding zero col padding of size ({col_padding_size},{1})")
             x = np.concatenate([x, col_padding], axis=0)
 
         if x.shape[0] != self.matCols:
-            raise Exception("The Padded X vector rows {} exceed Padded Matrix Columns {}".format(
-                x.shape[0], self.matCols))
+            raise Exception(f"The Padded X vector rows {x.shape[0]} exceed Padded Matrix Columns {self.matCols}")
 
         self.x = x
 
@@ -354,17 +380,17 @@ class RootMCA(BaseMCA):
         mcaStats = np.zeros((self.num_mca_stats,1),dtype=float)
         self.comm.Gather(mcaStats, self.allMCAStats, root=self.ROOT_PROCESS_RANK)
         for rank in range(self.size):
-            print("MCAStats for Rank {}".format(rank))
+            print(f"MCAStats for Rank {rank}")
             
-            print("\t totalSubArrayArea = {}".format(self.allMCAStats[rank][0][0]))
-            print("\t totalNeuronAreaIH = {}".format(self.allMCAStats[rank][1][0]))
-            print("\t subArrayIHLeakage = {}".format(self.allMCAStats[rank][2][0]))
-            print("\t leakageNeuronIH = {}".format(self.allMCAStats[rank][3][0]))
+            print(f"\t totalSubArrayArea = {self.allMCAStats[rank][0][0]}")
+            print(f"\t totalNeuronAreaIH = {self.allMCAStats[rank][1][0]}")
+            print(f"\t subArrayIHLeakage = {self.allMCAStats[rank][2][0]}")
+            print(f"\t leakageNeuronIH = {self.allMCAStats[rank][3][0]}")
 
-            print("\t subArrayIH->writeLatency = {}".format(self.allMCAStats[rank][4][0]))
-            print("\t arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy = {}".format(self.allMCAStats[rank][5][0]))
-            print("\t subArrayIH->readLatency = {}".format(self.allMCAStats[rank][6][0]))
-            print("\t arrayIH->readEnergy + subArrayIH->readDynamicEnergy = {}".format(self.allMCAStats[rank][7][0]))
+            print(f"\t subArrayIH->writeLatency = {self.allMCAStats[rank][4][0]}")
+            print(f"\t arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy = {self.allMCAStats[rank][5][0]}")
+            print(f"\t subArrayIH->readLatency = {self.allMCAStats[rank][6][0]}")
+            print(f"\t arrayIH->readEnergy + subArrayIH->readDynamicEnergy = {self.allMCAStats[rank][7][0]}")
 
         self.allMCAStats = self.allMCAStats.reshape((self.size,self.num_mca_stats))
 
@@ -374,10 +400,26 @@ class RootMCA(BaseMCA):
         readLat= self.allMCAStats[:,6]
         readEnergy = self.allMCAStats[:,7]
 
-        print("EC= {}; writeLatency mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(writeLat),np.std(writeLat)))
-        print("EC= {}; writeEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(writeEnergy), np.std(writeEnergy)))
-        print("EC= {}; readLatency mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readLat), np.std(readLat)))
-        print("EC= {}; readEnergy mean = {}, std_dev = {}".format(self.ERR_CORR,np.mean(readEnergy), np.std(readEnergy)))
+        print("\nOverall MCA Stats:")
+        print(f"EC= {self.ERR_CORR}; writeLatency Mean = {np.mean(writeLat)} [s], stddev = {np.std(writeLat)} [s]")
+        print(f"EC= {self.ERR_CORR}; writeLatency Max = {np.max(writeLat)} [s], Min = {np.min(writeLat)} [s]")
+        print(f"EC= {self.ERR_CORR}; writeEnergy Mean = {np.mean(writeEnergy)} [J], stddev = {np.std(writeEnergy)} [J]")
+        print(f"EC= {self.ERR_CORR}; writeEnergy Max = {np.max(writeEnergy)} [J], Min = {np.min(writeEnergy)} [J]")
 
-    def globalMatVec(self):
-        return None
+        print(f"EC= {self.ERR_CORR}; readLatency Mean = {np.mean(readLat)} [s], stddev = {np.std(readLat)} [s]")
+        print(f"EC= {self.ERR_CORR}; readLatency Max = {np.max(readLat)} [s], Min = {np.min(readLat)} [s]")
+        print(f"EC= {self.ERR_CORR}; readEnergy Mean = {np.mean(readEnergy)} [J], stddev = {np.std(readEnergy)} [J]")
+        print(f"EC= {self.ERR_CORR}; readEnergy Max = {np.max(readEnergy)} [J], Min = {np.min(readEnergy)} [J]")
+
+        # Write the MCA stats to the report file
+        string_builder = []
+        string_builder.append("\nOverall MCA Stats:")
+        string_builder.append(f"EC= {self.ERR_CORR}; writeLatency Mean = {np.mean(writeLat)} [s], stddev = {np.std(writeLat)} [s]")
+        string_builder.append(f"EC= {self.ERR_CORR}; writeLatency Max = {np.max(writeLat)} [s], Min = {np.min(writeLat)} [s]")
+        string_builder.append(f"EC= {self.ERR_CORR}; writeEnergy Mean = {np.mean(writeEnergy)} [J], stddev = {np.std(writeEnergy)} [J]")
+        string_builder.append(f"EC= {self.ERR_CORR}; writeEnergy Max = {np.max(writeEnergy)} [J], Min = {np.min(writeEnergy)} [J]")
+        string_builder.append(f"EC= {self.ERR_CORR}; readLatency Mean = {np.mean(readLat)} [s], stddev = {np.std(readLat)} [s]")
+        string_builder.append(f"EC= {self.ERR_CORR}; readLatency Max = {np.max(readLat)} [s], Min = {np.min(readLat)} [s]")
+        string_builder.append(f"EC= {self.ERR_CORR}; readEnergy Mean = {np.mean(readEnergy)} [J], stddev = {np.std(readEnergy)} [J]")
+        string_builder.append(f"EC= {self.ERR_CORR}; readEnergy Max = {np.max(readEnergy)} [J], Min = {np.min(readEnergy)} [J]")
+        __write_report__("\n".join(string_builder))
