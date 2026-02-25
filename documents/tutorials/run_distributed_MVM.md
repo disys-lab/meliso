@@ -1,8 +1,7 @@
 # Tutorials for MELISO+
 
 Created by: Huynh Quang Nguyen Vo
-
-Last updated time: February 23, 2026 1:28 PM
+Last updated time: February 25, 2026 2:06 AM
 
 # Distributed Matrix-Vector Multiplication (distributedMVM)
 
@@ -10,7 +9,7 @@ Last updated time: February 23, 2026 1:28 PM
 
 <aside>
 
-The following installation steps are introduced under the assumption that you are running the experiments on supercomputers with [SLURM](https://slurm.schedmd.com/documentation.html) (e.g., OSU Pete Supercomputer).
+The following installation steps are introduced under the assumption that you are running the experiments on supercomputers with [SLURM](https://slurm.schedmd.com/documentation.html) (e.g., [OSU Pete Supercomputer](https://hpcc.okstate.edu/pete-supercomputer)).
 
 </aside>
 
@@ -121,7 +120,7 @@ Suppose we have a system of four RRAM crossbar arrays, and we want to run experi
 
 <aside>
 
-The following steps are introduced under the assumption that you are running the experiments on supercomputers with [SLURM](https://slurm.schedmd.com/documentation.html) (e.g., OSU Pete Supercomputer).
+The following steps are introduced under the assumption that you are running the experiments on supercomputers with [SLURM](https://slurm.schedmd.com/documentation.html) (e.g., [OSU Pete Supercomputer](https://hpcc.okstate.edu/pete-supercomputer)).
 
 </aside>
 
@@ -351,7 +350,7 @@ The following steps are introduced under the assumption that you are running the
 
 <aside>
 
-The following steps are introduced under the assumption that you are running the experiments on supercomputers with [SLURM](https://slurm.schedmd.com/documentation.html) (e.g., OSU Pete Supercomputer).
+The following steps are introduced under the assumption that you are running the experiments on supercomputers with [SLURM](https://slurm.schedmd.com/documentation.html) (e.g., [OSU Pete Supercomputer](https://hpcc.okstate.edu/pete-supercomputer)).
 
 </aside>
 
@@ -598,14 +597,105 @@ The following steps are introduced under the assumption that you are running the
         sbatch run_varied_iters.sh
         ```
         
-    2. Virtualization with weak-scaling (the input matrix is fixed, the number of crossbar arrays is fixed, only the number of cells per array is changing):
+    2. Distributed MVM when virtualization is applied with weak-scaling (the input matrix is fixed, the number of crossbar arrays is fixed, only the number of cells per array is changing):
         
         ```bash
         sbatch run_weakScaling.sh
         ```
         
-    3. Virtualization with strong-scaling (the number of crossbar arrays is fixed, the number of cells per array is fixed, only the input matrices are changing):
+    3. Distributed MVM when virtualization is applied with strong-scaling (the number of crossbar arrays is fixed, the number of cells per array is fixed, only the input matrices are changing):
         
         ```bash
-        sbatch run_strongScaling.sh
+        sbatch run_weakScaling.sh
         ```
+        
+
+## Run the distributedMVM for multilayer perceptron (MLP) inference
+
+<aside>
+
+The following steps are introduced under the assumption that you are running the experiments on supercomputers with [SLURM](https://slurm.schedmd.com/documentation.html) (e.g., [OSU Pete Supercomputer](https://hpcc.okstate.edu/pete-supercomputer)).
+
+</aside>
+
+1. Ensure that all YAML files are in the appropriate directories.
+    - **How the appropriated directories appear for all YAML files**
+        
+        ```bash
+        meliso
+        ├── config_files/
+        │   ├── MLP/
+        │   │   ├── EpiRAM/
+        │   │   │   ├── exp1.yaml
+        │   ├── device_Ag-aSi.yaml
+        │   ├── device_AlOx-HfO2.yaml
+        │   ├── device_EpiRAM.yaml
+        │   └── device_TaOx-HfOx.yaml
+        └── <other files and folders>
+        ```
+        
+2. Ensure that shell scripts, each corresponding to one experiment type, are created following the templates. Most importantly, ensure that the appropriate number of MPI processes are defined in these scripts.
+    - **Examples of the shell scripts for all experiments in Nature Communication**
+        
+        Here, only the modified sections of the script are shown, the rest remained them same.
+        
+        1. Inferences with an MLP with one hidden layer
+            
+            ```bash
+            #===================================================================================================
+            # SLURM DIRECTIVES -- Job scheduler settings
+            #===================================================================================================
+            #SBATCH --partition batch                         # Partition (queue) to submit the job to
+            #SBATCH --time 3:00:00                            # Maximum runtime in HH:MM:SS format
+            #SBATCH --nodes=1                                 # Number of nodes requested
+            #SBATCH --ntasks=32                               # Total MPI ranks
+            #SBATCH --mem=32GB                                # Total memory required for the job
+            #SBATCH [--mail-user=lucius.vo@okstate.edu](mailto:--mail-user=lucius.vo@okstate.edu)         # Email address for job notifications
+            #SBATCH --mail-type=END                           # Send an email when the job finishes
+            #SBATCH --output=logs/mlpInference_%j.out
+            #SBATCH --job-name=mlpInference                   # Job name for easier identification
+            #===================================================================================================
+            
+            ...
+            
+            #===================================================================================================
+            # EXPERIMENT CONFIGURATION
+            #===================================================================================================
+            EXPERIMENT_NAME="mlp"      # A name for this set of experiments, used in report paths.
+            NUM_PROCESSES=15                    # Total number of MPI processes to use for each run.
+            DEVICE_TYPE=1                       # Device type to use for the experiments.
+            NUM_REPLICATIONS=1                  # Number of repetitions for each experiment configuration
+            EXPERIMENT_IDS=("1")                # A list of experiment IDs to run. Example: ("1" "2" "3")
+            ITERATION_LIMITS=(21)               # A list of iteration limits for the write-and-verify. Example: (1 21)
+            ENABLE_OVERRIDE=0                   # Whether to enable the override feature for iteration limits (1 for true, 0 for false).
+            INPUT_VECTOR_PATH="inputs/vectors/input_x.txt" # The file path for the common input vector.
+            
+            # Define the materials to be tested and the paths to their configuration directories.
+            declare -A MATERIAL_CONFIGS=(
+                ["EpiRAM"]="config_files/${EXPERIMENT_NAME}/EpiRAM"
+                )
+            
+            ...
+            ```
+            
+3. Include the matrices representing the model’s weights in the appropriate directories
+    - **How the appropriated directories appear for all input matrices and vector(s)**
+        
+        ```bash
+        meliso
+        ├── inputs/
+        │   ├── mlp/
+        │   │   ├── B1.npy
+        │   │   ├── B2.npy
+        │   │   ├── mnist_test_images.npy
+        │   │   ├── mnist_test_labels.npy
+        │   │   ├── W1.npy
+        │   │   └── W2.npy
+        └── <other files and folders>
+        ```
+        
+4. Run the experiment (MNIST inference on a two-layer MLP) using this command from the home directory:
+    
+    ```bash
+    sbatch run_MLP.sh
+    ```
