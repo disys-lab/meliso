@@ -45,8 +45,8 @@ class RootMCA(BaseMCA):
 
         self.matRows = 0
         self.matCols = 0
-        self.origMatRows=0
-        self.origMatCols=0
+        self.origMatRows = 0
+        self.origMatCols = 0
         self.mat = None
         self.globalMat = None
         self.x = None

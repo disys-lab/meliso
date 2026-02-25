@@ -8,6 +8,7 @@ This script demonstrates how to perform inference with a simple multi-layer perc
 the MELISO+ framework for accelerated matrix-vector multiplication (MVM). It loads a pre-trained MLP 
 model, runs inference on the MNIST test set, and evaluates the accuracy of the predictions.
 """
+
 import os
 import meliso
 import numpy as np
