@@ -685,12 +685,12 @@ The following steps are introduced under the assumption that you are running the
         meliso
         ├── inputs/
         │   ├── mlp/
-        │   │   ├── B1.npy
-        │   │   ├── B2.npy
+        │   │   ├── B1.npy # First layer bias
+        │   │   ├── B2.npy # Second layer bias
         │   │   ├── mnist_test_images.npy
         │   │   ├── mnist_test_labels.npy
-        │   │   ├── W1.npy
-        │   │   └── W2.npy
+        │   │   ├── W1.npy # First layer weight
+        │   │   └── W2.npy # Second layer weight
         └── <other files and folders>
         ```
         
