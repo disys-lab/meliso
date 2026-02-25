@@ -309,8 +309,15 @@ class Root:
 
         if correction == True:
             # Sanity check for correction parameters
-            mat_min, mat_max, mat_row_sum = __check_array_attributes__(self.origMat)
+            mat_min, mat_max, mat_row_sum = __check_array_attributes__(self.mca.globalMat)
+            print(f"[INFO] Matrix attributes for correction - min: {mat_min}, max: {mat_max}, row_sum (first 5): {mat_row_sum[:5]}")
+            # Uncomment the following lines to force the matrix attributes
+            # mat_min = float(self.mca.mat_min)
+            # mat_max = float(self.mca.mat_max)
+            # mat_row_sum = np.copy(self.mca.mat_row_sum)
+
             x_min, x_max, x_sum = self.x_min, self.x_max, self.x_sum
+            print(f"[INFO] Vector attributes for correction - min: {x_min}, max: {x_max}, sum: {x_sum}")
             self.y_orig = self.addCorrectionY(self.origMatCols, self.y,
                           mat_min, mat_max, mat_row_sum,
                           x_min, x_max, x_sum)
@@ -318,12 +325,15 @@ class Root:
             print(f"[INFO] MELISO+ Result (with normalization reversal): \n {self.y_mem_result}")
             
             # Save the memristive MVM result (with normalization reversal)
-            np.savetxt(('./y_mem_result.txt'), self.y_mem_result, delimiter=',')
+            np.savetxt(__out_path__('y_mem_result_reversal_applied.txt'), self.y_mem_result, delimiter=',')
         else:
             self.y_mem_result = np.copy(self.y)
             print(f"[INFO] MELISO+ Result (without normalization reversal): \n {self.y_mem_result}")
             # Save the memristive MVM result (without normalization reversal)
-            np.savetxt(('./y_mem_result.txt'), self.y_mem_result, delimiter=',')
+            np.savetxt(__out_path__('y_mem_result_no_reversal.txt'), self.y_mem_result, delimiter=',')
+        
+        # Save the memristive MVM result
+        np.savetxt(__out_path__('y_mem_result.txt'), self.y_mem_result, delimiter=',')
 
 
 
@@ -336,7 +346,7 @@ class Root:
             scalingOn (int): Flag to indicate if scaling is applied (default: 0).
             correction (bool): Flag to indicate if min-max scaling reversal should be applied before benchmarking (default: False).
         """
-        assert self.origMat is not None, "Global matrix must be available for benchmarking."
+        assert self.mca.globalMat is not None, "Global matrix must be available for benchmarking."
         assert self.globalX is not None, "Global input vector must be available for benchmarking."
 
         # Placeholder for hardware and scaling flags, since both `Root` and `NonRoot` share the 
@@ -347,7 +357,7 @@ class Root:
         # ------------------------------------------------------------------------------------------
         # Load the full matrix and vector and perform Numpy MVM for benchmarking
         # ------------------------------------------------------------------------------------------
-        A_full = self.origMat   
+        A_full = self.mca.globalMat   
         n_cols = int(getattr(self, "origMatCols", A_full.shape[1]))
         A = A_full[:, :n_cols]                  
 
@@ -393,6 +403,8 @@ class Root:
             relL2_orig_domain   = np.linalg.norm(err_orig_domain, 2)    / den2
             relLinf_orig_domain = np.linalg.norm(err_orig_domain, np.inf) / deni
             
+            # TODO: In some cases, the relative errors may be very large due to the nature of the 
+            # original domain values, while in scaled domain, the errors are significantly smaller. 
             print(f"[INFO] Comparing memristive MVM result to CPU MVM result in the original domain (after normalization reversal):")
             print(f"[INFO] Relative L2 error:  {relL2_orig_domain}")
             print(f"[INFO] Relative Loo error:  {relLinf_orig_domain}")
@@ -408,6 +420,11 @@ class Root:
             relL2_scaled_domain   = np.linalg.norm(err_scaled_domain, 2)    / den2
             relLinf_scaled_domain = np.linalg.norm(err_scaled_domain, np.inf) / deni
             
+            # In 99% of empirical cases, the relative errors in the scaled domain are significantly 
+            # smaller. This is because the min-max scaling normalizes the values to a smaller range, 
+            # which can help mitigate the effects of noise and non-idealities in the memristive MVM, 
+            # leading to more accurate results compared to the original domain where values can be 
+            # much larger and more susceptible to errors.
             print(f"[INFO] Comparing memristive MVM result to CPU MVM result in the scaled domain (without normalization reversal):")
             print(f"[INFO] Relative L2 error:  {relL2_scaled_domain}")
             print(f"[INFO] Relative Loo error:  {relLinf_scaled_domain}")
@@ -472,18 +489,16 @@ def __check_array_attributes__(array):
 def __minMax_Scale__(array):
     """
     Apply min-max scaling to the input array and return the scaled array along with the minimum and 
-    range.
+    maximum values.
 
     Args:
         array (np.ndarray): The input array to be scaled.
     
     Returns:
         tuple: A tuple containing the scaled array, the minimum value of the original array, and the 
-        range (max - min) of the original array. The scaled array is normalized to the [0, 1] range.
+        maximum value of the original array. The scaled array is normalized to the [0, 1] range.
     """
     array_min = array.min()
-    array_range = array.max() - array_min
-    if array_range == 0:
-        return np.zeros_like(array), float(array_min), 0.0
-    return (array - array_min) / array_range, float(array_min), float(array_range)
+    array_max = array.ptp()
+    return (array - array_min) / array_max, float(array_min), float(array_max)
     
