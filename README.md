@@ -12,7 +12,7 @@
 
 1. Clone the Repository
 ```
-git clone https://github.com/paritoshpr/MELISO.git
+git clone https://github.com/disys-lab/meliso.git
 ```
 
 2. Build and Setup
@@ -42,7 +42,7 @@ make all
 ## For Windows OS (via Docker build)
 1. Clone the Repository
 ```
-git clone https://github.com/paritoshpr/MELISO.git
+git clone https://github.com/disys-lab/meliso.git
 ```
 
 2. Build Docker Image

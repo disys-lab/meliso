@@ -37,7 +37,7 @@ MatVecSolver  (solver/matvec/MatVecSolver.py)
 
 ```bash
 # Clone and build
-git clone https://github.com/paritoshpr/meliso.git
+git clone https://github.com/disys-lab/meliso.git
 cd meliso
 mkdir build
 export PYTHONPATH="${PYTHONPATH}:./build"

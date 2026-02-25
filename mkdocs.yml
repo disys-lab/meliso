@@ -2,7 +2,7 @@ site_name: MELISO+ Documentation
 site_description: >-
   MELISO+ — Memristor Linear Solver for Optimization.
   Distributed matrix-vector multiplication on memristive crossbar array hardware.
-site_author: MELISO Team
+site_author: Paritosh Ramanan, Lucius Vo
 
 docs_dir: documents
 site_dir: site

@@ -17,7 +17,7 @@ The following installation steps are introduced under the assumption that you ar
 1. Clone the repository from GitHub:
     
     ```bash
-    git clone https://github.com/paritoshpr/meliso.git
+    git clone https://github.com/disys-lab/meliso.git
     ```
     
 2. Run this command from the home directory:
