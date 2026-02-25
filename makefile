@@ -2,7 +2,8 @@
 #Date: January 21st 2024
 
 .SECONDEXPANSION:
-
+IMMV_REPO = https://github.com/disys-lab/InMemMVM
+IMMV_DIR  = .inmemmvm_tmp
 MLP_NEUROSIM = src/mlp_neurosim
 BUILD_DIR = ./build
 ALLSRC := $(wildcard $(MLP_NEUROSIM)/*.cpp $(MLP_NEUROSIM)/NeuroSim/*.cpp)
@@ -17,9 +18,23 @@ $(info    Creating following objects $(ALLOBJ))
 CXX := g++ -static-libstdc++ 
 CXXFLAGS := -fopenmp -O3 -std=c++0x -w -fPIC
 
-.PHONY: all clean
+.PHONY: all clean update-immv clean-immv delete-immv
 
-all: create-build neurosim meliso
+all: get-immv create-build neurosim meliso
+
+get-immv:
+	@echo "Cloning or updating InMemMVM..."
+	@if [ -d "$(IMMV_DIR)/.git" ]; then \
+		echo "Repo exists — pulling latest changes..."; \
+		cd $(IMMV_DIR) && git pull; \
+	else \
+		rm -rf $(IMMV_DIR); \
+		git clone $(IMMV_REPO) $(IMMV_DIR); \
+	fi
+	@echo "Copying files into $(MLP_NEUROSIM)..."
+	@mkdir -p $(MLP_NEUROSIM)
+	@cp -a $(IMMV_DIR)/. $(MLP_NEUROSIM)/
+	@echo "Done."
 
 neurosim: $(ALLOBJ)
 	$(CXX) $(CXXFLAGS) $^ -shared -o $(BUILD_DIR)/libmlp.so
@@ -43,3 +58,11 @@ clean-neurosim:
 clean-meliso:
 	python3 setup.py clean --all
 	$(RM) $(BUILD_DIR)/meliso.*
+
+clean-immv:
+	@echo "Removing temp repo folder..."
+	rm -rf $(IMMV_DIR)
+
+delete-immv:
+	@echo "Removing mlp_neurosim..."
+	rm -rf $(MLP_NEUROSIM)

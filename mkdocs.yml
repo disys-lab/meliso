@@ -1,0 +1,68 @@
+site_name: MELISO+ Documentation
+site_description: >-
+  MELISO+ — Memristor Linear Solver for Optimization.
+  Distributed matrix-vector multiplication on memristive crossbar array hardware.
+site_author: MELISO Team
+
+docs_dir: documents
+site_dir: site
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - API Reference:
+      - Overview: api/index.md
+      - src.core:
+          - BaseMCA: api/src/core/BaseMCA.md
+          - RootMCA: api/src/core/RootMCA.md
+          - NonRootMCA: api/src/core/NonRootMCA.md
+      - src.cython:
+          - MelisoPy: api/src/cython/MelisoPy.md
+          - C++ Interface (Meliso.pxd): api/src/cython/Meliso_interface.md
+      - solver.matvec:
+          - MatVecSolver: api/solver/matvec/MatVecSolver.md
+          - Root: api/solver/matvec/Root.md
+          - NonRoot: api/solver/matvec/NonRoot.md
+      - solver.common:
+          - loaders: api/solver/common/loaders.md
+          - make_toy_linear_systems: api/solver/common/make_toy_linear_systems.md
+      - Driver Scripts:
+          - DistributedMatVec.py: api/scripts/DistributedMatVec.md
+          - mlpInference.py: api/scripts/mlpInference.md
+  - Tutorials:
+      - Distributed MVM: tutorials/run_distributed_MVM.md
