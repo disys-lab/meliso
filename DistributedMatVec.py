@@ -9,8 +9,8 @@ MELISO+ framework. It loads input vectors, runs the MVM with and without min-max
 and compares the results with benchmark outputs.
 """
 
-import meliso
 import os
+import meliso
 import numpy as np
 from solver.matvec.MatVecSolver import MatVecSolver
 

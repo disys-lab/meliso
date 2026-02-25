@@ -13,31 +13,6 @@ else:
     sys.path.append("../../")
 from src.core.RootMCA import RootMCA
 
-
-#===================================================================================================
-# Utility functions
-#===================================================================================================
-def __out_path__(name: str) -> str:
-    """Define temporary output path for intermediate files."""
-    base = os.environ.get("TMPDIR")
-    if base:
-        os.makedirs(base, exist_ok=True)
-        return os.path.join(base, name)
-    return name
-
-def __check_array_attributes__(array):
-    array_row_sum = np.sum(array, axis=1)
-    array_min = array.min()
-    array_max = array.ptp()
-    return array_min, array_max, array_row_sum
-
-def __minMax_Scale__(array):
-    array_min = array.min()
-    array_range = array.max() - array_min
-    if array_range == 0:
-        return np.zeros_like(array), float(array_min), 0.0
-    return (array - array_min) / array_range, float(array_min), float(array_range)
-
 #===================================================================================================
 # CLASS DEFINITION
 #===================================================================================================
@@ -315,4 +290,27 @@ class Root:
         data = np.array([-1, -1], dtype=np.float64)
         self.comm.Bcast(data, root=self.mca.ROOT_PROCESS_RANK)
 
+#---------------------------------------------------------------------------------------------------
+# Internal methods for the Root class
+#---------------------------------------------------------------------------------------------------
+def __out_path__(name: str) -> str:
+    """Define temporary output path for intermediate files."""
+    base = os.environ.get("TMPDIR")
+    if base:
+        os.makedirs(base, exist_ok=True)
+        return os.path.join(base, name)
+    return name
+
+def __check_array_attributes__(array):
+    array_row_sum = np.sum(array, axis=1)
+    array_min = array.min()
+    array_max = array.ptp()
+    return array_min, array_max, array_row_sum
+
+def __minMax_Scale__(array):
+    array_min = array.min()
+    array_range = array.max() - array_min
+    if array_range == 0:
+        return np.zeros_like(array), float(array_min), 0.0
+    return (array - array_min) / array_range, float(array_min), float(array_range)
     
