@@ -1,0 +1,2763 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="MELISO+ — Memristor Linear Solver for Optimization. Distributed matrix-vector multiplication on memristive crossbar array hardware.">
+      
+      
+        <meta name="author" content="Paritosh Ramanan, Lucius Vo">
+      
+      
+      
+        <link rel="prev" href="../installation/">
+      
+      
+        <link rel="next" href="../tutorials/quickstart_local/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+    
+    
+      
+        <title>Configuration Reference - MELISO+ Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#configuration-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MELISO+ Documentation" class="md-header__button md-logo" aria-label="MELISO+ Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MELISO+ Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Configuration Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="cyan"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../installation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Installation
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Configuration Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../tutorials/quickstart_local/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MELISO+ Documentation" class="md-nav__button md-logo" aria-label="MELISO+ Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MELISO+ Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#experiment-configuration-expyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Experiment Configuration (exp*.yaml)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Experiment Configuration (exp*.yaml)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exp_params-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        exp_params Fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="exp_params Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#turnonhardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        turnOnHardware
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turnonscaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        turnOnScaling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        matrix_name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        matrix_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#errcorr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        errCorr
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpolants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        interpolants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributeddecomposition_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        distributed.decomposition_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributedmca_rows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        distributed.mca_rows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributedmca_cols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        distributed.mca_cols
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device_config-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config Fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="device_config Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#device_configroot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config.root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device_configcell_rows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config.cell_rows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device_configcell_cols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config.cell_cols
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device_configassignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config.assignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complete-experiment-config-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete Experiment Config Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-configuration-device_yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Configuration (device_*.yaml)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Device Configuration (device_*.yaml)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-schema_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#field-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Field Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Field Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conductanceproperties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConductanceProperties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writeproperties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WriteProperties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devicevariation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DeviceVariation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readproperties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ReadProperties
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-materials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Materials
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Device Materials">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comparison-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guidance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mca-grid-sizing-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCA Grid Sizing Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/quickstart_local/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick-Start (Local / Docker)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/run_distributed_MVM/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributed MVM (SLURM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    src.core
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    src.core
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/src/core/BaseMCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BaseMCA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/src/core/RootMCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RootMCA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/src/core/NonRootMCA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NonRootMCA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    src.cython
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    src.cython
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/src/cython/MelisoPy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MelisoPy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/src/cython/Meliso_interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C++ Interface (Meliso.pxd)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    solver.matvec
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    solver.matvec
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/solver/matvec/MatVecSolver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MatVecSolver
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/solver/matvec/Root/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Root
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/solver/matvec/NonRoot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NonRoot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    solver.common
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    solver.common
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/solver/common/loaders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    loaders
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/solver/common/make_toy_linear_systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    make_toy_linear_systems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Scripts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Driver Scripts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/scripts/DistributedMatVec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DistributedMatVec.py
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/scripts/mlpInference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mlpInference.py
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#experiment-configuration-expyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Experiment Configuration (exp*.yaml)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Experiment Configuration (exp*.yaml)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exp_params-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        exp_params Fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="exp_params Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#turnonhardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        turnOnHardware
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turnonscaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        turnOnScaling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        matrix_name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        matrix_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#errcorr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        errCorr
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpolants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        interpolants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributeddecomposition_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        distributed.decomposition_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributedmca_rows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        distributed.mca_rows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distributedmca_cols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        distributed.mca_cols
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device_config-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config Fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="device_config Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#device_configroot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config.root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device_configcell_rows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config.cell_rows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device_configcell_cols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config.cell_cols
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device_configassignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        device_config.assignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complete-experiment-config-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete Experiment Config Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-configuration-device_yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Configuration (device_*.yaml)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Device Configuration (device_*.yaml)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-schema_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#field-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Field Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Field Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conductanceproperties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConductanceProperties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writeproperties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WriteProperties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devicevariation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DeviceVariation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readproperties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ReadProperties
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-materials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Materials
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Device Materials">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comparison-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guidance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mca-grid-sizing-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCA Grid Sizing Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="configuration-reference">Configuration Reference<a class="headerlink" href="#configuration-reference" title="Permanent link">&para;</a></h1>
+<p>MELISO+ uses two types of YAML configuration files:</p>
+<ol>
+<li><strong>Experiment config</strong> (<code>exp*.yaml</code>) — defines the matrix, MCA grid layout, and which device configs to use.</li>
+<li><strong>Device config</strong> (<code>device_*.yaml</code>) — defines the physical parameters of a memristor device material.</li>
+</ol>
+<p>Both files must exist and be correctly referenced before running any experiment.</p>
+<hr />
+<h2 id="experiment-configuration-expyaml">Experiment Configuration (<code>exp*.yaml</code>)<a class="headerlink" href="#experiment-configuration-expyaml" title="Permanent link">&para;</a></h2>
+<h3 id="full-schema">Full Schema<a class="headerlink" href="#full-schema" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">exp_params</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">turnOnHardware</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">        </span><span class="c1"># required</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">turnOnScaling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">         </span><span class="c1"># required</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">matrix_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;string&gt;</span><span class="w">        </span><span class="c1"># required</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">matrix_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;string&gt;</span><span class="w">        </span><span class="c1"># required</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">errCorr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">               </span><span class="c1"># optional</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">interpolants</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">          </span><span class="c1"># optional</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">distributed</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">decomposition_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;string&gt;</span><span class="w"> </span><span class="c1"># optional</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">mca_rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">             </span><span class="c1"># required</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="nt">mca_cols</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">             </span><span class="c1"># required</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="nt">device_config</span><span class="p">:</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;string&gt;</span><span class="w">               </span><span class="c1"># required</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nt">cell_rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">             </span><span class="c1"># required</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nt">cell_cols</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">             </span><span class="c1"># required</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="nt">assignment</span><span class="p">:</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="nt">&lt;device_file.yaml&gt;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;rank_list&gt;</span><span class="w">  </span><span class="c1"># required (one or more entries)</span>
+</code></pre></div>
+<hr />
+<h3 id="exp_params-fields"><code>exp_params</code> Fields<a class="headerlink" href="#exp_params-fields" title="Permanent link">&para;</a></h3>
+<h4 id="turnonhardware"><code>turnOnHardware</code><a class="headerlink" href="#turnonhardware" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>int</code> — <code>0</code> or <code>1</code>
+<strong>Required:</strong> Yes</p>
+<p>Controls whether the NeuroSim hardware simulator is active.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1</code></td>
+<td>Hardware simulation is on. Weights are encoded with device noise and non-idealities.</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>Hardware simulation is off. The MVM is effectively a simple floating-point multiply — useful for debugging the pipeline.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="turnonscaling"><code>turnOnScaling</code><a class="headerlink" href="#turnonscaling" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>int</code> — <code>0</code> or <code>1</code>
+<strong>Required:</strong> Yes</p>
+<p>Controls whether an additional internal conductance scaling is applied inside the C++ backend. In most experiments this is set to <code>0</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1</code></td>
+<td>Enable internal scaling inside NeuroSim.</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>Disable internal scaling (recommended).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="matrix_name"><code>matrix_name</code><a class="headerlink" href="#matrix_name" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>string</code>
+<strong>Required:</strong> Yes</p>
+<p>A short identifier for the matrix. Used to name the temporary matrix chunk directory:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>&lt;decomposition_dir&gt;/&lt;matrix_name&gt;-&lt;mca_rows&gt;_&lt;mca_cols&gt;_&lt;cell_rows&gt;_&lt;cell_cols&gt;/
+</code></pre></div>
+<p>Does not need to match the filename — it is only used for naming purposes.</p>
+<hr />
+<h4 id="matrix_file"><code>matrix_file</code><a class="headerlink" href="#matrix_file" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>string</code> (file path, relative to the project root)
+<strong>Required:</strong> Yes</p>
+<p>Path to the input matrix file. Supported formats:</p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.mtx</code></td>
+<td>Matrix Market (sparse or dense)</td>
+</tr>
+<tr>
+<td><code>.npy</code></td>
+<td>NumPy binary array</td>
+</tr>
+<tr>
+<td><code>.csv</code></td>
+<td>Comma-separated values</td>
+</tr>
+<tr>
+<td><code>.txt</code></td>
+<td>Comma-separated values</td>
+</tr>
+<tr>
+<td><code>.npz</code></td>
+<td>NumPy archive (sparse PDHG snapshot or dense)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="errcorr"><code>errCorr</code><a class="headerlink" href="#errcorr" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>int</code> — <code>0</code> or <code>1</code>
+<strong>Required:</strong> No (default: <code>1</code>)</p>
+<p>Enable or disable the multi-step error correction algorithm. Can also be overridden at runtime with the <code>EC</code> environment variable.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1</code></td>
+<td>Error correction on. More accurate but slower (requires multiple MVM passes per tile).</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>Error correction off. Faster but less accurate, especially for noisy devices.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="interpolants"><code>interpolants</code><a class="headerlink" href="#interpolants" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>int</code>
+<strong>Required:</strong> No (default: <code>3</code>)</p>
+<p>Number of interpolation points used by the NeuroSim device model for piecewise-linear conductance curves. Higher values improve accuracy but increase simulation time. Typical values are <code>3</code> to <code>5</code>.</p>
+<hr />
+<h4 id="distributeddecomposition_dir"><code>distributed.decomposition_dir</code><a class="headerlink" href="#distributeddecomposition_dir" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>string</code> (directory path)
+<strong>Required:</strong> No (default: <code>/tmp/</code> or <code>TMPDIR</code> env var)</p>
+<p>Directory where matrix sub-block files (<code>.npy</code>) are written during decomposition. Must be writable and accessible by all MPI processes. On shared-filesystem clusters, use a path on the shared filesystem rather than <code>/tmp/</code>.</p>
+<p>Can be overridden at runtime with the <code>TMPDIR</code> environment variable (takes priority over YAML).</p>
+<hr />
+<h4 id="distributedmca_rows"><code>distributed.mca_rows</code><a class="headerlink" href="#distributedmca_rows" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>int</code>
+<strong>Required:</strong> Yes (if <code>distributed</code> block is present)</p>
+<p>Number of rows in the MCA grid. Together with <code>mca_cols</code>, determines how the matrix is partitioned and how many MPI worker processes are needed.</p>
+<p><strong>Constraint:</strong> <code>mpi_processes = mca_rows × mca_cols + 1</code></p>
+<hr />
+<h4 id="distributedmca_cols"><code>distributed.mca_cols</code><a class="headerlink" href="#distributedmca_cols" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>int</code>
+<strong>Required:</strong> Yes (if <code>distributed</code> block is present)</p>
+<p>Number of columns in the MCA grid.</p>
+<hr />
+<h3 id="device_config-fields"><code>device_config</code> Fields<a class="headerlink" href="#device_config-fields" title="Permanent link">&para;</a></h3>
+<h4 id="device_configroot"><code>device_config.root</code><a class="headerlink" href="#device_configroot" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>string</code> (directory path, relative to project root)
+<strong>Required:</strong> Yes</p>
+<p>The directory prefix prepended to device config filenames in the <code>assignment</code> map.</p>
+<p>Example: if <code>root: "config_files/"</code> and <code>assignment</code> contains <code>device_EpiRAM.yaml</code>, the full path resolved is <code>config_files/device_EpiRAM.yaml</code>.</p>
+<hr />
+<h4 id="device_configcell_rows"><code>device_config.cell_rows</code><a class="headerlink" href="#device_configcell_rows" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>int</code>
+<strong>Required:</strong> Yes</p>
+<p>Number of cell rows in each individual MCA chip. Combined with <code>mca_rows</code>, sets the total row capacity of the hardware grid:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>total_row_capacity = mca_rows × cell_rows
+</code></pre></div>
+<p>The input matrix is zero-padded to this capacity if needed.</p>
+<hr />
+<h4 id="device_configcell_cols"><code>device_config.cell_cols</code><a class="headerlink" href="#device_configcell_cols" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>int</code>
+<strong>Required:</strong> Yes</p>
+<p>Number of cell columns in each individual MCA chip.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>total_col_capacity = mca_cols × cell_cols
+</code></pre></div>
+<hr />
+<h4 id="device_configassignment"><code>device_config.assignment</code><a class="headerlink" href="#device_configassignment" title="Permanent link">&para;</a></h4>
+<p><strong>Type:</strong> <code>dict</code>
+<strong>Required:</strong> Yes</p>
+<p>Maps device config filenames to the MCA ranks that should use them. Enables heterogeneous systems (different device materials for different chips).</p>
+<p><strong>Format:</strong> <code>{ &lt;device_file.yaml&gt;: &lt;rank_list&gt; }</code></p>
+<p><strong>Rank list syntax:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[[-1]]</code></td>
+<td>All MCA ranks use this device config (homogeneous system)</td>
+</tr>
+<tr>
+<td><code>[[0, 3]]</code></td>
+<td>Ranks 0, 1, 2 use this device config (range, exclusive end)</td>
+</tr>
+<tr>
+<td><code>[[0]]</code></td>
+<td>Only rank 0 uses this device config</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Homogeneous example:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">assignment</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">device_EpiRAM.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">-1</span><span class="p p-Indicator">]]</span>
+</code></pre></div></p>
+<p><strong>Heterogeneous example (2×2 grid = 4 ranks):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">assignment</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">device_Ag-aSi.yaml</span><span class="p">:</span><span class="w">    </span><span class="p p-Indicator">[[</span><span class="nv">0</span><span class="p p-Indicator">]]</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">device_AlOx-HfO2.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">1</span><span class="p p-Indicator">]]</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">device_EpiRAM.yaml</span><span class="p">:</span><span class="w">    </span><span class="p p-Indicator">[[</span><span class="nv">2</span><span class="p p-Indicator">]]</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">device_TaOx-HfOx.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">3</span><span class="p p-Indicator">]]</span>
+</code></pre></div></p>
+<hr />
+<h3 id="complete-experiment-config-examples">Complete Experiment Config Examples<a class="headerlink" href="#complete-experiment-config-examples" title="Permanent link">&para;</a></h3>
+<p><strong>Minimal — 1 array, EpiRAM, 66×66 cells:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">exp_params</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">turnOnHardware</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">turnOnScaling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">matrix_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bcsstk02&quot;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">matrix_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;inputs/matrices/bcsstk02.mtx&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">distributed</span><span class="p">:</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="nt">decomposition_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp/&quot;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nt">mca_rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="nt">mca_cols</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="nt">device_config</span><span class="p">:</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;config_files/&quot;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="nt">cell_rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">66</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">  </span><span class="nt">cell_cols</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">66</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">  </span><span class="nt">assignment</span><span class="p">:</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="nt">device_EpiRAM.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">-1</span><span class="p p-Indicator">]]</span>
+</code></pre></div>
+Launch with: <code>mpiexec -n 2 python3 DistributedMatVec.py</code></p>
+<hr />
+<p><strong>3×3 grid, Ag-aSi, 512×512 cells:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">exp_params</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">turnOnHardware</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">turnOnScaling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">matrix_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;add32&quot;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">matrix_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;inputs/matrices/add32.mtx&quot;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="nt">distributed</span><span class="p">:</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="nt">decomposition_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp/&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="nt">mca_rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="nt">mca_cols</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="nt">device_config</span><span class="p">:</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;config_files/&quot;</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">  </span><span class="nt">cell_rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">  </span><span class="nt">cell_cols</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">  </span><span class="nt">assignment</span><span class="p">:</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="nt">device_Ag-aSi.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">-1</span><span class="p p-Indicator">]]</span>
+</code></pre></div>
+Launch with: <code>mpiexec -n 10 python3 DistributedMatVec.py</code></p>
+<hr />
+<h2 id="device-configuration-device_yaml">Device Configuration (<code>device_*.yaml</code>)<a class="headerlink" href="#device-configuration-device_yaml" title="Permanent link">&para;</a></h2>
+<h3 id="full-schema_1">Full Schema<a class="headerlink" href="#full-schema_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">Device</span><span class="p">:</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">ConductanceProperties</span><span class="p">:</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nt">maxConductance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">         </span><span class="c1"># required</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nt">minConductance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">         </span><span class="c1"># required</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="nt">avgMaxConductance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float|alias&gt;</span><span class="w"> </span><span class="c1"># required</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="nt">avgMinConductance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float|alias&gt;</span><span class="w"> </span><span class="c1"># required</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="nt">conductance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float|alias&gt;</span><span class="w">       </span><span class="c1"># required</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="nt">conductancePrev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float|alias&gt;</span><span class="w">   </span><span class="c1"># required</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span><span class="nt">ReadProperties</span><span class="p">:</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="nt">readVoltage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="nt">readPulseWidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">  </span><span class="nt">WriteProperties</span><span class="p">:</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="nt">writeVoltageLTP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">        </span><span class="c1"># required</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">    </span><span class="nt">writeVoltageLTD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">        </span><span class="c1"># required</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="nt">writePulseWidthLTP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">     </span><span class="c1"># required</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">    </span><span class="nt">writePulseWidthLTD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">     </span><span class="c1"># required</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">    </span><span class="nt">writeEnergy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">    </span><span class="nt">maxNumLevelLTP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">           </span><span class="c1"># required</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">    </span><span class="nt">maxNumLevelLTD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span><span class="w">           </span><span class="c1"># required</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">    </span><span class="nt">numPulse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="w">  </span><span class="nt">DeviceConfiguration</span><span class="p">:</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="w">    </span><span class="nt">cmosAccess</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;bool&gt;</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="w">    </span><span class="nt">FeFET</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;bool&gt;</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="w">    </span><span class="nt">gateCapFeFET</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="w">    </span><span class="nt">resistanceAccess</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="w">    </span><span class="nt">nonlinearIV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;bool&gt;</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="w">    </span><span class="nt">nonIdenticalPulse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;bool&gt;</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="w">    </span><span class="nt">NL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="w">  </span><span class="nt">DeviceVariation</span><span class="p">:</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="w">    </span><span class="nt">NL_LTP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">                 </span><span class="c1"># required</span>
+<a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="w">    </span><span class="nt">NL_LTD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">                 </span><span class="c1"># required</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a><span class="w">    </span><span class="nt">sigmaDtoD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">              </span><span class="c1"># required</span>
+<a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a><span class="w">    </span><span class="nt">sigmaCtoC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w">              </span><span class="c1"># required</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a>
+<a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a><span class="w">  </span><span class="nt">ReadNoise</span><span class="p">:</span>
+<a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;bool&gt;</span>
+<a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a><span class="w">    </span><span class="nt">sigmaReadNoise</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a>
+<a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a><span class="w">  </span><span class="nt">ConductanceRangeVariation</span><span class="p">:</span>
+<a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;bool&gt;</span>
+<a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a><span class="w">    </span><span class="nt">maxConductanceVar</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a><span class="w">    </span><span class="nt">minConductanceVar</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-47" name="__codelineno-8-47" href="#__codelineno-8-47"></a>
+<a id="__codelineno-8-48" name="__codelineno-8-48" href="#__codelineno-8-48"></a><span class="w">  </span><span class="nt">PhysicalDimensions</span><span class="p">:</span>
+<a id="__codelineno-8-49" name="__codelineno-8-49" href="#__codelineno-8-49"></a><span class="w">    </span><span class="nt">heightInFeatureSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span>
+<a id="__codelineno-8-50" name="__codelineno-8-50" href="#__codelineno-8-50"></a><span class="w">    </span><span class="nt">widthInFeatureSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;int&gt;</span>
+<a id="__codelineno-8-51" name="__codelineno-8-51" href="#__codelineno-8-51"></a>
+<a id="__codelineno-8-52" name="__codelineno-8-52" href="#__codelineno-8-52"></a><span class="w">  </span><span class="nt">DeviceMaterials</span><span class="p">:</span>
+<a id="__codelineno-8-53" name="__codelineno-8-53" href="#__codelineno-8-53"></a><span class="w">    </span><span class="nt">material</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;string&gt;</span>
+<a id="__codelineno-8-54" name="__codelineno-8-54" href="#__codelineno-8-54"></a>
+<a id="__codelineno-8-55" name="__codelineno-8-55" href="#__codelineno-8-55"></a><span class="w">  </span><span class="nt">NonlinearWrite</span><span class="p">:</span>
+<a id="__codelineno-8-56" name="__codelineno-8-56" href="#__codelineno-8-56"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;bool&gt;</span>
+<a id="__codelineno-8-57" name="__codelineno-8-57" href="#__codelineno-8-57"></a>
+<a id="__codelineno-8-58" name="__codelineno-8-58" href="#__codelineno-8-58"></a><span class="w">  </span><span class="nt">NonIdenticalPulseSettings</span><span class="p">:</span>
+<a id="__codelineno-8-59" name="__codelineno-8-59" href="#__codelineno-8-59"></a><span class="w">    </span><span class="nt">VinitLTP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-60" name="__codelineno-8-60" href="#__codelineno-8-60"></a><span class="w">    </span><span class="nt">VstepLTP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-61" name="__codelineno-8-61" href="#__codelineno-8-61"></a><span class="w">    </span><span class="nt">VinitLTD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-62" name="__codelineno-8-62" href="#__codelineno-8-62"></a><span class="w">    </span><span class="nt">VstepLTD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-63" name="__codelineno-8-63" href="#__codelineno-8-63"></a><span class="w">    </span><span class="nt">PWinitLTP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-64" name="__codelineno-8-64" href="#__codelineno-8-64"></a><span class="w">    </span><span class="nt">PWstepLTP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-65" name="__codelineno-8-65" href="#__codelineno-8-65"></a><span class="w">    </span><span class="nt">PWinitLTD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-66" name="__codelineno-8-66" href="#__codelineno-8-66"></a><span class="w">    </span><span class="nt">PWstepLTD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+<a id="__codelineno-8-67" name="__codelineno-8-67" href="#__codelineno-8-67"></a><span class="w">    </span><span class="nt">writeVoltageSquareSum</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span>
+</code></pre></div>
+<hr />
+<h3 id="field-reference">Field Reference<a class="headerlink" href="#field-reference" title="Permanent link">&para;</a></h3>
+<h4 id="conductanceproperties"><code>ConductanceProperties</code><a class="headerlink" href="#conductanceproperties" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>maxConductance</code></td>
+<td>S (siemens)</td>
+<td>Maximum achievable cell conductance</td>
+</tr>
+<tr>
+<td><code>minConductance</code></td>
+<td>S</td>
+<td>Minimum achievable cell conductance (reset state)</td>
+</tr>
+<tr>
+<td><code>avgMaxConductance</code></td>
+<td>S</td>
+<td>Average max conductance; may reference <code>maxConductance</code> by alias</td>
+</tr>
+<tr>
+<td><code>avgMinConductance</code></td>
+<td>S</td>
+<td>Average min conductance; may reference <code>minConductance</code> by alias</td>
+</tr>
+<tr>
+<td><code>conductance</code></td>
+<td>S</td>
+<td>Initial conductance state (typically <code>minConductance</code>)</td>
+</tr>
+<tr>
+<td><code>conductancePrev</code></td>
+<td>S</td>
+<td>Previous conductance state (used in write algorithm)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Alias values:</strong> Fields that accept <code>"maxConductance"</code> or <code>"minConductance"</code> as string values will resolve to the corresponding numeric values at runtime.</p>
+<hr />
+<h4 id="writeproperties"><code>WriteProperties</code><a class="headerlink" href="#writeproperties" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>writeVoltageLTP</code></td>
+<td>V</td>
+<td>Voltage pulse for long-term potentiation (weight increase)</td>
+</tr>
+<tr>
+<td><code>writeVoltageLTD</code></td>
+<td>V</td>
+<td>Voltage pulse for long-term depression (weight decrease)</td>
+</tr>
+<tr>
+<td><code>writePulseWidthLTP</code></td>
+<td>s</td>
+<td>Pulse duration for LTP</td>
+</tr>
+<tr>
+<td><code>writePulseWidthLTD</code></td>
+<td>s</td>
+<td>Pulse duration for LTD</td>
+</tr>
+<tr>
+<td><code>maxNumLevelLTP</code></td>
+<td>—</td>
+<td>Maximum discrete conductance levels for LTP</td>
+</tr>
+<tr>
+<td><code>maxNumLevelLTD</code></td>
+<td>—</td>
+<td>Maximum discrete conductance levels for LTD</td>
+</tr>
+<tr>
+<td><code>writeEnergy</code></td>
+<td>J</td>
+<td>Energy per write pulse (0 = compute from model)</td>
+</tr>
+<tr>
+<td><code>numPulse</code></td>
+<td>—</td>
+<td>Number of pulses per write step (0 = determined by model)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="devicevariation"><code>DeviceVariation</code><a class="headerlink" href="#devicevariation" title="Permanent link">&para;</a></h4>
+<p>These four parameters control the stochastic non-idealities of the device model. They are the most impactful parameters on MVM accuracy.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Effect on accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NL_LTP</code></td>
+<td>Non-linearity exponent for LTP</td>
+<td>Higher absolute value → more distortion during weight increase</td>
+</tr>
+<tr>
+<td><code>NL_LTD</code></td>
+<td>Non-linearity exponent for LTD</td>
+<td>Higher absolute value → more distortion during weight decrease</td>
+</tr>
+<tr>
+<td><code>sigmaDtoD</code></td>
+<td>Device-to-device variation (σ)</td>
+<td>Spread between chips; <code>0</code> = no D2D variation</td>
+</tr>
+<tr>
+<td><code>sigmaCtoC</code></td>
+<td>Cycle-to-cycle variation (σ)</td>
+<td>Noise per write operation; higher → less repeatable writes</td>
+</tr>
+</tbody>
+</table>
+<p>Setting all four to <code>0</code> produces a deterministic, linear device (closest to <code>IdealDevice</code>).</p>
+<hr />
+<h4 id="readproperties"><code>ReadProperties</code><a class="headerlink" href="#readproperties" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>readVoltage</code></td>
+<td>V</td>
+<td>Voltage applied during MVM (read operation)</td>
+</tr>
+<tr>
+<td><code>readPulseWidth</code></td>
+<td>s</td>
+<td>Duration of each read pulse</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="device-materials">Device Materials<a class="headerlink" href="#device-materials" title="Permanent link">&para;</a></h2>
+<p>MELISO+ ships with four pre-characterised device materials. Choose based on your target application and acceptable noise levels.</p>
+<h3 id="comparison-table">Comparison Table<a class="headerlink" href="#comparison-table" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>File</th>
+<th><code>maxG</code> (S)</th>
+<th><code>minG</code> (S)</th>
+<th>LTP levels</th>
+<th>LTD levels</th>
+<th><code>NL_LTP</code></th>
+<th><code>NL_LTD</code></th>
+<th><code>sigmaCtoC</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EpiRAM</strong> (Ag:SiGe)</td>
+<td><code>device_EpiRAM.yaml</code></td>
+<td>1.23e-5</td>
+<td>2.46e-7</td>
+<td>256</td>
+<td>256</td>
+<td>0.5</td>
+<td>-0.5</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td><strong>Ag-aSi</strong> (Ag:a-Si)</td>
+<td><code>device_Ag-aSi.yaml</code></td>
+<td>3.85e-8</td>
+<td>3.08e-9</td>
+<td>97</td>
+<td>100</td>
+<td>2.4</td>
+<td>-4.88</td>
+<td>0.035</td>
+</tr>
+<tr>
+<td><strong>AlOx-HfO2</strong></td>
+<td><code>device_AlOx-HfO2.yaml</code></td>
+<td>5.92e-5</td>
+<td>1.34e-5</td>
+<td>40</td>
+<td>40</td>
+<td>1.94</td>
+<td>-0.61</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td><strong>TaOx-HfOx</strong></td>
+<td><code>device_TaOx-HfOx.yaml</code></td>
+<td>1.0e-5</td>
+<td>1.0e-6</td>
+<td>128</td>
+<td>128</td>
+<td>0.04</td>
+<td>-0.63</td>
+<td>0.037</td>
+</tr>
+</tbody>
+</table>
+<h3 id="guidance">Guidance<a class="headerlink" href="#guidance" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Recommended material</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Highest precision / lowest noise</td>
+<td><strong>EpiRAM</strong> — lowest non-linearity, lowest cycle-to-cycle variation</td>
+</tr>
+<tr>
+<td>Most discrete levels</td>
+<td><strong>EpiRAM</strong> — 256 levels per direction</td>
+</tr>
+<tr>
+<td>Closest to linear write behaviour</td>
+<td><strong>TaOx-HfOx</strong> — <code>NL_LTP</code> of only 0.04</td>
+</tr>
+<tr>
+<td>Fastest write pulses</td>
+<td><strong>TaOx-HfOx</strong> — 50 ns pulses vs. 300 µs for Ag-aSi</td>
+</tr>
+<tr>
+<td>Highest conductance range ratio</td>
+<td><strong>Ag-aSi</strong> — ~12.5× ratio (<code>maxG/minG</code>)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: All four materials use CMOS access transistors (<code>cmosAccess: true</code>) and have nonlinear IV disabled by default.</p>
+</blockquote>
+<hr />
+<h2 id="mca-grid-sizing-rules">MCA Grid Sizing Rules<a class="headerlink" href="#mca-grid-sizing-rules" title="Permanent link">&para;</a></h2>
+<p>When choosing <code>mca_rows</code>, <code>mca_cols</code>, <code>cell_rows</code>, and <code>cell_cols</code>, these constraints must hold:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>mca_rows × cell_rows  ≥  matrix_rows
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>mca_cols × cell_cols  ≥  matrix_cols
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>mpi_processes = mca_rows × mca_cols + 1
+</code></pre></div>
+<p>If the matrix is smaller than the grid capacity, MELISO+ will zero-pad it automatically. If the matrix is larger, virtualization (tiling) is applied automatically — the matrix is processed in sequential passes without any changes to the config.</p>
+<p><strong>Example sizing for a 500×500 matrix:</strong></p>
+<table>
+<thead>
+<tr>
+<th><code>mca_rows</code></th>
+<th><code>mca_cols</code></th>
+<th><code>cell_rows</code></th>
+<th><code>cell_cols</code></th>
+<th>MPI procs</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>512</td>
+<td>512</td>
+<td>2</td>
+<td>Single chip, matrix fits with padding</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>256</td>
+<td>256</td>
+<td>5</td>
+<td>4 chips, matrix fits exactly</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>64</td>
+<td>64</td>
+<td>2</td>
+<td>Single chip, virtualization handles tiling</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.annotate", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
