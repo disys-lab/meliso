@@ -16,9 +16,9 @@ class NonRoot:
 
     def awaitInstructions(self):
         data = np.array([-1, -1], dtype=np.float64)
-        #print("RANK{}: trying to recieve next set of row and col id of submatrix".format(self.mca.rank))
+        # print("RANK{}: trying to recieve next set of row and col id of submatrix".format(self.mca.rank))
         self.comm.Bcast(data, root=self.mca.ROOT_PROCESS_RANK)
-        #print("RANK{}: row and col id of submatrix".format(self.mca.rank), data)
+        # print("RANK{}: row and col id of submatrix".format(self.mca.rank), data)
         if data[0] >= 0:
             self.mca.setMat()
             return True
@@ -30,21 +30,22 @@ class NonRoot:
         if self.virtualizationOn:
             while self.awaitInstructions():
                 self.y = self.mca.parallelMatVec()
-            #print("RANK{}: leaving parallelMatVec".format(self.mca.rank))
+            # print("RANK{}: leaving parallelMatVec".format(self.mca.rank))
         else:
-            #print("RANK{}: virtualizationON".format(self.virtualizationOn))
+            # print("RANK{}: virtualizationON".format(self.virtualizationOn))
             self.y = self.mca.parallelMatVec()
 
+        
     def benchmarkMatVec(self):
        pass
 
     def benchmarkMatVecParallel(self, hardwareOn=0, scalingOn=0,correction= False):
-        #print("RANK{}: benchmarking started".format(self.mca.rank))
+        # print("RANK{}: benchmarking started".format(self.mca.rank))
         self.mca.meliso_obj.setHardwareOn(hardwareOn)
         self.mca.meliso_obj.setScalingOn(scalingOn)
         #self.mca.initializeMCA()
         self.parallelMatVec(correction)
-        #print("RANK{}: benchmarking complete".format(self.mca.rank))
+        # print("RANK{}: benchmarking complete".format(self.mca.rank))
 
     def acquireMCAStats(self):
         self.mca.getMCAStats()

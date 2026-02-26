@@ -1,0 +1,17 @@
+exp_params:
+  turnOnHardware: 1
+  turnOnScaling: 0
+  errCorr: 0
+  matrix_name: "bcsstk02"
+  matrix_file: "inputs/matrices/bcsstk02.mtx"
+  distributed:
+    decomposition_dir: "/tmp/"
+    mca_rows: 1
+    mca_cols: 1
+
+device_config:
+  root: "config_files/"
+  cell_rows: 66
+  cell_cols: 66
+  assignment:
+    device_Ag-aSi.yaml: [[-1]]

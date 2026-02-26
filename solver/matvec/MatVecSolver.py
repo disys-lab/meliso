@@ -6,34 +6,56 @@ from .Root import Root
 from .NonRoot import NonRoot
 
 class MatVecSolver:
-    def __init__(self,xvec= None):
+    """
+    `MatVecSolver` serves as the main interface for performing distributed matrix-vector multiplication 
+    (MVM) using MPI. The interface abstracts away the complexities of parallelization and allows 
+    users to easily execute MVM.
 
-        if MPI.COMM_WORLD.Get_rank() == MPI.COMM_WORLD.Get_size() - 1:
-            self.solverObject = Root(MPI.COMM_WORLD)
-            if xvec is None:
-                #obtain x here
-                xpath = "input_x"
-                xvec = np.loadtxt(fname=xpath, delimiter=',')
+    A simple distributed MVM includes:
+    1. Initializing the input vector and matrix (if applicable).
+    2. Performing the MVM operation in parallel across multiple processes.
+    3. Optionally applying min-max scaling reversion to the results.
+    4. Finalizing the MPI environment after computations are complete.
+    5. Acquiring MCA (Memristor Crossbar Array) statistics for performance analysis.
+    """
+    def __init__(self, xvec= None, mat = None):
+        if xvec is None:
+            print("No input vector provided, loading from default path...\n")
+            xpath = os.environ.get("XVEC_PATH", "inputs/vectors/input_x.txt")
+            xvec = np.loadtxt(fname=xpath, delimiter=',')
 
-            # you can set a raw unprocessed matrix here or have the RootMCA read directly from config file
-            # for instance you can do:
-            # mat = np.random.rand(128,128)
-            # self.solverObject = Root(MPI.COMM_WORLD,x=xvec,mat=mat)
+        self.xvec = xvec
+        self.mat = mat
+        self.y = None
+        
+        # MPI Handler
+        self.comm = MPI.COMM_WORLD
+        self.rank = self.comm.Get_rank()
+        self.size = self.comm.Get_size()
 
-            #to reinitialize the matrix you can do for instance:
-            #self.solverObject.initializeMat(np.random.rand(128,128))
-            self.solverObject.initializeX(xvec)
-
+        if self.rank == self.size - 1:
+            self.solverObject = Root(MPI.COMM_WORLD, x=self.xvec, mat=self.mat)
         else:
             self.solverObject = NonRoot(MPI.COMM_WORLD)
 
+    # ----------------------------------------------------------------------------------------------
+    # Explicit initializers for the input vector and matrix
+    # ----------------------------------------------------------------------------------------------
+    def initializeVec(self):
+        if isinstance(self.solverObject, Root):
+            self.solverObject.initializeX(self.xvec)
+
+    def initializeMat(self):
+        if isinstance(self.solverObject, Root):
+            self.solverObject.initializeMat(self.mat)
+
+    # ----------------------------------------------------------------------------------------------
+    # Core operations 
+    # ----------------------------------------------------------------------------------------------
     def matVec(self,correction=False):
         self.solverObject.parallelMatVec(correction=correction)
 
-    def centralizedBenchmarkMatVec(self):
-        self.solverObject.benchmarkMatVec()
-
-    def parallelizedBenchmarkMatVec(self, hardwareOn=0, scalingOn=0,correction=False):
+    def parallelizedBenchmarkMatVec(self, hardwareOn=1, scalingOn=0,correction=False):
         self.solverObject.benchmarkMatVecParallel(hardwareOn,scalingOn,correction=correction)
 
     def acquireMCAStats(self):
@@ -41,3 +63,8 @@ class MatVecSolver:
 
     def finalize(self):
         self.solverObject.finalize()
+
+    def acquireResults(self):
+        if isinstance(self.solverObject, Root):
+            self.y = self.solverObject.y_mem_result
+            return self.y

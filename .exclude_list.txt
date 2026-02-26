@@ -1,0 +1,10 @@
+*.log
+*.lp
+*.pyc
+*.pdf
+*.png
+.DS_Store
+./results/*.*
+./documents/*
+./meliso_old/*
+./build/*

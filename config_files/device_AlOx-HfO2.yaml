@@ -1,0 +1,57 @@
+Device:
+  ConductanceProperties:
+    maxConductance: 5.9172e-05
+    minConductance: 1.3357e-05
+    avgMaxConductance: maxConductance
+    avgMinConductance: minConductance
+    conductance: minConductance
+    conductancePrev: conductance
+  ReadProperties:
+    readVoltage: 0.5
+    readPulseWidth: 5e-9
+  WriteProperties:
+    writeVoltageLTP: 0.9
+    writeVoltageLTD: -1
+    writePulseWidthLTP: 100e-6
+    writePulseWidthLTD: 100e-6
+    writeEnergy: 0
+    maxNumLevelLTP: 40
+    maxNumLevelLTD: 40
+    numPulse: 0
+  DeviceConfiguration:
+    cmosAccess: true
+    FeFET: false
+    gateCapFeFET: 2.1717e-18
+    resistanceAccess: 15e3
+    nonlinearIV: false
+    nonIdenticalPulse: false
+    NL: 10
+  NonIdenticalPulseSettings:
+    VinitLTP: 2.85
+    VstepLTP: 0.05
+    VinitLTD: 2.1
+    VstepLTD: 0.05
+    PWinitLTP: 75e-9
+    PWstepLTP: 5e-9
+    PWinitLTD: 75e-9
+    PWstepLTD: 5e-9
+    writeVoltageSquareSum: 0
+  ReadNoise:
+    enabled: true
+    sigmaReadNoise: 0
+  ConductanceRangeVariation:
+    enabled: false
+    maxConductanceVar: 0
+    minConductanceVar: 0
+  PhysicalDimensions:
+    heightInFeatureSize: 4
+    widthInFeatureSize: 4
+  DeviceMaterials:
+    material: AlOx/HfO2
+  NonlinearWrite:
+    enabled: false
+  DeviceVariation:
+    NL_LTP: 1.94
+    NL_LTD: -0.61
+    sigmaDtoD: 0
+    sigmaCtoC: 0.05

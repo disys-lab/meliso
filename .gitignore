@@ -1,6 +1,5 @@
 build/
 plot/
-matrices/
 .idea/
 *.so
 *.png
@@ -8,3 +7,7 @@ matrices/
 src/core/__pycache__/
 src/cython/mel.cpp
 solver/matvec/__pycache__/
+inputs/
+reports/
+*.csv
+*.zip

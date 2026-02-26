@@ -1,6 +1,6 @@
 import meliso
 import numpy as np
-import sys,os,yaml
+import sys,os,yaml,time
 
 
 '''
@@ -28,6 +28,7 @@ class BaseMCA:
         self.num_mca_stats = 8
 
         self.useMPI4MatDist = True
+        self.ERR_CORR = 1
 
 
         if "EXP_CONFIG_FILE" not in os.environ.keys():
@@ -40,7 +41,7 @@ class BaseMCA:
         #acquire from experiment config file
         self.ROOT_PROCESS_RANK = self.size-1
         self.exp_config =None
-        self.decomposition_dir = "/tmp/"
+        self.decomposition_dir = os.environ.get("TMPDIR", "/tmp/")
         self.distributed = 0
         self.mcaRows = 1
         self.mcaCols = 1
@@ -50,6 +51,12 @@ class BaseMCA:
         self.cellCols = 1
 
         self.readExpConfig(self.expConfigFile)
+
+        if "errCorr" in self.exp_config["exp_params"].keys():
+            self.ERR_CORR = self.exp_config["exp_params"]["errCorr"]
+
+        if "EC" in os.environ.keys():
+            self.ERR_CORR = int(os.environ["EC"])
 
         if self.size-1 != self.mcaRows*self.mcaCols:
             raise Exception("ExperimentConfigFileError: MCA grid size {}x{} != mpi processes {}".format(self.mcaRows,self.mcaCols,self.size))
@@ -87,13 +94,14 @@ class BaseMCA:
 
         if "distributed" in self.exp_config["exp_params"].keys():
             self.distributed = 1
-
-            if "decomposition_dir" not in self.exp_config["exp_params"]["distributed"].keys():
-                print(
-                    "ExperimentConfigFileWarning: decomposition_dir not found/specified, using /tmp/ as default")
-            else:
-
+            # prefer env override; otherwise honor YAML; otherwise keep default.
+            env_decomp = os.environ.get("TMPDIR")
+            if env_decomp:
+                self.decomposition_dir = env_decomp
+            elif "decomposition_dir" in self.exp_config["exp_params"]["distributed"].keys():
                 self.decomposition_dir = self.exp_config["exp_params"]["distributed"]["decomposition_dir"]
+            else:
+                print("ExperimentConfigFileWarning: decomposition_dir not found; using {}".format(self.decomposition_dir))
 
             if "mca_rows" not in self.exp_config["exp_params"]["distributed"].keys():
                 raise Exception(

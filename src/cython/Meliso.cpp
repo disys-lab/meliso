@@ -10,8 +10,33 @@ void Meliso::loadInput(double *x){
         for (int k = 0; k < param->nInput; k++) {
             Input[0][k] = truncate(x[k], param->numInputLevel - 1, param->BWthreshold);
             dInput[0][k] = round(Input[0][k] * (param->numInputLevel - 1));
+            //printf("x[%d],%.4f\n",k,Input[0][k]);
         }
 }
+
+void Meliso::setWeightsIncremental(double *A_matrix,double precision){
+
+    getWeights();
+    double d = 0;
+    for (int k = 0; k < param->nHide; k++) {
+                for (int j = 0; j < param->nInput; j++){
+                    deltaWeight1[k][j] = 0;
+                    d = A_matrix[k*param->nInput + j]-actualWeights[k*param->nInput + j];
+                    if (fabs(d)>precision){
+                        deltaWeight1[k][j] = A_matrix[k*param->nInput + j]-actualWeights[k*param->nInput + j];
+                    }
+                    //real_A_matrix[k*param->nInput + j] = A_matrix[k*param->nInput + j];
+                }
+            }
+    WriteWeights();
+
+}
+
+//void Meliso::setWeightsIterative(double *A_matrix, double precision){
+//
+//
+//
+//}
 
 void Meliso::setWeights(double *A_matrix){
     for (int k = 0; k < param->nHide; k++) {
@@ -23,9 +48,24 @@ void Meliso::setWeights(double *A_matrix){
     WriteWeights();
     //if(!scalingAdjusted){
     if (considerScaling && !scalingAdjusted){
-        adjustScalingLimits();
+        if(simpleScaling){
+            adjustScalingLimits();
+        }
+        else{
+            adjustNewtonDDScaling();
+        }
     }
 
+}
+
+void Meliso::getWeights(){
+
+    for (int k = 0; k < param->nHide; k++) {
+                    for (int j = 0; j < param->nInput; j++){
+                        actualWeights[k*param->nInput + j] = weight1[k][j];
+                    }
+
+    }
 }
 
 void Meliso::initializeWeights(){
@@ -56,43 +96,57 @@ void Meliso::matVec(){
     else if(_2T1F *temp = dynamic_cast<_2T1F*>(arrayIH->cell[0][0]))
         WeightTransfer_2T1F();
     /* Here the performance metrics of subArray also includes that of neuron peripheries (see Train.cpp and Test.cpp) */
-    printf("\tRead latency=%.4e s\n", subArrayIH->readLatency);// + subArrayHO->readLatency);
-    printf("\tWrite latency=%.4e s\n", subArrayIH->writeLatency);// + subArrayHO->writeLatency);
-    printf("\tRead energy=%.4e J\n", arrayIH->readEnergy + subArrayIH->readDynamicEnergy); // + arrayHO->readEnergy + subArrayHO->readDynamicEnergy);
-    printf("\tWrite energy=%.4e J\n", arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy); // + arrayHO->writeEnergy + subArrayHO->writeDynamicEnergy);
+//    printf("INFO: Meliso:matVec: Read latency=%.4e s\n", subArrayIH->readLatency);// + subArrayHO->readLatency);
+//    printf("INFO: Meliso:matVec: Write latency=%.4e s\n", subArrayIH->writeLatency);// + subArrayHO->writeLatency);
+//    printf("INFO: Meliso:matVec: Read energy=%.4e J\n", arrayIH->readEnergy + subArrayIH->readDynamicEnergy); // + arrayHO->readEnergy + subArrayHO->readDynamicEnergy);
+//    printf("INFO: Meliso:matVec: Write energy=%.4e J\n", arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy); // + arrayHO->writeEnergy + subArrayHO->writeDynamicEnergy);
     if(HybridCell* temp = dynamic_cast<HybridCell*>(arrayIH->cell[0][0])){
-        printf("\tTransfer latency=%.4e s\n", subArrayIH->transferLatency);// + subArrayHO->transferLatency);
-        printf("\tTransfer latency=%.4e s\n", subArrayIH->transferLatency);
-        printf("\tTransfer energy=%.4e J\n", arrayIH->transferEnergy + subArrayIH->transferDynamicEnergy);// + arrayHO->transferEnergy + subArrayHO->transferDynamicEnergy);
+        printf("INFO: Meliso:matVec: Transfer latency=%.4e s\n", subArrayIH->transferLatency);// + subArrayHO->transferLatency);
+        printf("INFO: Meliso:matVec: Transfer latency=%.4e s\n", subArrayIH->transferLatency);
+        printf("INFO: Meliso:matVec: Transfer energy=%.4e J\n", arrayIH->transferEnergy + subArrayIH->transferDynamicEnergy);// + arrayHO->transferEnergy + subArrayHO->transferDynamicEnergy);
     }
     else if(_2T1F* temp = dynamic_cast<_2T1F*>(arrayIH->cell[0][0])){
-        printf("\tTransfer latency=%.4e s\n", subArrayIH->transferLatency);
-        printf("\tTransfer energy=%.4e J\n", arrayIH->transferEnergy + subArrayIH->transferDynamicEnergy);// + arrayHO->transferEnergy + subArrayHO->transferDynamicEnergy);
+        printf("INFO: Meliso:matVec: Transfer latency=%.4e s\n", subArrayIH->transferLatency);
+        printf("INFO: Meliso:matVec: Transfer energy=%.4e J\n", arrayIH->transferEnergy + subArrayIH->transferDynamicEnergy);// + arrayHO->transferEnergy + subArrayHO->transferDynamicEnergy);
      }
 	printf("\n");
 
 
 	//acquire the values that can change with compute operations
-    mcaStats[4] += subArrayIH->writeLatency;
-    mcaStats[5] += arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy;
-    mcaStats[6] += subArrayIH->readLatency;
-    mcaStats[7] += arrayIH->readEnergy + subArrayIH->readDynamicEnergy;
+    mcaStats[4] = mcaStats[4] + subArrayIH->writeLatency;
+    mcaStats[5] = mcaStats[5] + arrayIH->writeEnergy + subArrayIH->writeDynamicEnergy;
+    mcaStats[6] = mcaStats[6] + subArrayIH->readLatency;
+    mcaStats[7] = mcaStats[7] + arrayIH->readEnergy + subArrayIH->readDynamicEnergy;
 
+    printf("INFO: Meliso:matVec: Read latency=%.4e s\n", mcaStats[6]);// + subArrayHO->readLatency);
+    printf("INFO: Meliso:matVec: Write latency=%.4e s\n", mcaStats[4]);// + subArrayHO->writeLatency);
+    printf("INFO: Meliso:matVec: Read energy=%.4e J\n", mcaStats[7]); // + arrayHO->readEnergy + subArrayHO->readDynamicEnergy);
+    printf("INFO: Meliso:matVec: Write energy=%.4e J\n", mcaStats[5]); // + arrayHO->writeEnergy + subArrayHO->writeDynamicEnergy);
 }
 
 void Meliso::getResults(){
       //memset(y,0,rows*sizeof(double));
       for (int k = 0; k < param->nHide; k++) {
-            //if (scalingAdjusted){
-            if ( considerScaling && scalingAdjusted){
-                y[k] = (sign[k]*Output[0][k] - y_adj_min[k])/delta[k];
-                y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
-                //printf("getResults:: scaling adjusted : %d consider scaling %d\n",scalingAdjusted,sc);
-            }
-            else{
-                y[k] = Output[0][k];
-                //printf("getResults after:: Output[%d] = %f\n",k,Output[0][k]);
-            }
+            y[k] = Output[0][k];
+//            //if (scalingAdjusted){
+//            if ( considerScaling && scalingAdjusted){
+//                if(simpleScaling){
+//                    y[k] = (sign[k]*Output[0][k] - y_adj_min[k])/delta[k];
+//                    y[k] = real_delta[k]*y[k] + real_y_adj_min[k];
+//                    //printf("getResults:: real_delta[%d]=%f\n",k,real_delta[k]);
+//                    //printf("getResults:: real_delta[%d]=%f\n",k,real_delta[k]);
+//                    //printf("getResults:: delta[%d]=%f\n",k,delta[k]);
+//                    //printf("getResults:: scaling adjusted : %d consider scaling %d\n",scalingAdjusted,sc);
+//                }
+//                else{
+//                    y[k] = Output[0][k] - evaluatePolynomial(p-1,Output[0][k],f,t,k*p);
+//                    //printf("INFO: Meliso:getResults :%d y=%lf Output=%lf\n",k,y[k],Output[0][k]);
+//                }
+//            }
+//            else{
+//                y[k] = Output[0][k];
+//                //printf("INFO: Meliso:getResults turnOnScaling=%d::scalingAdjusted=%d :: Output[%d] = %lf\n",considerScaling,scalingAdjusted,k,y[k]);
+//            }
         }
 }
 
@@ -114,6 +168,7 @@ void Meliso::getScalingLimits(double *y_scaled_result,double *real_y_result, dou
 
     for (int k = 0; k < param->nHide; k++) {
         for (int j = 0; j < param->nInput; j++){
+            //real_y_result[k] = real_y_result[k] + x[j]*x[j];
             real_y_result[k] = real_y_result[k] + real_A_matrix[k*param->nInput + j]*x[j];
         }
     }
@@ -137,6 +192,82 @@ void Meliso::adjustScalingLimits(){
     }
 
     scalingAdjusted = true;
+}
+
+void Meliso::adjustNewtonDDScaling(){
+
+    int m = rows;
+    printf("INFO: Meliso:adjustNewtonDDScaling: adjustNewtonDDScaling interpolants=%d\n",p);
+    for (int a = 0; a<p; a++){
+
+        double value;// = a*double(MAX_TOL)/(p-1);
+
+        initializeWeights();
+
+        for (int k = 0; k < param->nHide; k++) {
+                    for (int j = 0; j < param->nInput; j++){
+                        value = ((double)rand())/(RAND_MAX)*a/(p-1);
+                        deltaWeight1[k][j] = value;
+                        real_A_matrix[k*param->nInput + j] = value;
+                    }
+                }
+
+        WriteWeights();
+
+        getScalingLimits(delta,real_delta,MAX_TOL);
+        for (int i=0 ;i <m; i++){
+            t[i*p+a] = delta[i];
+            d[i*p+a] = delta[i] - real_delta[i];
+            printf("INFO: Meliso:adjustNewtonDDScaling :value=%lf t[%d]=%lf, d[%d]=%lf\n",value,i*p+a,i*p+a,t[i*p+a],d[i*p+a]);
+        }
+
+        memset(delta,0,m*sizeof(double));
+        memset(real_delta,0,m*sizeof(double));
+    }
+
+    for(int i= 0; i<m; i++){
+        computeInterpolants(p-1,0,p-1,f,d,t,1,i*p);
+    }
+
+    scalingAdjusted = true;
+}
+
+
+double Meliso::computeInterpolants(int n, int start, int end, double *f, double *d, double *t,int store_res,int arr_start){
+
+    if(start == end){
+        return d[arr_start+start];
+    }
+
+    double f_2k = computeInterpolants(n-1,start+1,end,f,d,t,0,arr_start);
+    double f_1km1 = computeInterpolants(n-1,start,end-1,f,d,t,1,arr_start);
+
+    double f_res = double(f_2k - f_1km1)/(t[arr_start+end] - t[arr_start+start]);
+
+    if(store_res){
+        f[arr_start+n] = f_res;
+        f[arr_start+n-1] = f_1km1;
+    }
+
+    return f_res;
+
+}
+
+double Meliso::evaluatePolynomial(int n,double value, double *f, double *t, int arr_start){
+
+    double res = 0;
+
+    for (int i=0;i<n;i++){
+        double prod = 1;
+        for (int j =0; j<i ; j++){
+            prod = prod *(value -t[arr_start+j]);
+        }
+
+        res = res + prod*f[arr_start+i];
+    }
+
+    return res;
+
 }
 
 void Meliso::setConductanceProperties(  double maxConductance,
@@ -325,7 +456,30 @@ void Meliso::setScalingOn(int turnOnScaling){
     //
 }
 
+void Meliso::setInterpolants(int interpolants){
+
+    p = interpolants;
+
+    int m = rows;
+    f = (double*)malloc(p*m*sizeof(double));
+    memset(f,0,m*sizeof(double));
+
+    d = (double*)malloc(p*m*sizeof(double));
+    memset(y,0,m*sizeof(double));
+
+    t = (double*)malloc(p*m*sizeof(double));
+    memset(t,0,m*sizeof(double));
+
+    if(!simpleScaling){
+        adjustNewtonDDScaling();
+    }
+    printf("INFO: Meliso:Constructor: scalingAdjusted=%d \n",scalingAdjusted);
+}
+
 Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int turnOnHardware,int turnOnScaling) {
+
+    p = 3;
+
     rows = m;
     columns = n;
 
@@ -338,6 +492,7 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
 
 	scalingAdjusted = false;
 	considerScaling = false;
+	simpleScaling = false;
 
     setHardwareOn(turnOnHardware);
     setScalingOn(turnOnScaling);
@@ -357,6 +512,9 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
     real_A_matrix = (double*)malloc(m*n*sizeof(double));
     memset(real_A_matrix,0,m*n*sizeof(double));
 
+    actualWeights = (double*)malloc(m*n*sizeof(double));
+    memset(actualWeights,0,m*n*sizeof(double));
+
 	y = (double*)malloc(m*sizeof(double));
     memset(y,0,m*sizeof(double));
 
@@ -374,6 +532,8 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
 
     real_y_adj_min = (double*)malloc(m*sizeof(double));
     memset(real_y_adj_min,0,m*sizeof(double));
+
+
 
 
 	/* Initialization of synaptic array from input to hidden layer */
@@ -400,7 +560,7 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
         arrayIH->Initialization<_2T1F>();
     }
     else{
-        printf("Unsupported device_type\n");
+        printf("INFO: Meliso:Constructor:Unsupported device_type\n");
         exit(0);
     }
     omp_set_num_threads(16);
@@ -427,16 +587,16 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
 	totalSubArrayArea = subArrayIH->usedArea; //+ subArrayHO->usedArea;
 	totalNeuronAreaIH = adderIH.area + muxIH.area + muxDecoderIH.area + dffIH.area + subtractorIH.area;
 
-	printf("Total SubArray (synaptic core) area=%.4e m^2\n", totalSubArrayArea);
-	printf("Total Neuron (neuron peripheries) area=%.4e m^2\n", totalNeuronAreaIH); // + totalNeuronAreaHO);
-	printf("Total area=%.4e m^2\n", totalSubArrayArea + totalNeuronAreaIH); //+ totalNeuronAreaHO);
+	printf("INFO: Meliso:Constructor: Total SubArray (synaptic core) area=%.4e m^2\n", totalSubArrayArea);
+	printf("INFO: Meliso:Constructor: Total Neuron (neuron peripheries) area=%.4e m^2\n", totalNeuronAreaIH); // + totalNeuronAreaHO);
+	printf("INFO: Meliso:Constructor: Total area=%.4e m^2\n", totalSubArrayArea + totalNeuronAreaIH); //+ totalNeuronAreaHO);
 
 	/* Print the standby leakage power of synaptic core and neuron peripheries */
-	printf("Leakage power of subArrayIH is : %.4e W\n", subArrayIH->leakage);
+	printf("INFO: Meliso:Constructor: Leakage power of subArrayIH is : %.4e W\n", subArrayIH->leakage);
 
-	printf("Leakage power of NeuronIH is : %.4e W\n", leakageNeuronIH);
-	printf("Total leakage power of subArray is : %.4e W\n", subArrayIH->leakage);// + subArrayHO->leakage);
-	printf("Total leakage power of Neuron is : %.4e W\n", leakageNeuronIH); // + leakageNeuronHO);
+	printf("INFO: Meliso:Constructor: Leakage power of NeuronIH is : %.4e W\n", leakageNeuronIH);
+	printf("INFO: Meliso:Constructor: Total leakage power of subArray is : %.4e W\n", subArrayIH->leakage);// + subArrayHO->leakage);
+	printf("INFO: Meliso:Constructor: Total leakage power of Neuron is : %.4e W\n", leakageNeuronIH); // + leakageNeuronHO);
 
     //only initialized during construction of Meliso
     mcaStats[0] = totalSubArrayArea;
@@ -448,6 +608,9 @@ Meliso::Meliso(int device_type,int m,int n, double max_tol,double min_tol,int tu
     //subArrayIH->readLatency
     //subArrayIH->writeDynamicEnergy
     //subArrayIH->readDynamicEnergy
+
+
+
 
 }
 }
