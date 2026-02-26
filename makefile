@@ -18,7 +18,7 @@ $(info    Creating following objects $(ALLOBJ))
 CXX := g++ -static-libstdc++ 
 CXXFLAGS := -fopenmp -O3 -std=c++0x -w -fPIC
 
-.PHONY: all clean update-immv clean-immv delete-immv
+.PHONY: all clean update-immv clean-immv
 
 all: get-immv create-build neurosim meliso
 
@@ -62,7 +62,4 @@ clean-meliso:
 clean-immv:
 	@echo "Removing temp repo folder..."
 	rm -rf $(IMMV_DIR)
-
-delete-immv:
-	@echo "Removing mlp_neurosim..."
 	rm -rf $(MLP_NEUROSIM)

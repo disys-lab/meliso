@@ -39,15 +39,18 @@ MatVecSolver  (solver/matvec/MatVecSolver.py)
 # Clone and build
 git clone https://github.com/disys-lab/meliso.git
 cd meliso
-mkdir build
-export PYTHONPATH="${PYTHONPATH}:./build"
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:./build/"
+conda activate mpienv38
+export PYTHONPATH="${PYTHONPATH}:$(pwd)/build"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$(pwd)/build/"
 make all
 
 # Run a 1-array experiment (1 worker + 1 root = 2 MPI ranks)
 EXP_CONFIG_FILE=config_files/quickstart/EpiRAM/exp1.yaml \
+XVEC_PATH=inputs/vectors/input_x.txt \
   mpiexec -n 2 python3 DistributedMatVec.py
 ```
+
+See the [Installation guide](installation.md) for full prerequisites and Docker instructions, and the [Local Quick-Start tutorial](tutorials/quickstart_local.md) for a step-by-step walkthrough.
 
 ---
 
@@ -69,13 +72,17 @@ EXP_CONFIG_FILE=config_files/quickstart/EpiRAM/exp1.yaml \
 
 ## Documentation Sections
 
+- [Installation](installation.md) — Prerequisites, build steps, Docker setup
+- [Configuration Reference](configuration.md) — Full YAML schema for experiment and device configs, device materials comparison
+- Tutorials:
+    - [Quick-Start (Local / Docker)](tutorials/quickstart_local.md) — Run your first experiment without a cluster
+    - [Distributed MVM on SLURM](tutorials/run_distributed_MVM.md) — Full HPC workflow with shell script templates
 - [API Reference](api/index.md) — All classes and public functions
     - [`src.core`](api/src/core/BaseMCA.md) — Core MCA process roles
     - [`src.cython`](api/src/cython/MelisoPy.md) — Cython/C++ hardware interface
     - [`solver.matvec`](api/solver/matvec/MatVecSolver.md) — High-level solver
     - [`solver.common`](api/solver/common/loaders.md) — Utilities
     - [Driver scripts](api/scripts/DistributedMatVec.md) — Entry-point scripts
-- [Tutorials](tutorials/run_distributed_MVM.md) — Step-by-step guides
 
 ---
 

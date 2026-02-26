@@ -45,6 +45,11 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Installation: installation.md
+  - Configuration Reference: configuration.md
+  - Tutorials:
+      - Quick-Start (Local / Docker): tutorials/quickstart_local.md
+      - Distributed MVM (SLURM): tutorials/run_distributed_MVM.md
   - API Reference:
       - Overview: api/index.md
       - src.core:
@@ -64,5 +69,3 @@ nav:
       - Driver Scripts:
           - DistributedMatVec.py: api/scripts/DistributedMatVec.md
           - mlpInference.py: api/scripts/mlpInference.md
-  - Tutorials:
-      - Distributed MVM: tutorials/run_distributed_MVM.md
