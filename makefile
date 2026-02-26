@@ -20,7 +20,8 @@ CXXFLAGS := -fopenmp -O3 -std=c++0x -w -fPIC
 
 .PHONY: all clean update-immv clean-immv
 
-all: get-immv create-build neurosim meliso
+all: get-immv
+	$(MAKE) create-build neurosim meliso
 
 get-immv:
 	@echo "Cloning or updating InMemMVM..."
