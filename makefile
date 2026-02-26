@@ -34,6 +34,7 @@ get-immv:
 	@echo "Copying files into $(MLP_NEUROSIM)..."
 	@mkdir -p $(MLP_NEUROSIM)
 	@cp -a $(IMMV_DIR)/. $(MLP_NEUROSIM)/
+	@rm -rf $(MLP_NEUROSIM)/.git
 	@echo "Done."
 
 neurosim: $(ALLOBJ)
