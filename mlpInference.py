@@ -53,7 +53,7 @@ def main():
         input_vector = test_images[i] # Shape: (784,)
         true_label = test_labels[i]
         z1_cpu, z2_cpu, a1_cpu, a2_cpu  = model.predict(input_vector)
-        predicted_label = np.argmax(a2_cpu)
+        predicted_label = int(np.argmax(a2_cpu))
         print(f"Sample {i}: True label = {true_label}, Predicted label = {predicted_label}")
         if predicted_label == true_label:
             correct_predictions += 1
@@ -74,7 +74,7 @@ def main():
         true_label = test_labels[i]
 
         # Setup MELISO+ for the first time
-        CORRECTION = True # With min-max scaling reversion 
+        CORRECTION = False # With min-max scaling reversion 
         mv = MatVecSolver(xvec=input_vector, mat=model.W1) # Initialize with the first layer weights
 
         # --- First layer, (784, 1) x (512, 784) + (512,1) -> (512, 1) ---
@@ -84,12 +84,13 @@ def main():
         mv.matVec(correction=CORRECTION) 
         mv.finalize() # Memristive MVM should be in the original range
         mv.acquireMCAStats() 
-        z1 = np.loadtxt('./y_mem_result.txt', delimiter=',') # Load the MVM result for the first layer
+        z1 = mv.acquireResults() # Load the MVM result for the first layer
 
         if z1 is not None and z1.min() != 0 and z1.max() != 0:
             print(f"Obtained MVM result with shape {z1.shape} for the first layer.")
             # 2. Add bias and apply ReLU activation
-            z1 = z1[0]                  # Remove the extra dimension from MVM output
+            print(f"Current dimensions of z1: {z1.shape}, expected (512, 1).")
+            z1 = z1.reshape(-1,1)                  
             print(f"Relative L2 error for the first layer MVM result compared to CPU: {np.linalg.norm(z1 - z1_cpu) / np.linalg.norm(z1_cpu):.2%}")
             z1 = z1 + model.B1          # Add bias
             a1 = model.__relu__(z1)     # Apply ReLU activation
@@ -100,27 +101,27 @@ def main():
         # TODO: For the second layer, we would need to re-initialize the MatVecSolver with the 
         # new input vector (a1) and the second layer weights (model.W2). A more elegent approach is 
         # needed.
-        mv = MatVecSolver(xvec=a1.reshape(-1,1), mat=model.W2) # Initialize with the second layer weights
-        mv.matVec(correction=CORRECTION)
-        mv.finalize() # Memristive MVM should be in the original range
-        mv.acquireMCAStats()
-        z2 = np.loadtxt('./y_mem_result.txt', delimiter=',') # Load the MVM result for the second layer
-        mv.stopCommunication() # Cleanly stop MPI communication after acquiring results
+        # mv = MatVecSolver(xvec=a1.reshape(-1,1), mat=model.W2) # Initialize with the second layer weights
+        # mv.matVec(correction=CORRECTION)
+        # mv.finalize() # Memristive MVM should be in the original range
+        # mv.acquireMCAStats()
+        # z2 = np.loadtxt('./y_mem_result.txt', delimiter=',') # Load the MVM result for the second layer
+        # mv.stopCommunication() # Cleanly stop MPI communication after acquiring results
 
-        if z2 is not None and z2.min() != 0 and z2.max() != 0:
-            print(f"Obtained MVM result with shape {z2.shape} for the second layer.")
-            # 3. Add bias and apply softmax activation
-            z2 = z2[0]                  # Remove the extra dimension from MVM output
-            print(f"Relative L2 error for the second layer MVM result compared to CPU: {np.linalg.norm(z2 - z2_cpu) / np.linalg.norm(z2_cpu):.2%}")
-            z2 = z2 + model.B2          # Add bias
-            a2 = model.__softmax__(z2)  # Apply softmax activation
-            print(f"Relative L2 error for the second layer activated output compared to CPU: {np.linalg.norm(a2 - a2_cpu) / np.linalg.norm(a2_cpu):.2%}")
-            print(f"Obtained activated output with shape {a2.shape} for the second layer.")
+        # if z2 is not None and z2.min() != 0 and z2.max() != 0:
+        #     print(f"Obtained MVM result with shape {z2.shape} for the second layer.")
+        #     # 3. Add bias and apply softmax activation
+        #     z2 = z2[0]                  # Remove the extra dimension from MVM output
+        #     print(f"Relative L2 error for the second layer MVM result compared to CPU: {np.linalg.norm(z2 - z2_cpu) / np.linalg.norm(z2_cpu):.2%}")
+        #     z2 = z2 + model.B2          # Add bias
+        #     a2 = model.__softmax__(z2)  # Apply softmax activation
+        #     print(f"Relative L2 error for the second layer activated output compared to CPU: {np.linalg.norm(a2 - a2_cpu) / np.linalg.norm(a2_cpu):.2%}")
+        #     print(f"Obtained activated output with shape {a2.shape} for the second layer.")
 
-            predicted_label_meliso = np.argmax(a2)
-            print(f"Sample {i}: True label = {true_label}, Predicted label (MELISO+) = {predicted_label_meliso}")
-            if predicted_label_meliso == true_label:
-                correct_predictions_meliso += 1
+        #     predicted_label_meliso = np.argmax(a2)
+        #     print(f"Sample {i}: True label = {true_label}, Predicted label (MELISO+) = {predicted_label_meliso}")
+        #     if predicted_label_meliso == true_label:
+        #         correct_predictions_meliso += 1
             
     accuracy_meliso = correct_predictions_meliso / subset_size
     print(f"Accuracy on the first {subset_size} samples of the MNIST test set using MELISO+: {accuracy_meliso:.2%}")

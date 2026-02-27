@@ -4,6 +4,9 @@ import numpy as np
 class MLP:
     def __init__(self, W1_path, B1_path, W2_path, B2_path):
         self.W1, self.B1, self.W2, self.B2 = self.__load_model__(W1_path, B1_path, W2_path, B2_path)
+        self.FANIN_1 = 784.0  
+        self.FANIN_2 = 512.0  
+        self.temperature = 1.0
     
     def predict(self, input_vector):
             """Perform inference with the MLP model given an input vector."""
@@ -20,14 +23,14 @@ class MLP:
                 raise ValueError(f"Input size mismatch. Expected {expected_size} elements, but got {input_vector.size}.")
 
             # First layer
-            z1 = np.dot(self.W1, input_vector) + self.B1
-            a1 = self.__relu__(z1)
+            z1 = (self.W1 @ input_vector/ self.FANIN_1) + self.B1
+            a1 = np.clip(z1, 0.0, 1.0)  # ReLU activation
 
             # Second layer
-            z2 = np.dot(self.W2, a1) + self.B2
-            a2 = self.__softmax__(z2)
+            z2 = (self.W2 @ a1 / self.FANIN_2) + self.B2
+            a2 = self.__softmax__(self.temperature *z2)
             
-            return z1, z2, a1,a2
+            return z1, z2, a1, a2
     
     #-----------------------------------------------------------------------------------------------
     # Internal methods for the MLP class
@@ -38,8 +41,9 @@ class MLP:
     
     def __softmax__(self, x):
         """Numerically stable softmax function."""
-        e_x = np.exp(x - np.max(x))
-        return e_x / e_x.sum(axis=0)
+        z = x - np.max(x)
+        ez = np.exp(z)
+        return ez / np.sum(ez)
     
     def __load_model__(self, W1_path, B1_path, W2_path, B2_path):
         """Load the two-layer MLP model parameters from the specified file paths."""

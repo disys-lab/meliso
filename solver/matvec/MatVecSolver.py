@@ -143,6 +143,9 @@ class MatVecSolver:
             Any: The result data (`y_mem_result`) from the solver object if it is an instance of 
             `Root`, otherwise `None`.
         """
+        # TODO: In future implementation, we may want to handle results from NonRoot processes as 
+        # well, to ensure that the entire distributed system can access the results. One approach is 
+        # to broadcast the results from the Root process to all NonRoot processes after acquisition.
         if isinstance(self.solverObject, Root):
             self.y = self.solverObject.y_mem_result
             return self.y

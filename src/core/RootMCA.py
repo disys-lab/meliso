@@ -95,6 +95,7 @@ class RootMCA(BaseMCA):
 
         else:
             self.mat = mat
+            self.globalMat = mat
 
             # Capture original rows and cols of the matrix before any scaling or padding is applied
             self.origMatRows = mat.shape[0]
