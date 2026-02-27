@@ -49,7 +49,7 @@ class MatVecSolver:
 | `solverObject` | `Root` or `NonRoot` | Process-role object |
 | `xvec` | `np.ndarray` | Input vector |
 | `mat` | `np.ndarray` or `None` | Input matrix (may be `None` on non-root processes) |
-| `y` | `np.ndarray` or `None` | MVM result (populated after `acquireResults()`) |
+| `y` | `np.ndarray` | MVM result; initialised to `np.zeros_like(xvec)` at construction, populated after `acquireResults()` |
 
 ---
 
@@ -92,6 +92,9 @@ def matVec(self, correction: bool = False) -> None
 | `correction` | If `True`, the root process reverses min-max scaling on the output, returning results in the original domain. |
 
 This is a collective call — **all MPI processes must call it** (root coordinates, workers execute).
+
+!!! note "Auto-initialization"
+    As of the latest version, `matVec()` calls `initializeVec()` and `initializeMat()` internally before executing the MVM. Explicit prior calls to these methods are no longer required when using the standard workflow.
 
 ---
 
@@ -136,6 +139,21 @@ Must be called after each `matVec()` or `parallelizedBenchmarkMatVec()` call to 
 
 ---
 
+### `stopCommunication()`
+
+Cleanly terminate the MPI environment.
+
+```python
+def stopCommunication(self) -> None
+```
+
+Calls `MPI.Finalize()`. **Must be called after all MPI computation is complete** and after `finalize()` has been called to ensure worker processes have exited their loops.
+
+!!! warning
+    Once `stopCommunication()` is called, no further MPI operations are possible. Call this only at the very end of your script.
+
+---
+
 ### `acquireResults()`
 
 Return the MVM output vector on the root process.
@@ -174,6 +192,9 @@ mv.matVec(correction=True)
 mv.finalize()
 mv.acquireMCAStats()
 y_original_domain = mv.acquireResults()
+
+# ── Clean up MPI at the very end ──────────────────────────────────────────
+mv.stopCommunication()
 ```
 
 ---
@@ -193,4 +214,6 @@ Example: `mca_rows=2, mca_cols=2` → launch with `mpiexec -n 5`.
 
 - [`Root`](Root.md) — Root-process coordinator.
 - [`NonRoot`](NonRoot.md) — Worker-process coordinator.
-- [`DistributedMatVec.py`](../../scripts/DistributedMatVec.md) — Driver script that uses `MatVecSolver`.
+- [`DistributedMatVec.py`](../../scripts/DistributedMatVec.md) — Basic MVM driver script.
+- [`mlpInference.py`](../../scripts/mlpInference.md) — MLP inference driver.
+- [`pdhg.py`](../../scripts/pdhg.md) — PDHG optimization driver.

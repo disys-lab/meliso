@@ -9,8 +9,8 @@ MELISO+ framework. It loads input vectors, runs the MVM with and without min-max
 and compares the results with benchmark outputs.
 """
 
-import meliso
 import os
+import meliso
 import numpy as np
 from solver.matvec.MatVecSolver import MatVecSolver
 
@@ -34,7 +34,6 @@ print("Obtained MVM result without min-max scaling correction: \n", y_minmax)
 
 mv.parallelizedBenchmarkMatVec(0,0,correction = CORRECTION) # The benchmarking results should also be in the [0,1] range
 mv.finalize()
-mv.acquireMCAStats()
 
 # --------------------------------------------------------------------------------------------------
 # Run the distributed matrix-vector multiplication (MVM) with min-max scaling reversion and 

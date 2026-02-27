@@ -63,9 +63,12 @@ nav:
           - MatVecSolver: api/solver/matvec/MatVecSolver.md
           - Root: api/solver/matvec/Root.md
           - NonRoot: api/solver/matvec/NonRoot.md
+      - solver.mlp:
+          - MLP: api/solver/mlp/MLP.md
       - solver.common:
           - loaders: api/solver/common/loaders.md
           - make_toy_linear_systems: api/solver/common/make_toy_linear_systems.md
       - Driver Scripts:
           - DistributedMatVec.py: api/scripts/DistributedMatVec.md
           - mlpInference.py: api/scripts/mlpInference.md
+          - pdhg.py: api/scripts/pdhg.md

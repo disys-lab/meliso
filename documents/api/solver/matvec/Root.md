@@ -153,7 +153,13 @@ After computing `y`:
 - If `correction=True`: calls `addCorrectionY()` to reverse min-max scaling and stores in `y_mem_result`.
 - If `correction=False`: stores raw scaled result in `y_mem_result`.
 
-Result is also saved to `<TMPDIR>/y_mem_result.txt`.
+Results are saved to the following output files:
+
+| File | Description |
+|------|-------------|
+| `<TMPDIR>/y_mem_result.txt` | Final MVM result (content depends on `correction` flag) |
+| `<TMPDIR>/y_mem_result_reversal_applied.txt` | Result with min-max scaling reversal applied |
+| `<TMPDIR>/y_mem_result_no_reversal.txt` | Result without scaling reversal (in `[0,1]` domain) |
 
 ---
 
