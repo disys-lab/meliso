@@ -13,10 +13,8 @@
       
       
       
-        <link rel="prev" href="../DistributedMatVec/">
+        <link rel="prev" href="../mlpInference/">
       
-      
-        <link rel="next" href="../pdhg/">
       
       
         
@@ -27,7 +25,7 @@
     
     
       
-        <title>mlpInference.py - MELISO+ Documentation</title>
+        <title>pdhg.py - MELISO+ Documentation</title>
       
     
     
@@ -78,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#driver-script-mlpinferencepy" class="md-skip">
+        <a href="#driver-script-pdhgpy" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              mlpInference.py
+              pdhg.py
             
           </span>
         </div>
@@ -1332,6 +1330,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../mlpInference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mlpInference.py
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1351,7 +1377,7 @@
   <span class="md-ellipsis">
     
   
-    mlpInference.py
+    pdhg.py
   
 
     
@@ -1369,7 +1395,7 @@
   <span class="md-ellipsis">
     
   
-    mlpInference.py
+    pdhg.py
   
 
     
@@ -1406,33 +1432,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
+  <a href="#class-pdhgsolver" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage
+        Class: PDHGSolver
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Functions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Functions">
+    <nav class="md-nav" aria-label="Class: PDHGSolver">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cancel_slurm_job" class="md-nav__link">
+  <a href="#class-constants" class="md-nav__link">
     <span class="md-ellipsis">
       
-        cancel_SLURM_job()
+        Class Constants
       
     </span>
   </a>
@@ -1440,10 +1455,99 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#main" class="md-nav__link">
+  <a href="#__init__a-b-c-num_iterations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        main()
+        __init__(A, b, c, num_iterations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_compute_matvecmatrix-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _compute_matvec(matrix, vector)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_project_dualmu-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _project_dual(mu) (static)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_project_primalx-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _project_primal(x) (static)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_compute_stepsizea-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _compute_stepsize(A) (static)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        solve()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="solve()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Files
       
     </span>
   </a>
@@ -1454,24 +1558,29 @@
     </nav>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#script-flow" class="md-nav__link">
+  <a href="#module-level-function-main" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Script Flow
+        Module-Level Function: main()
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Script Flow">
+    <nav class="md-nav" aria-label="Module-Level Function: main()">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-load-model-and-data" class="md-nav__link">
+  <a href="#root-process-rank-size-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Load Model and Data
+        Root Process (rank == size - 1)
       
     </span>
   </a>
@@ -1479,32 +1588,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-cpu-inference" class="md-nav__link">
+  <a href="#worker-processes-rank-size-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. CPU Inference
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-meliso-accelerated-inference-layer-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. MELISO+ Accelerated Inference (Layer 1)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-second-layer-not-yet-implemented" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Second Layer (Not Yet Implemented)
+        Worker Processes (rank &lt; size - 1)
       
     </span>
   </a>
@@ -1513,39 +1600,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration-variables" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration Variables
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Network Architecture
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#input-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Input Files
-      
-    </span>
-  </a>
   
 </li>
       
@@ -1561,10 +1615,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#output" class="md-nav__link">
+  <a href="#pdhg-iteration-data-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Output
+        PDHG Iteration Data Flow
       
     </span>
   </a>
@@ -1572,10 +1626,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dependencies" class="md-nav__link">
+  <a href="#example-usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dependencies
+        Example Usage
       
     </span>
   </a>
@@ -1597,34 +1651,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../pdhg/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    pdhg.py
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1683,33 +1709,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
+  <a href="#class-pdhgsolver" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage
+        Class: PDHGSolver
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Functions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Functions">
+    <nav class="md-nav" aria-label="Class: PDHGSolver">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cancel_slurm_job" class="md-nav__link">
+  <a href="#class-constants" class="md-nav__link">
     <span class="md-ellipsis">
       
-        cancel_SLURM_job()
+        Class Constants
       
     </span>
   </a>
@@ -1717,10 +1732,99 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#main" class="md-nav__link">
+  <a href="#__init__a-b-c-num_iterations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        main()
+        __init__(A, b, c, num_iterations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_compute_matvecmatrix-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _compute_matvec(matrix, vector)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_project_dualmu-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _project_dual(mu) (static)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_project_primalx-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _project_primal(x) (static)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_compute_stepsizea-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _compute_stepsize(A) (static)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        solve()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="solve()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Files
       
     </span>
   </a>
@@ -1731,24 +1835,29 @@
     </nav>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#script-flow" class="md-nav__link">
+  <a href="#module-level-function-main" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Script Flow
+        Module-Level Function: main()
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Script Flow">
+    <nav class="md-nav" aria-label="Module-Level Function: main()">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-load-model-and-data" class="md-nav__link">
+  <a href="#root-process-rank-size-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Load Model and Data
+        Root Process (rank == size - 1)
       
     </span>
   </a>
@@ -1756,32 +1865,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-cpu-inference" class="md-nav__link">
+  <a href="#worker-processes-rank-size-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. CPU Inference
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-meliso-accelerated-inference-layer-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. MELISO+ Accelerated Inference (Layer 1)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-second-layer-not-yet-implemented" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Second Layer (Not Yet Implemented)
+        Worker Processes (rank &lt; size - 1)
       
     </span>
   </a>
@@ -1790,39 +1877,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration-variables" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration Variables
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Network Architecture
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#input-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Input Files
-      
-    </span>
-  </a>
   
 </li>
       
@@ -1838,10 +1892,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#output" class="md-nav__link">
+  <a href="#pdhg-iteration-data-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Output
+        PDHG Iteration Data Flow
       
     </span>
   </a>
@@ -1849,10 +1903,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dependencies" class="md-nav__link">
+  <a href="#example-usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dependencies
+        Example Usage
       
     </span>
   </a>
@@ -1887,166 +1941,307 @@
 
 
 
-<h1 id="driver-script-mlpinferencepy">Driver Script: <code>mlpInference.py</code><a class="headerlink" href="#driver-script-mlpinferencepy" title="Permanent link">&para;</a></h1>
-<p><strong>File:</strong> <code>mlpInference.py</code>
+<h1 id="driver-script-pdhgpy">Driver Script: <code>pdhg.py</code><a class="headerlink" href="#driver-script-pdhgpy" title="Permanent link">&para;</a></h1>
+<p><strong>File:</strong> <code>pdhg.py</code>
 <strong>Authors:</strong> Huynh Quang Nguyen Vo (Oklahoma State University)</p>
 <hr />
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p><code>mlpInference.py</code> demonstrates inference with a pre-trained two-layer MLP on the MNIST digit classification task. It runs two inference passes:</p>
-<ol>
-<li><strong>CPU inference</strong> using the <a href="../../solver/mlp/MLP/"><code>MLP</code></a> class and standard NumPy.</li>
-<li><strong>MELISO+ accelerated inference</strong> using <a href="../../solver/matvec/MatVecSolver/"><code>MatVecSolver</code></a> to offload the first layer's matrix-vector multiplication to memristive crossbar hardware.</li>
-</ol>
-<p>The second layer's MELISO+ acceleration is not yet fully implemented (see the <code>TODO</code> comment in the source).</p>
-<hr />
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">EXP_CONFIG_FILE</span><span class="o">=</span>config_files/quickstart/EpiRAM/exp1.yaml<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>python3<span class="w"> </span>mlpInference.py
+<p><code>pdhg.py</code> implements a <strong>Primal-Dual Hybrid Gradient (PDHG)</strong> solver for linear programs, accelerated by the MELISO+ framework for distributed matrix-vector multiplication (MVM) on memristive crossbar hardware.</p>
+<p>The script solves problems of the form:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>minimize    c^T x
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>subject to  Ax = b,  x &gt;= 0
+</code></pre></div>
+<p>using the iterative PDHG algorithm with extrapolation. Each PDHG iteration requires two matrix-vector products (<code>A*x_bar</code> and <code>A^T*mu</code>), both offloaded to MELISO+ hardware.</p>
+<p>The script must be launched via <code>mpiexec</code> with the same number of processes as required by the MCA configuration:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">A_FILE</span><span class="o">=</span>inputs/A.csv<span class="w"> </span><span class="nv">B_FILE</span><span class="o">=</span>inputs/b.csv<span class="w"> </span><span class="nv">C_FILE</span><span class="o">=</span>inputs/c.csv<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">EXP_CONFIG_FILE</span><span class="o">=</span>config_files/quickstart/EpiRAM/exp1.yaml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>python3<span class="w"> </span>pdhg.py
 </code></pre></div>
 <hr />
-<h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h2>
-<h3 id="cancel_slurm_job"><code>cancel_SLURM_job()</code><a class="headerlink" href="#cancel_slurm_job" title="Permanent link">&para;</a></h3>
-<p>Attempt to cancel the current SLURM job if running in a SLURM environment.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">cancel_SLURM_job</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<h2 id="class-pdhgsolver">Class: <code>PDHGSolver</code><a class="headerlink" href="#class-pdhgsolver" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">PDHGSolver</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">RESULT_FILENAME</span>    <span class="o">=</span> <span class="s2">&quot;y_mem_result.csv&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">X_ITERATES_FILENAME</span> <span class="o">=</span> <span class="s2">&quot;x_iterates.csv&quot;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">LOG_FILENAME</span>       <span class="o">=</span> <span class="s2">&quot;x_log.txt&quot;</span>
 </code></pre></div>
-<p>Reads the <code>SLURM_JOB_ID</code> environment variable and calls <code>scancel &lt;job_id&gt;</code> via <code>subprocess.run</code>. If <code>SLURM_JOB_ID</code> is not set, prints a warning and takes no action.</p>
-<hr />
-<h3 id="main"><code>main()</code><a class="headerlink" href="#main" title="Permanent link">&para;</a></h3>
-<p>Main entry point. Loads the model and data, then runs CPU and MELISO+ inference.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-</code></pre></div>
-<hr />
-<h2 id="script-flow">Script Flow<a class="headerlink" href="#script-flow" title="Permanent link">&para;</a></h2>
-<h3 id="1-load-model-and-data">1. Load Model and Data<a class="headerlink" href="#1-load-model-and-data" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">model</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">W1_path</span><span class="o">=</span><span class="s2">&quot;./inputs/mlp/W1.npy&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">B1_path</span><span class="o">=</span><span class="s2">&quot;./inputs/mlp/B1.npy&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">W2_path</span><span class="o">=</span><span class="s2">&quot;./inputs/mlp/W2.npy&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">B2_path</span><span class="o">=</span><span class="s2">&quot;./inputs/mlp/B2.npy&quot;</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">)</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">test_images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./inputs/mlp/mnist_test_images.npy&quot;</span><span class="p">)</span>  <span class="c1"># shape (10000, 784)</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">test_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./inputs/mlp/mnist_test_labels.npy&quot;</span><span class="p">)</span>  <span class="c1"># shape (10000,)</span>
-</code></pre></div>
-<h3 id="2-cpu-inference">2. CPU Inference<a class="headerlink" href="#2-cpu-inference" title="Permanent link">&para;</a></h3>
-<p>Iterates over <code>subset_size</code> samples from the test set:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">subset_size</span> <span class="o">=</span> <span class="mi">1</span>   <span class="c1"># Adjust to evaluate more samples</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">subset_size</span><span class="p">):</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">z1_cpu</span><span class="p">,</span> <span class="n">z2_cpu</span><span class="p">,</span> <span class="n">a1_cpu</span><span class="p">,</span> <span class="n">a2_cpu</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_images</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">predicted_label</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">a2_cpu</span><span class="p">))</span>
-</code></pre></div>
-<p>Reports accuracy percentage on the evaluated subset.</p>
-<h3 id="3-meliso-accelerated-inference-layer-1">3. MELISO+ Accelerated Inference (Layer 1)<a class="headerlink" href="#3-meliso-accelerated-inference-layer-1" title="Permanent link">&para;</a></h3>
-<p>For each sample, the first layer's MVM is offloaded to MELISO+:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">CORRECTION</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Keep result in [0,1] (min-max scaled domain)</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">mv</span> <span class="o">=</span> <span class="n">MatVecSolver</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="n">input_vector</span><span class="p">,</span> <span class="n">mat</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">W1</span><span class="p">)</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">mv</span><span class="o">.</span><span class="n">matVec</span><span class="p">(</span><span class="n">correction</span><span class="o">=</span><span class="n">CORRECTION</span><span class="p">)</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">mv</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">mv</span><span class="o">.</span><span class="n">acquireMCAStats</span><span class="p">()</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">z1</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">acquireResults</span><span class="p">()</span>      <span class="c1"># Shape: (512, 1)</span>
-</code></pre></div>
-<p>After acquiring <code>z1</code>, bias is added and ReLU is applied:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">z1</span> <span class="o">=</span> <span class="n">z1</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>        <span class="c1"># Ensure (512, 1) shape</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">z1</span> <span class="o">=</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">B1</span>            <span class="c1"># Add bias</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">a1</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">__relu__</span><span class="p">(</span><span class="n">z1</span><span class="p">)</span>       <span class="c1"># Apply ReLU activation</span>
-</code></pre></div>
-<p>The script also prints the <strong>relative L2 error</strong> of both <code>z1</code> and <code>a1</code> against the CPU reference values.</p>
-<h3 id="4-second-layer-not-yet-implemented">4. Second Layer (Not Yet Implemented)<a class="headerlink" href="#4-second-layer-not-yet-implemented" title="Permanent link">&para;</a></h3>
-<p>The second layer MELISO+ acceleration is commented out with a <code>TODO</code> note. The recommended approach is:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># mv = MatVecSolver(xvec=a1.reshape(-1,1), mat=model.W2)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># mv.matVec(correction=CORRECTION)</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># mv.finalize()</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># mv.acquireMCAStats()</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># z2 = mv.acquireResults()</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># mv.stopCommunication()</span>
-</code></pre></div>
-<hr />
-<h2 id="configuration-variables">Configuration Variables<a class="headerlink" href="#configuration-variables" title="Permanent link">&para;</a></h2>
+<h3 id="class-constants">Class Constants<a class="headerlink" href="#class-constants" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Variable</th>
-<th>Default</th>
+<th>Constant</th>
+<th>Value</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>subset_size</code></td>
-<td><code>1</code></td>
-<td>Number of MNIST test samples to evaluate</td>
+<td><code>RESULT_FILENAME</code></td>
+<td><code>"y_mem_result.csv"</code></td>
+<td>Output file for MVM results</td>
 </tr>
 <tr>
-<td><code>CORRECTION</code></td>
-<td><code>False</code></td>
-<td>Whether to apply min-max scaling reversal (<code>False</code> = results in <code>[0,1]</code> range)</td>
+<td><code>X_ITERATES_FILENAME</code></td>
+<td><code>"x_iterates.csv"</code></td>
+<td>Output file for all primal iterates</td>
+</tr>
+<tr>
+<td><code>LOG_FILENAME</code></td>
+<td><code>"x_log.txt"</code></td>
+<td>Convergence log file</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="network-architecture">Network Architecture<a class="headerlink" href="#network-architecture" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Input x ∈ R^784   (MNIST flattened image, shape (784, 1))
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>   │
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>   ▼  W1 ∈ R^{512 × 784}   (distributed MVM via MELISO+)
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>Layer 1:  z1 = MVM(W1, x)        via MatVecSolver
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>           z1 = z1 + B1           add bias
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>           a1 = ReLU(z1)          shape (512, 1)
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>   │
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>   ▼  W2 ∈ R^{10 × 512}   (TODO: MELISO+ acceleration pending)
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>Layer 2:  z2 = W2 @ a1 / FANIN_2 + B2
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>           a2 = softmax(z2)       shape (10,)
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>   │
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>   ▼
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>Predicted class = argmax(a2)
+<h3 id="__init__a-b-c-num_iterations"><code>__init__(A, b, c, num_iterations)</code><a class="headerlink" href="#__init__a-b-c-num_iterations" title="Permanent link">&para;</a></h3>
+<p>Initialize the PDHG solver with problem data and iteration count.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">b</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">c</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">num_iterations</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>A</code></td>
+<td><code>np.ndarray</code></td>
+<td>Constraint matrix of shape <code>(m, n)</code></td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td><code>np.ndarray</code></td>
+<td>Right-hand side vector of shape <code>(m,)</code></td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td><code>np.ndarray</code></td>
+<td>Objective cost vector of shape <code>(n,)</code></td>
+</tr>
+<tr>
+<td><code>num_iterations</code></td>
+<td><code>int</code></td>
+<td>Maximum number of PDHG iterations</td>
+</tr>
+</tbody>
+</table>
+<p>Internally creates a <code>MatVecSolver</code> instance stored in <code>self.mv_solver</code>. This triggers MPI initialization for all worker processes.</p>
 <hr />
-<h2 id="input-files">Input Files<a class="headerlink" href="#input-files" title="Permanent link">&para;</a></h2>
-<p>All model and data files should be placed under <code>./inputs/mlp/</code>:</p>
+<h3 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>A</code></td>
+<td><code>np.ndarray</code></td>
+<td>Constraint matrix</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td><code>np.ndarray</code></td>
+<td>RHS vector</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td><code>np.ndarray</code></td>
+<td>Cost vector</td>
+</tr>
+<tr>
+<td><code>n_primal</code></td>
+<td><code>int</code></td>
+<td>Primal dimension (<code>A.shape[1]</code>)</td>
+</tr>
+<tr>
+<td><code>n_dual</code></td>
+<td><code>int</code></td>
+<td>Dual dimension (<code>A.shape[0]</code>)</td>
+</tr>
+<tr>
+<td><code>tol</code></td>
+<td><code>float</code></td>
+<td>Convergence tolerance (<code>1e-6</code>)</td>
+</tr>
+<tr>
+<td><code>theta</code></td>
+<td><code>float</code></td>
+<td>Extrapolation parameter (<code>1.0</code>)</td>
+</tr>
+<tr>
+<td><code>num_iterations</code></td>
+<td><code>int</code></td>
+<td>Maximum number of iterations</td>
+</tr>
+<tr>
+<td><code>x_iterates</code></td>
+<td><code>List[np.ndarray]</code></td>
+<td>All primal iterates collected during <code>solve()</code></td>
+</tr>
+<tr>
+<td><code>x_bar</code></td>
+<td><code>np.ndarray</code> or <code>None</code></td>
+<td>Extrapolated primal variable (updated each iteration)</td>
+</tr>
+<tr>
+<td><code>x_avg</code></td>
+<td><code>np.ndarray</code> or <code>None</code></td>
+<td>Ergodic (averaged) solution after <code>solve()</code></td>
+</tr>
+<tr>
+<td><code>mv_solver</code></td>
+<td><code>MatVecSolver</code></td>
+<td>MELISO+ interface for accelerated MVM</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_compute_matvecmatrix-vector"><code>_compute_matvec(matrix, vector)</code><a class="headerlink" href="#_compute_matvecmatrix-vector" title="Permanent link">&para;</a></h3>
+<p>Compute a single matrix-vector product using the MELISO+ accelerator.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_compute_matvec</span><span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">vector</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>matrix</code></td>
+<td>Matrix to multiply (e.g. <code>A</code> or <code>A.T</code>)</td>
+</tr>
+<tr>
+<td><code>vector</code></td>
+<td>Input vector</td>
+</tr>
+</tbody>
+</table>
+<p>Steps:</p>
+<ol>
+<li>Calls <code>mv_solver.solverObject.initializeMat(matrix)</code> to load the matrix on the root process.</li>
+<li>Calls <code>mv_solver.solverObject.initializeX(vector)</code> to load the vector on the root process.</li>
+<li>Calls <code>mv_solver.matVec(correction=True)</code> — applies min-max scaling reversal so results are in the original domain.</li>
+<li>Calls <code>mv_solver.finalize()</code> to signal workers after the MVM.</li>
+<li>Calls <code>mv_solver.acquireMCAStats()</code> to gather hardware statistics.</li>
+<li>Returns the result via <code>mv_solver.acquireResults()</code>.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>correction=True</code> is used so that the result is returned in the original mathematical domain (not the normalised <code>[0,1]</code> domain), which is required for correct PDHG updates.</p>
+</div>
+<hr />
+<h3 id="_project_dualmu-static"><code>_project_dual(mu)</code> (static)<a class="headerlink" href="#_project_dualmu-static" title="Permanent link">&para;</a></h3>
+<p>Project dual variables onto the non-negative orthant.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@staticmethod</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">_project_dual</span><span class="p">(</span><span class="n">mu</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+</code></pre></div>
+<p>Returns <code>np.maximum(mu, 0)</code>.</p>
+<hr />
+<h3 id="_project_primalx-static"><code>_project_primal(x)</code> (static)<a class="headerlink" href="#_project_primalx-static" title="Permanent link">&para;</a></h3>
+<p>Project primal variables onto the non-negative orthant.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nd">@staticmethod</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">_project_primal</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+</code></pre></div>
+<p>Returns <code>np.maximum(x, 0)</code>.</p>
+<hr />
+<h3 id="_compute_stepsizea-static"><code>_compute_stepsize(A)</code> (static)<a class="headerlink" href="#_compute_stepsizea-static" title="Permanent link">&para;</a></h3>
+<p>Compute the primal and dual step sizes from the spectral norm of <code>A</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nd">@staticmethod</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">_compute_stepsize</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>maximum_step = 1 / ||A||_2
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>primal_step  = maximum_step
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>dual_step    = maximum_step
+</code></pre></div>
+<p>Returns <code>(primal_step, dual_step)</code>. Using equal primal and dual steps equal to <code>1/||A||_2</code> ensures convergence of the PDHG algorithm.</p>
+<hr />
+<h3 id="solve"><code>solve()</code><a class="headerlink" href="#solve" title="Permanent link">&para;</a></h3>
+<p>Execute the PDHG iterations and return the final and averaged solutions.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>Returns:</strong> <code>(x_bar, x_avg)</code> — the extrapolated final iterate and the ergodic average.</p>
+<h4 id="algorithm">Algorithm<a class="headerlink" href="#algorithm" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Initialize: x = 0,  mu = 0,  x_bar = 0
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Compute: primal_step, dual_step = 1 / ||A||_2
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>For k = 0, 1, ..., num_iterations-1:
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    # Dual update
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    mv_result = A * x_bar              (via MELISO+)
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    mu_tilde  = mu + dual_step * (mv_result - b)
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    mu_next   = max(mu_tilde, 0)        (project onto R+)
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>    # Primal update
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>    mv_result = A^T * mu_next           (via MELISO+)
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    x_grad    = x - primal_step * (mv_result + c)
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>    x_next    = max(x_grad, 0)          (project onto R+)
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>    # Extrapolation
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>    x_bar = x_next + theta * (x_next - x)
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>    # Check convergence
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>    if ||x_next - x||_2 &lt; tol:
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>        break
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>    x, mu = x_next, mu_next
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>    Append x_next to x_log.txt
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>Save all iterates to x_iterates.csv
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>x_avg = mean(x_iterates)
+</code></pre></div>
+<h4 id="output-files">Output Files<a class="headerlink" href="#output-files" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
 <th>File</th>
-<th>Shape</th>
-<th>Description</th>
+<th>Contents</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>W1.npy</code></td>
-<td><code>(512, 784)</code></td>
-<td>Layer 1 weight matrix</td>
+<td><code>x_log.txt</code></td>
+<td>Primal iterate appended each iteration; removed and recreated at the start of each <code>solve()</code> call</td>
 </tr>
 <tr>
-<td><code>B1.npy</code></td>
-<td><code>(512,)</code></td>
-<td>Layer 1 bias vector</td>
-</tr>
-<tr>
-<td><code>W2.npy</code></td>
-<td><code>(10, 512)</code></td>
-<td>Layer 2 weight matrix</td>
-</tr>
-<tr>
-<td><code>B2.npy</code></td>
-<td><code>(10,)</code></td>
-<td>Layer 2 bias vector</td>
-</tr>
-<tr>
-<td><code>mnist_test_images.npy</code></td>
-<td><code>(10000, 784)</code></td>
-<td>MNIST test images</td>
-</tr>
-<tr>
-<td><code>mnist_test_labels.npy</code></td>
-<td><code>(10000,)</code></td>
-<td>MNIST test labels</td>
+<td><code>x_iterates.csv</code></td>
+<td>All collected primal iterates as a CSV matrix; removed and recreated at the end of <code>solve()</code></td>
 </tr>
 </tbody>
 </table>
 <hr />
+<h2 id="module-level-function-main">Module-Level Function: <code>main()</code><a class="headerlink" href="#module-level-function-main" title="Permanent link">&para;</a></h2>
+<p>MPI-aware entry point that separates root-process algorithm execution from worker-process loops.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<h3 id="root-process-rank-size-1">Root Process (<code>rank == size - 1</code>)<a class="headerlink" href="#root-process-rank-size-1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Reads <code>A</code>, <code>b</code>, <code>c</code> from files at paths given by environment variables <code>A_FILE</code>, <code>B_FILE</code>, <code>C_FILE</code>.</li>
+<li>Creates a <code>PDHGSolver</code> with <code>num_iterations=100000</code>.</li>
+<li>Calls <code>solver.solve()</code> and prints the optimal solution and objective value.</li>
+<li>Broadcasts a termination signal to worker processes.</li>
+</ol>
+<h3 id="worker-processes-rank-size-1">Worker Processes (<code>rank &lt; size - 1</code>)<a class="headerlink" href="#worker-processes-rank-size-1" title="Permanent link">&para;</a></h3>
+<p>Loop waiting for broadcasts from the root process. Each iteration of the PDHG loop triggers two <code>MatVecSolver().matVec(correction=True)</code> calls (one for <code>A*x_bar</code>, one for <code>A^T*mu</code>). Worker processes exit when they receive <code>True</code> from the root's termination broadcast.</p>
+<hr />
 <h2 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h2>
-<p>Inherits all MELISO+ environment variables:</p>
 <table>
 <thead>
 <tr>
@@ -2057,7 +2252,19 @@
 <tbody>
 <tr>
 <td><code>EXP_CONFIG_FILE</code></td>
-<td><strong>Required.</strong> Experiment YAML configuration path</td>
+<td><strong>Required.</strong> Path to the experiment YAML configuration file</td>
+</tr>
+<tr>
+<td><code>A_FILE</code></td>
+<td><strong>Required.</strong> Path to the constraint matrix CSV file</td>
+</tr>
+<tr>
+<td><code>B_FILE</code></td>
+<td><strong>Required.</strong> Path to the RHS vector CSV file</td>
+</tr>
+<tr>
+<td><code>C_FILE</code></td>
+<td><strong>Required.</strong> Path to the cost vector CSV file</td>
 </tr>
 <tr>
 <td><code>DT</code></td>
@@ -2069,59 +2276,63 @@
 </tr>
 <tr>
 <td><code>TMPDIR</code></td>
-<td>Temporary directory for intermediate MVM files</td>
+<td>Temporary directory for intermediate MVM output files</td>
 </tr>
 <tr>
-<td><code>SLURM_JOB_ID</code></td>
-<td>If set, <code>cancel_SLURM_job()</code> will cancel this job</td>
+<td><code>REPORT_PATH</code></td>
+<td>Path for MCA statistics report</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Console:</strong> Per-sample predictions, relative L2 errors, and accuracy percentage.</li>
-<li><strong><code>&lt;TMPDIR&gt;/y_mem_result.txt</code>:</strong> Intermediate MVM result from the MELISO+ accelerator.</li>
-</ul>
+<h2 id="pdhg-iteration-data-flow">PDHG Iteration Data Flow<a class="headerlink" href="#pdhg-iteration-data-flow" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Root Process                            Worker Processes
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>     │                                        │
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>     │  solve()                               │
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>     │   ┌───────────────────────────────┐    │
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>     │   │ Dual update:                  │    │
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>     │   │  _compute_matvec(A, x_bar)    │    │
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>     │   │   → matVec(correction=True)   │◄───┤ tile MVM
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>     │   │   → finalize()               │────►│ exit loop
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>     │   │   → acquireResults()         │    │
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>     │   │                               │    │
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>     │   │ Primal update:                │    │
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>     │   │  _compute_matvec(A.T, mu_next)│    │
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>     │   │   → matVec(correction=True)   │◄───┤ tile MVM
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>     │   │   → finalize()               │────►│ exit loop
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>     │   └───────────────────────────────┘    │
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>     │  ... repeat for num_iterations ...     │
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>     │                                        │
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>     │  bcast(True) ─────────────────────────►│ exit
+</code></pre></div>
 <hr />
-<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Package</th>
-<th>Usage</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>meliso</code></td>
-<td>Compiled Cython extension</td>
-</tr>
-<tr>
-<td><code>solver.matvec.MatVecSolver</code></td>
-<td>Distributed MVM interface</td>
-</tr>
-<tr>
-<td><code>solver.mlp.MLP</code></td>
-<td>MLP model inference</td>
-</tr>
-<tr>
-<td><code>numpy</code></td>
-<td>Numerical operations</td>
-</tr>
-<tr>
-<td><code>subprocess</code></td>
-<td>SLURM job cancellation</td>
-</tr>
-</tbody>
-</table>
+<h2 id="example-usage">Example Usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Generate toy problem data first</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="s2">import numpy as np</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="s2">A = np.random.rand(4, 8)</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="s2">b = np.random.rand(4)</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="s2">c = np.random.rand(8)</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="s2">np.savetxt(&#39;inputs/A.csv&#39;, A, delimiter=&#39;,&#39;)</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="s2">np.savetxt(&#39;inputs/b.csv&#39;, b, delimiter=&#39;,&#39;)</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="s2">np.savetxt(&#39;inputs/c.csv&#39;, c, delimiter=&#39;,&#39;)</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="s2">&quot;</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="c1"># Run PDHG with 1x1 MCA grid (2 MPI processes)</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="nv">A_FILE</span><span class="o">=</span>inputs/A.csv<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="nv">B_FILE</span><span class="o">=</span>inputs/b.csv<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="nv">C_FILE</span><span class="o">=</span>inputs/c.csv<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="nv">EXP_CONFIG_FILE</span><span class="o">=</span>config_files/quickstart/EpiRAM/exp1.yaml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="nv">DT</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">ITER_LIMIT</span><span class="o">=</span><span class="m">21</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="w">  </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>python3<span class="w"> </span>pdhg.py
+</code></pre></div>
 <hr />
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../solver/mlp/MLP/"><code>MLP</code></a> — The MLP class used for both CPU inference and weight loading.</li>
-<li><a href="../../solver/matvec/MatVecSolver/"><code>MatVecSolver</code></a> — The distributed MVM interface.</li>
+<li><a href="../../solver/matvec/MatVecSolver/"><code>MatVecSolver</code></a> — The MVM interface used for accelerated computation.</li>
 <li><a href="../DistributedMatVec/"><code>DistributedMatVec.py</code></a> — Simpler single-MVM driver script.</li>
-<li><a href="../pdhg/"><code>pdhg.py</code></a> — PDHG optimization driver using the same MELISO+ framework.</li>
+<li><a href="../mlpInference/"><code>mlpInference.py</code></a> — MLP inference driver using the same framework.</li>
+<li><a href="../../../tutorials/run_distributed_MVM/">Tutorials</a> — Step-by-step guide for running MELISO+.</li>
 </ul>
 
 

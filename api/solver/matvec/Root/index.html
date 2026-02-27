@@ -1353,7 +1353,7 @@
   <span class="md-ellipsis">
     
   
-    solver.common
+    solver.mlp
   
 
     
@@ -1366,6 +1366,97 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    solver.mlp
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mlp/MLP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    solver.common
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1462,10 +1553,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
         
           
-          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5_7" id="__nav_5_7_label" tabindex="">
             
   
   
@@ -1483,8 +1574,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_6">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1537,6 +1628,34 @@
     
   
     mlpInference.py
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../scripts/pdhg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pdhg.py
   
 
     
@@ -2096,7 +2215,29 @@
 <li>If <code>correction=True</code>: calls <code>addCorrectionY()</code> to reverse min-max scaling and stores in <code>y_mem_result</code>.</li>
 <li>If <code>correction=False</code>: stores raw scaled result in <code>y_mem_result</code>.</li>
 </ul>
-<p>Result is also saved to <code>&lt;TMPDIR&gt;/y_mem_result.txt</code>.</p>
+<p>Results are saved to the following output files:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;TMPDIR&gt;/y_mem_result.txt</code></td>
+<td>Final MVM result (content depends on <code>correction</code> flag)</td>
+</tr>
+<tr>
+<td><code>&lt;TMPDIR&gt;/y_mem_result_reversal_applied.txt</code></td>
+<td>Result with min-max scaling reversal applied</td>
+</tr>
+<tr>
+<td><code>&lt;TMPDIR&gt;/y_mem_result_no_reversal.txt</code></td>
+<td>Result without scaling reversal (in <code>[0,1]</code> domain)</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h3 id="addcorrectionyn-y-a_min-a_max-a_row_sum-x_min-x_max-x_sum"><code>addCorrectionY(n, y, a_min, a_max, a_row_sum, x_min, x_max, x_sum)</code><a class="headerlink" href="#addcorrectionyn-y-a_min-a_max-a_row_sum-x_min-x_max-x_sum" title="Permanent link">&para;</a></h3>
 <p>Reverses the min-max scaling effects after MVM.</p>

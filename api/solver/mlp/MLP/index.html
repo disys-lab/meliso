@@ -13,10 +13,10 @@
       
       
       
-        <link rel="prev" href="../../../src/cython/Meliso_interface/">
+        <link rel="prev" href="../../matvec/NonRoot/">
       
       
-        <link rel="next" href="../Root/">
+        <link rel="next" href="../../common/loaders/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>MatVecSolver - MELISO+ Documentation</title>
+        <title>MLP - MELISO+ Documentation</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#matvecsolver" class="md-skip">
+        <a href="#mlp" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              MatVecSolver
+              MLP
             
           </span>
         </div>
@@ -890,6 +890,153 @@
                 
   
   
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    solver.matvec
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    solver.matvec
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../matvec/MatVecSolver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MatVecSolver
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../matvec/Root/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Root
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../matvec/NonRoot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NonRoot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -911,17 +1058,17 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    solver.matvec
+    solver.mlp
   
 
     
@@ -932,12 +1079,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_5">
             <span class="md-nav__icon md-icon"></span>
             
   
-    solver.matvec
+    solver.mlp
   
 
           </label>
@@ -966,7 +1113,7 @@
   <span class="md-ellipsis">
     
   
-    MatVecSolver
+    MLP
   
 
     
@@ -984,7 +1131,7 @@
   <span class="md-ellipsis">
     
   
-    MatVecSolver
+    MLP
   
 
     
@@ -1072,10 +1219,38 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#initializevec" class="md-nav__link">
+  <a href="#predictinput_vector" class="md-nav__link">
     <span class="md-ellipsis">
       
-        initializeVec()
+        predict(input_vector)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="predict(input_vector)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forward-pass-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forward Pass Detail
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#__relu__x-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __relu__(x) (private)
       
     </span>
   </a>
@@ -1083,10 +1258,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#initializemat" class="md-nav__link">
+  <a href="#__softmax__x-private" class="md-nav__link">
     <span class="md-ellipsis">
       
-        initializeMat()
+        __softmax__(x) (private)
       
     </span>
   </a>
@@ -1094,65 +1269,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#matveccorrectionfalse" class="md-nav__link">
+  <a href="#__load_model__w1_path-b1_path-w2_path-b2_path-private" class="md-nav__link">
     <span class="md-ellipsis">
       
-        matVec(correction=False)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parallelizedbenchmarkmatvechardwareon1-scalingon0-correctionfalse" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        parallelizedBenchmarkMatVec(hardwareOn=1, scalingOn=0, correction=False)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#acquiremcastats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        acquireMCAStats()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#finalize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        finalize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stopcommunication" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        stopCommunication()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#acquireresults" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        acquireResults()
+        __load_model__(W1_path, B1_path, W2_path, B2_path) (private)
       
     </span>
   </a>
@@ -1165,10 +1285,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#typical-usage-pattern" class="md-nav__link">
+  <a href="#typical-usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Typical Usage Pattern
+        Typical Usage
       
     </span>
   </a>
@@ -1176,10 +1296,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpi-process-count" class="md-nav__link">
+  <a href="#expected-input-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPI Process Count
+        Expected Input Files
       
     </span>
   </a>
@@ -1201,153 +1321,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Root/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Root
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../NonRoot/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    NonRoot
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-          
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    solver.mlp
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    solver.mlp
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../mlp/MLP/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MLP
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1723,10 +1696,38 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#initializevec" class="md-nav__link">
+  <a href="#predictinput_vector" class="md-nav__link">
     <span class="md-ellipsis">
       
-        initializeVec()
+        predict(input_vector)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="predict(input_vector)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forward-pass-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forward Pass Detail
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#__relu__x-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __relu__(x) (private)
       
     </span>
   </a>
@@ -1734,10 +1735,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#initializemat" class="md-nav__link">
+  <a href="#__softmax__x-private" class="md-nav__link">
     <span class="md-ellipsis">
       
-        initializeMat()
+        __softmax__(x) (private)
       
     </span>
   </a>
@@ -1745,65 +1746,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#matveccorrectionfalse" class="md-nav__link">
+  <a href="#__load_model__w1_path-b1_path-w2_path-b2_path-private" class="md-nav__link">
     <span class="md-ellipsis">
       
-        matVec(correction=False)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parallelizedbenchmarkmatvechardwareon1-scalingon0-correctionfalse" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        parallelizedBenchmarkMatVec(hardwareOn=1, scalingOn=0, correction=False)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#acquiremcastats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        acquireMCAStats()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#finalize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        finalize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stopcommunication" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        stopCommunication()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#acquireresults" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        acquireResults()
+        __load_model__(W1_path, B1_path, W2_path, B2_path) (private)
       
     </span>
   </a>
@@ -1816,10 +1762,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#typical-usage-pattern" class="md-nav__link">
+  <a href="#typical-usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Typical Usage Pattern
+        Typical Usage
       
     </span>
   </a>
@@ -1827,10 +1773,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mpi-process-count" class="md-nav__link">
+  <a href="#expected-input-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MPI Process Count
+        Expected Input Files
       
     </span>
   </a>
@@ -1865,26 +1811,30 @@
 
 
 
-<h1 id="matvecsolver"><code>MatVecSolver</code><a class="headerlink" href="#matvecsolver" title="Permanent link">&para;</a></h1>
-<p><strong>Module:</strong> <code>solver.matvec.MatVecSolver</code>
-<strong>File:</strong> <code>solver/matvec/MatVecSolver.py</code></p>
+<h1 id="mlp"><code>MLP</code><a class="headerlink" href="#mlp" title="Permanent link">&para;</a></h1>
+<p><strong>Module:</strong> <code>solver.mlp.MLP</code>
+<strong>File:</strong> <code>solver/mlp/MLP.py</code></p>
 <hr />
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p><code>MatVecSolver</code> is the primary user-facing interface for performing distributed matrix-vector multiplication (MVM) with MELISO+. It abstracts away MPI process roles, hardware initialisation, and the virtualization protocol, exposing a simple API:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">mv</span> <span class="o">=</span> <span class="n">MatVecSolver</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">mat</span><span class="o">=</span><span class="n">A</span><span class="p">)</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">mv</span><span class="o">.</span><span class="n">matVec</span><span class="p">(</span><span class="n">correction</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">mv</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">y</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">acquireResults</span><span class="p">()</span>
+<p><code>MLP</code> implements a two-layer multi-layer perceptron (MLP) for MNIST digit classification. It is used by <a href="../../../scripts/mlpInference/"><code>mlpInference.py</code></a> to provide CPU-reference inference results and to supply the trained weight matrices to the MELISO+ accelerated inference pipeline.</p>
+<p>The network architecture is:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Input x ∈ R^784   (flattened 28×28 MNIST image)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>   │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>   ▼  W1 ∈ R^{512 × 784},  B1 ∈ R^512,  fan-in = 784
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Layer 1:  z1 = (W1 @ x) / FANIN_1 + B1
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>          a1 = clip(z1, 0, 1)           ← clipped ReLU
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>   │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>   ▼  W2 ∈ R^{10 × 512},  B2 ∈ R^10,  fan-in = 512
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Layer 2:  z2 = (W2 @ a1) / FANIN_2 + B2
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>          a2 = softmax(temperature × z2)
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>   │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>   ▼
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>Predicted class = argmax(a2)
 </code></pre></div>
-<p>Internally, <code>MatVecSolver</code> creates either a <a href="../Root/"><code>Root</code></a> or <a href="../NonRoot/"><code>NonRoot</code></a> solver object depending on the MPI rank:</p>
-<ul>
-<li><strong>Root process</strong> (<code>rank == size - 1</code>): creates a <code>Root</code> instance.</li>
-<li><strong>Worker processes</strong> (<code>rank &lt; size - 1</code>): create a <code>NonRoot</code> instance.</li>
-</ul>
 <hr />
 <h2 id="class-definition">Class Definition<a class="headerlink" href="#class-definition" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">MatVecSolver</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mat</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> <span class="o">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">W1_path</span><span class="p">,</span> <span class="n">B1_path</span><span class="p">,</span> <span class="n">W2_path</span><span class="p">,</span> <span class="n">B2_path</span><span class="p">):</span> <span class="o">...</span>
 </code></pre></div>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <table>
@@ -1892,22 +1842,29 @@
 <tr>
 <th>Parameter</th>
 <th>Type</th>
-<th>Default</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>xvec</code></td>
-<td><code>np.ndarray</code> or <code>None</code></td>
-<td><code>None</code></td>
-<td>Input vector. If <code>None</code>, loaded from <code>XVEC_PATH</code> env var (default <code>inputs/vectors/input_x.txt</code>)</td>
+<td><code>W1_path</code></td>
+<td><code>str</code></td>
+<td>Path to first-layer weight matrix <code>.npy</code> file</td>
 </tr>
 <tr>
-<td><code>mat</code></td>
-<td><code>np.ndarray</code> or <code>None</code></td>
-<td><code>None</code></td>
-<td>Weight matrix. If <code>None</code>, loaded from the path in the experiment YAML</td>
+<td><code>B1_path</code></td>
+<td><code>str</code></td>
+<td>Path to first-layer bias vector <code>.npy</code> file</td>
+</tr>
+<tr>
+<td><code>W2_path</code></td>
+<td><code>str</code></td>
+<td>Path to second-layer weight matrix <code>.npy</code> file</td>
+</tr>
+<tr>
+<td><code>B2_path</code></td>
+<td><code>str</code></td>
+<td>Path to second-layer bias vector <code>.npy</code> file</td>
 </tr>
 </tbody>
 </table>
@@ -1923,163 +1880,194 @@
 </thead>
 <tbody>
 <tr>
-<td><code>comm</code></td>
-<td><code>MPI.Comm</code></td>
-<td>MPI communicator (<code>COMM_WORLD</code>)</td>
-</tr>
-<tr>
-<td><code>rank</code></td>
-<td><code>int</code></td>
-<td>This process's MPI rank</td>
-</tr>
-<tr>
-<td><code>size</code></td>
-<td><code>int</code></td>
-<td>Total number of MPI processes</td>
-</tr>
-<tr>
-<td><code>solverObject</code></td>
-<td><code>Root</code> or <code>NonRoot</code></td>
-<td>Process-role object</td>
-</tr>
-<tr>
-<td><code>xvec</code></td>
+<td><code>W1</code></td>
 <td><code>np.ndarray</code></td>
-<td>Input vector</td>
+<td>First-layer weight matrix, shape <code>(hidden, 784)</code></td>
 </tr>
 <tr>
-<td><code>mat</code></td>
-<td><code>np.ndarray</code> or <code>None</code></td>
-<td>Input matrix (may be <code>None</code> on non-root processes)</td>
-</tr>
-<tr>
-<td><code>y</code></td>
+<td><code>B1</code></td>
 <td><code>np.ndarray</code></td>
-<td>MVM result; initialised to <code>np.zeros_like(xvec)</code> at construction, populated after <code>acquireResults()</code></td>
+<td>First-layer bias vector, shape <code>(hidden,)</code></td>
+</tr>
+<tr>
+<td><code>W2</code></td>
+<td><code>np.ndarray</code></td>
+<td>Second-layer weight matrix, shape <code>(10, hidden)</code></td>
+</tr>
+<tr>
+<td><code>B2</code></td>
+<td><code>np.ndarray</code></td>
+<td>Second-layer bias vector, shape <code>(10,)</code></td>
+</tr>
+<tr>
+<td><code>FANIN_1</code></td>
+<td><code>float</code></td>
+<td>First-layer fan-in normalisation constant (<code>784.0</code>)</td>
+</tr>
+<tr>
+<td><code>FANIN_2</code></td>
+<td><code>float</code></td>
+<td>Second-layer fan-in normalisation constant (<code>512.0</code>)</td>
+</tr>
+<tr>
+<td><code>temperature</code></td>
+<td><code>float</code></td>
+<td>Softmax temperature scaling factor (<code>1.0</code>)</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="initializevec"><code>initializeVec()</code><a class="headerlink" href="#initializevec" title="Permanent link">&para;</a></h3>
-<p>Explicitly initialise the input vector on the root process.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">initializeVec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-</code></pre></div>
-<p>Only has effect on the root process. Calls <code>self.solverObject.initializeX(self.xvec)</code>.</p>
-<hr />
-<h3 id="initializemat"><code>initializeMat()</code><a class="headerlink" href="#initializemat" title="Permanent link">&para;</a></h3>
-<p>Explicitly initialise the matrix on the root process.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">initializeMat</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-</code></pre></div>
-<p>Only has effect on the root process. Calls <code>self.solverObject.initializeMat(self.mat)</code>.</p>
-<hr />
-<h3 id="matveccorrectionfalse"><code>matVec(correction=False)</code><a class="headerlink" href="#matveccorrectionfalse" title="Permanent link">&para;</a></h3>
-<p>Execute the distributed MVM.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">matVec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">correction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<h3 id="predictinput_vector"><code>predict(input_vector)</code><a class="headerlink" href="#predictinput_vector" title="Permanent link">&para;</a></h3>
+<p>Run a full forward pass through both layers and return all intermediate activations.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
 </code></pre></div>
 <table>
 <thead>
 <tr>
 <th>Parameter</th>
+<th>Type</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>correction</code></td>
-<td>If <code>True</code>, the root process reverses min-max scaling on the output, returning results in the original domain.</td>
+<td><code>input_vector</code></td>
+<td>array-like</td>
+<td>Input sample; can be a list, 1-D array <code>(784,)</code>, or 2-D array <code>(28, 28)</code></td>
 </tr>
 </tbody>
 </table>
-<p>This is a collective call — <strong>all MPI processes must call it</strong> (root coordinates, workers execute).</p>
+<p><strong>Returns:</strong> <code>(z1, z2, a1, a2)</code> where:</p>
+<table>
+<thead>
+<tr>
+<th>Return value</th>
+<th>Shape</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>z1</code></td>
+<td><code>(hidden,)</code></td>
+<td>Pre-activation output of layer 1</td>
+</tr>
+<tr>
+<td><code>z2</code></td>
+<td><code>(10,)</code></td>
+<td>Pre-activation output of layer 2</td>
+</tr>
+<tr>
+<td><code>a1</code></td>
+<td><code>(hidden,)</code></td>
+<td>Post-activation output of layer 1 (clipped ReLU)</td>
+</tr>
+<tr>
+<td><code>a2</code></td>
+<td><code>(10,)</code></td>
+<td>Post-activation output of layer 2 (softmax probabilities)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Raises:</strong> <code>ValueError</code> if <code>input_vector.size != W1.shape[1]</code>.</p>
+<h4 id="forward-pass-detail">Forward Pass Detail<a class="headerlink" href="#forward-pass-detail" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Layer 1</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">z1</span> <span class="o">=</span> <span class="p">(</span><span class="n">W1</span> <span class="o">@</span> <span class="n">input_vector</span> <span class="o">/</span> <span class="n">FANIN_1</span><span class="p">)</span> <span class="o">+</span> <span class="n">B1</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">a1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>          <span class="c1"># Clipped ReLU: clips to [0, 1]</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Layer 2</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">z2</span> <span class="o">=</span> <span class="p">(</span><span class="n">W2</span> <span class="o">@</span> <span class="n">a1</span> <span class="o">/</span> <span class="n">FANIN_2</span><span class="p">)</span> <span class="o">+</span> <span class="n">B2</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">a2</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">temperature</span> <span class="o">*</span> <span class="n">z2</span><span class="p">)</span>
+</code></pre></div>
 <div class="admonition note">
-<p class="admonition-title">Auto-initialization</p>
-<p>As of the latest version, <code>matVec()</code> calls <code>initializeVec()</code> and <code>initializeMat()</code> internally before executing the MVM. Explicit prior calls to these methods are no longer required when using the standard workflow.</p>
+<p class="admonition-title">Clipped ReLU vs Standard ReLU</p>
+<p>Layer 1 uses <code>np.clip(z1, 0.0, 1.0)</code> (clipping to <code>[0, 1]</code>), not a standard ReLU. This keeps activations within the hardware's operating range when used with MELISO+ in subsequent layers.</p>
 </div>
 <hr />
-<h3 id="parallelizedbenchmarkmatvechardwareon1-scalingon0-correctionfalse"><code>parallelizedBenchmarkMatVec(hardwareOn=1, scalingOn=0, correction=False)</code><a class="headerlink" href="#parallelizedbenchmarkmatvechardwareon1-scalingon0-correctionfalse" title="Permanent link">&para;</a></h3>
-<p>Run the MVM again in benchmark mode and compare memristive results against a CPU (NumPy) baseline.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">parallelizedBenchmarkMatVec</span><span class="p">(</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="bp">self</span><span class="p">,</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">hardwareOn</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">scalingOn</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">correction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<h3 id="__relu__x-private"><code>__relu__(x)</code> (private)<a class="headerlink" href="#__relu__x-private" title="Permanent link">&para;</a></h3>
+<p>Standard ReLU activation: <code>max(0, x)</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">__relu__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
 </code></pre></div>
-<p>Prints relative L2 and L∞ errors between the memristive and CPU results.</p>
-<hr />
-<h3 id="acquiremcastats"><code>acquireMCAStats()</code><a class="headerlink" href="#acquiremcastats" title="Permanent link">&para;</a></h3>
-<p>Gather and print hardware performance statistics from all processes.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">acquireMCAStats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-</code></pre></div>
-<p>Delegates to <code>solverObject.acquireMCAStats()</code>.</p>
-<hr />
-<h3 id="finalize"><code>finalize()</code><a class="headerlink" href="#finalize" title="Permanent link">&para;</a></h3>
-<p>Signal worker processes to exit their instruction-wait loop.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-</code></pre></div>
-<p>Must be called after each <code>matVec()</code> or <code>parallelizedBenchmarkMatVec()</code> call to keep workers and root synchronised.</p>
-<hr />
-<h3 id="stopcommunication"><code>stopCommunication()</code><a class="headerlink" href="#stopcommunication" title="Permanent link">&para;</a></h3>
-<p>Cleanly terminate the MPI environment.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">stopCommunication</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-</code></pre></div>
-<p>Calls <code>MPI.Finalize()</code>. <strong>Must be called after all MPI computation is complete</strong> and after <code>finalize()</code> has been called to ensure worker processes have exited their loops.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Once <code>stopCommunication()</code> is called, no further MPI operations are possible. Call this only at the very end of your script.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>__relu__</code> is not used internally by <code>predict()</code>. It is exposed for external use, e.g. in <code>mlpInference.py</code> where it is called explicitly after an MELISO+ MVM.</p>
 </div>
 <hr />
-<h3 id="acquireresults"><code>acquireResults()</code><a class="headerlink" href="#acquireresults" title="Permanent link">&para;</a></h3>
-<p>Return the MVM output vector on the root process.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">acquireResults</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span>
+<h3 id="__softmax__x-private"><code>__softmax__(x)</code> (private)<a class="headerlink" href="#__softmax__x-private" title="Permanent link">&para;</a></h3>
+<p>Numerically stable softmax.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">__softmax__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
 </code></pre></div>
-<p>Returns <code>None</code> on non-root processes. On the root process, returns <code>self.solverObject.y_mem_result</code>.</p>
-<hr />
-<h2 id="typical-usage-pattern">Typical Usage Pattern<a class="headerlink" href="#typical-usage-pattern" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">mpi4py</span><span class="w"> </span><span class="kn">import</span> <span class="n">MPI</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">solver.matvec.MatVecSolver</span><span class="w"> </span><span class="kn">import</span> <span class="n">MatVecSolver</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">xvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;inputs/vectors/input_x.txt&quot;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="c1"># ── Run 1: without normalization reversal ──────────────────────────────────</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="n">mv</span> <span class="o">=</span> <span class="n">MatVecSolver</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="n">xvec</span><span class="p">)</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="n">mv</span><span class="o">.</span><span class="n">matVec</span><span class="p">(</span><span class="n">correction</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="n">mv</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="n">mv</span><span class="o">.</span><span class="n">acquireMCAStats</span><span class="p">()</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="n">y_scaled</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">acquireResults</span><span class="p">()</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="n">mv</span><span class="o">.</span><span class="n">parallelizedBenchmarkMatVec</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">correction</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="n">mv</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="n">mv</span><span class="o">.</span><span class="n">acquireMCAStats</span><span class="p">()</span>
-<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="c1"># ── Run 2: with normalization reversal ────────────────────────────────────</span>
-<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="n">mv</span> <span class="o">=</span> <span class="n">MatVecSolver</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="n">xvec</span><span class="p">)</span>
-<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="n">mv</span><span class="o">.</span><span class="n">matVec</span><span class="p">(</span><span class="n">correction</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="n">mv</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
-<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="n">mv</span><span class="o">.</span><span class="n">acquireMCAStats</span><span class="p">()</span>
-<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="n">y_original_domain</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">acquireResults</span><span class="p">()</span>
-<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>
-<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="c1"># ── Clean up MPI at the very end ──────────────────────────────────────────</span>
-<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="n">mv</span><span class="o">.</span><span class="n">stopCommunication</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>z = x - max(x)
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>return exp(z) / sum(exp(z))
 </code></pre></div>
 <hr />
-<h2 id="mpi-process-count">MPI Process Count<a class="headerlink" href="#mpi-process-count" title="Permanent link">&para;</a></h2>
-<p>The number of MPI processes must be exactly <code>(mca_rows × mca_cols) + 1</code>:</p>
-<ul>
-<li><code>mca_rows × mca_cols</code> worker processes (one per hardware array).</li>
-<li><code>1</code> root process.</li>
-</ul>
-<p>Example: <code>mca_rows=2, mca_cols=2</code> → launch with <code>mpiexec -n 5</code>.</p>
+<h3 id="__load_model__w1_path-b1_path-w2_path-b2_path-private"><code>__load_model__(W1_path, B1_path, W2_path, B2_path)</code> (private)<a class="headerlink" href="#__load_model__w1_path-b1_path-w2_path-b2_path-private" title="Permanent link">&para;</a></h3>
+<p>Load all model parameters from <code>.npy</code> files.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">__load_model__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">W1_path</span><span class="p">,</span> <span class="n">B1_path</span><span class="p">,</span> <span class="n">W2_path</span><span class="p">,</span> <span class="n">B2_path</span><span class="p">)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+</code></pre></div>
+<p>Loads files with <code>np.load(..., allow_pickle=True)</code> and prints the loaded shapes for validation.</p>
+<hr />
+<h2 id="typical-usage">Typical Usage<a class="headerlink" href="#typical-usage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">solver.mlp.MLP</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLP</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Load model</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">model</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">W1_path</span><span class="o">=</span><span class="s2">&quot;./inputs/mlp/W1.npy&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">B1_path</span><span class="o">=</span><span class="s2">&quot;./inputs/mlp/B1.npy&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="n">W2_path</span><span class="o">=</span><span class="s2">&quot;./inputs/mlp/W2.npy&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="n">B2_path</span><span class="o">=</span><span class="s2">&quot;./inputs/mlp/B2.npy&quot;</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="p">)</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="c1"># Run inference on a single MNIST sample</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="n">test_images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./inputs/mlp/mnist_test_images.npy&quot;</span><span class="p">)</span>  <span class="c1"># shape (10000, 784)</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="n">input_vector</span> <span class="o">=</span> <span class="n">test_images</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">input_vector</span><span class="p">)</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="n">predicted_class</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">a2</span><span class="p">))</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Predicted: </span><span class="si">{</span><span class="n">predicted_class</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="expected-input-files">Expected Input Files<a class="headerlink" href="#expected-input-files" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Shape</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>W1.npy</code></td>
+<td><code>(512, 784)</code></td>
+<td>Layer 1 weight matrix</td>
+</tr>
+<tr>
+<td><code>B1.npy</code></td>
+<td><code>(512,)</code></td>
+<td>Layer 1 bias vector</td>
+</tr>
+<tr>
+<td><code>W2.npy</code></td>
+<td><code>(10, 512)</code></td>
+<td>Layer 2 weight matrix</td>
+</tr>
+<tr>
+<td><code>B2.npy</code></td>
+<td><code>(10,)</code></td>
+<td>Layer 2 bias vector</td>
+</tr>
+</tbody>
+</table>
+<p>These files should be stored under <code>./inputs/mlp/</code> relative to the working directory.</p>
 <hr />
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../Root/"><code>Root</code></a> — Root-process coordinator.</li>
-<li><a href="../NonRoot/"><code>NonRoot</code></a> — Worker-process coordinator.</li>
-<li><a href="../../../scripts/DistributedMatVec/"><code>DistributedMatVec.py</code></a> — Basic MVM driver script.</li>
-<li><a href="../../../scripts/mlpInference/"><code>mlpInference.py</code></a> — MLP inference driver.</li>
-<li><a href="../../../scripts/pdhg/"><code>pdhg.py</code></a> — PDHG optimization driver.</li>
+<li><a href="../../../scripts/mlpInference/"><code>mlpInference.py</code></a> — Driver script that uses <code>MLP</code> for both CPU and MELISO+ accelerated inference.</li>
+<li><a href="../../matvec/MatVecSolver/"><code>MatVecSolver</code></a> — Used in <code>mlpInference.py</code> to accelerate layer MVM on hardware.</li>
 </ul>
 
 
