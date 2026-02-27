@@ -1,14 +1,18 @@
 # Driver Script: `mlpInference.py`
 
 **File:** `mlpInference.py`
+**Authors:** Huynh Quang Nguyen Vo (Oklahoma State University)
 
 ---
 
 ## Overview
 
-`mlpInference.py` runs a two-layer MLP (Multi-Layer Perceptron) neural network inference entirely on memristive crossbar hardware (or its simulation). It uses the MELISO+ framework for each matrix-vector multiply (MVM) and applies per-layer gain scaling to compensate for the hardware's normalised output domain.
+`mlpInference.py` demonstrates inference with a pre-trained two-layer MLP on the MNIST digit classification task. It runs two inference passes:
 
-The script is targeted at the MNIST digit classification task but is straightforwardly adaptable to other pre-trained models.
+1. **CPU inference** using the [`MLP`](../solver/mlp/MLP.md) class and standard NumPy.
+2. **MELISO+ accelerated inference** using [`MatVecSolver`](../solver/matvec/MatVecSolver.md) to offload the first layer's matrix-vector multiplication to memristive crossbar hardware.
+
+The second layer's MELISO+ acceleration is not yet fully implemented (see the `TODO` comment in the source).
 
 ---
 
@@ -23,168 +27,176 @@ EXP_CONFIG_FILE=config_files/quickstart/EpiRAM/exp1.yaml \
 
 ## Functions
 
-### `softmax(x)`
+### `cancel_SLURM_job()`
 
-Numerically stable softmax.
+Attempt to cancel the current SLURM job if running in a SLURM environment.
 
 ```python
-def softmax(x: np.ndarray) -> np.ndarray
+def cancel_SLURM_job() -> None
 ```
 
-```
-z = x - max(x)
-return exp(z) / sum(exp(z))
+Reads the `SLURM_JOB_ID` environment variable and calls `scancel <job_id>` via `subprocess.run`. If `SLURM_JOB_ID` is not set, prints a warning and takes no action.
+
+---
+
+### `main()`
+
+Main entry point. Loads the model and data, then runs CPU and MELISO+ inference.
+
+```python
+def main() -> None
 ```
 
 ---
 
-### `to_unit_interval(v, eps=1e-12)`
+## Script Flow
 
-Rescale a non-negative vector to `[0, 1]` by dividing by its maximum.
+### 1. Load Model and Data
 
 ```python
-def to_unit_interval(v: np.ndarray, eps: float = 1e-12) -> np.ndarray
+model = MLP(
+    W1_path="./inputs/mlp/W1.npy",
+    B1_path="./inputs/mlp/B1.npy",
+    W2_path="./inputs/mlp/W2.npy",
+    B2_path="./inputs/mlp/B2.npy"
+)
+
+test_images = np.load("./inputs/mlp/mnist_test_images.npy")  # shape (10000, 784)
+test_labels = np.load("./inputs/mlp/mnist_test_labels.npy")  # shape (10000,)
 ```
 
-- Applies ReLU clamp (`max(v, 0)`) before scaling.
-- Returns a zero vector if `max(v) < eps`.
+### 2. CPU Inference
 
-Used to keep inter-layer activations in the hardware's operating range.
+Iterates over `subset_size` samples from the test set:
+
+```python
+subset_size = 1   # Adjust to evaluate more samples
+for i in range(subset_size):
+    z1_cpu, z2_cpu, a1_cpu, a2_cpu = model.predict(test_images[i])
+    predicted_label = int(np.argmax(a2_cpu))
+```
+
+Reports accuracy percentage on the evaluated subset.
+
+### 3. MELISO+ Accelerated Inference (Layer 1)
+
+For each sample, the first layer's MVM is offloaded to MELISO+:
+
+```python
+CORRECTION = False  # Keep result in [0,1] (min-max scaled domain)
+mv = MatVecSolver(xvec=input_vector, mat=model.W1)
+
+mv.matVec(correction=CORRECTION)
+mv.finalize()
+mv.acquireMCAStats()
+z1 = mv.acquireResults()      # Shape: (512, 1)
+```
+
+After acquiring `z1`, bias is added and ReLU is applied:
+
+```python
+z1 = z1.reshape(-1, 1)        # Ensure (512, 1) shape
+z1 = z1 + model.B1            # Add bias
+a1 = model.__relu__(z1)       # Apply ReLU activation
+```
+
+The script also prints the **relative L2 error** of both `z1` and `a1` against the CPU reference values.
+
+### 4. Second Layer (Not Yet Implemented)
+
+The second layer MELISO+ acceleration is commented out with a `TODO` note. The recommended approach is:
+
+```python
+# mv = MatVecSolver(xvec=a1.reshape(-1,1), mat=model.W2)
+# mv.matVec(correction=CORRECTION)
+# mv.finalize()
+# mv.acquireMCAStats()
+# z2 = mv.acquireResults()
+# mv.stopCommunication()
+```
 
 ---
 
-### `mem_mvm_scaled(x_scaled, W_scaled, y_path=None)`
+## Configuration Variables
 
-Perform a single MVM on memristive hardware and return the scaled-domain output.
-
-```python
-def mem_mvm_scaled(
-    x_scaled: np.ndarray,
-    W_scaled: np.ndarray,
-    y_path: str | None = None
-) -> np.ndarray
-```
-
-| Parameter | Description |
-|-----------|-------------|
-| `x_scaled` | Input vector already scaled to `[0, 1]` |
-| `W_scaled` | Weight matrix already scaled to `[0, 1]` |
-| `y_path` | Optional override for the result file path |
-
-Steps:
-
-1. Creates a `MatVecSolver(xvec=x_scaled, mat=W_scaled)`.
-2. Calls `initializeVec()` and `initializeMat()`.
-3. Calls `matVec(correction=False)` — stays in scaled domain.
-4. Reads the result from `<TMPDIR>/y_mem_result.txt`.
-5. Calls `finalize()`.
-
-**Returns:** 1-D NumPy array with the scaled MVM output.
-
----
-
-### `run_layer_scaled(x_in_scaled, W_scaled, b, alpha=1.0, beta=1.0, relu=True)`
-
-Run one complete linear layer including bias and optional ReLU, returning both the raw output and the rescaled activation for the next layer.
-
-```python
-def run_layer_scaled(
-    x_in_scaled: np.ndarray,
-    W_scaled: np.ndarray,
-    b: np.ndarray,
-    alpha: float = 1.0,
-    beta: float = 1.0,
-    relu: bool = True
-) -> tuple[np.ndarray, np.ndarray]
-```
-
-| Parameter | Description |
-|-----------|-------------|
-| `x_in_scaled` | Input activation in `[0, 1]` |
-| `W_scaled` | Weight matrix in `[0, 1]` |
-| `b` | Bias vector |
-| `alpha` | Per-layer gain to map scaled output back toward real-domain magnitude |
-| `beta` | Additive shift applied alongside bias |
-| `relu` | If `True`, apply ReLU activation |
-
-Formula:
-
-```
-y_scaled = mem_mvm_scaled(x_in_scaled, W_scaled)
-y        = alpha * y_scaled + b + beta
-if relu:
-    y = max(y, 0)
-x_next = to_unit_interval(y)
-```
-
-**Returns:** `(y, x_next)` — the layer output and the normalised activation for the next layer.
-
----
-
-## Script Configuration
-
-### Data Paths
-
-```python
-X = np.load("./inputs/matrices/mnist_test_images.npy")  # shape (N, 784)
-Y = np.load("./inputs/matrices/mnist_test_labels.npy")
-W1 = np.load("./inputs/matrices/W1.npy")
-B1 = np.load("./inputs/matrices/B1.npy")
-W2 = np.load("./inputs/matrices/W2.npy")
-B2 = np.load("./inputs/matrices/B2.npy")
-```
-
-### Per-Layer Gains
-
-| Constant | Value | Description |
-|----------|-------|-------------|
-| `ALPHA_1` | `10.0` | Layer 1 output gain |
-| `BETA_1` | `0.0` | Layer 1 shift |
-| `ALPHA_2` | `10.0` | Layer 2 output gain |
-| `BETA_2` | `0.0` | Layer 2 shift |
-
-### Output Files
-
-Files are named with a timestamp (`run_id = time.strftime("%Y%m%d-%H%M%S")`):
-
-| File | Contents |
-|------|----------|
-| `offline_results_<run_id>.csv` | Per-sample results |
-| `offline_predictions_<run_id>.txt` | Predicted class labels |
-| `offline_accuracy_<run_id>.txt` | Classification accuracy |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `subset_size` | `1` | Number of MNIST test samples to evaluate |
+| `CORRECTION` | `False` | Whether to apply min-max scaling reversal (`False` = results in `[0,1]` range) |
 
 ---
 
 ## Network Architecture
 
 ```
-Input x ∈ R^784  (MNIST flattened image)
+Input x ∈ R^784   (MNIST flattened image, shape (784, 1))
    │
-   ▼  W1 ∈ R^{hidden × 784}, B1 ∈ R^hidden
-Layer 1: y1 = ALPHA_1 * (W1_scaled @ x_scaled) + B1 + BETA_1
-         → ReLU → rescale to [0,1]
+   ▼  W1 ∈ R^{512 × 784}   (distributed MVM via MELISO+)
+Layer 1:  z1 = MVM(W1, x)        via MatVecSolver
+           z1 = z1 + B1           add bias
+           a1 = ReLU(z1)          shape (512, 1)
    │
-   ▼  W2 ∈ R^{10 × hidden}, B2 ∈ R^10
-Layer 2: y2 = ALPHA_2 * (W2_scaled @ x1_scaled) + B2 + BETA_2
-         → softmax → predicted class = argmax
+   ▼  W2 ∈ R^{10 × 512}   (TODO: MELISO+ acceleration pending)
+Layer 2:  z2 = W2 @ a1 / FANIN_2 + B2
+           a2 = softmax(z2)       shape (10,)
+   │
+   ▼
+Predicted class = argmax(a2)
 ```
+
+---
+
+## Input Files
+
+All model and data files should be placed under `./inputs/mlp/`:
+
+| File | Shape | Description |
+|------|-------|-------------|
+| `W1.npy` | `(512, 784)` | Layer 1 weight matrix |
+| `B1.npy` | `(512,)` | Layer 1 bias vector |
+| `W2.npy` | `(10, 512)` | Layer 2 weight matrix |
+| `B2.npy` | `(10,)` | Layer 2 bias vector |
+| `mnist_test_images.npy` | `(10000, 784)` | MNIST test images |
+| `mnist_test_labels.npy` | `(10000,)` | MNIST test labels |
 
 ---
 
 ## Environment Variables
 
-Inherits all variables from the MELISO+ framework:
+Inherits all MELISO+ environment variables:
 
 | Variable | Description |
 |----------|-------------|
-| `EXP_CONFIG_FILE` | **Required.** Experiment YAML path |
-| `DT` | Device type (default `1`) |
+| `EXP_CONFIG_FILE` | **Required.** Experiment YAML configuration path |
+| `DT` | Device type (0–6); defaults to `1` (RealDevice) |
 | `ITER_LIMIT` | Write-and-verify iteration cap |
-| `TMPDIR` | Temp directory for intermediate files |
+| `TMPDIR` | Temporary directory for intermediate MVM files |
+| `SLURM_JOB_ID` | If set, `cancel_SLURM_job()` will cancel this job |
+
+---
+
+## Output
+
+- **Console:** Per-sample predictions, relative L2 errors, and accuracy percentage.
+- **`<TMPDIR>/y_mem_result.txt`:** Intermediate MVM result from the MELISO+ accelerator.
+
+---
+
+## Dependencies
+
+| Package | Usage |
+|---------|-------|
+| `meliso` | Compiled Cython extension |
+| `solver.matvec.MatVecSolver` | Distributed MVM interface |
+| `solver.mlp.MLP` | MLP model inference |
+| `numpy` | Numerical operations |
+| `subprocess` | SLURM job cancellation |
 
 ---
 
 ## See Also
 
-- [`MatVecSolver`](../solver/matvec/MatVecSolver.md) — Used for each layer's MVM.
-- [`DistributedMatVec.py`](DistributedMatVec.md) — Simpler MVM driver script.
+- [`MLP`](../solver/mlp/MLP.md) — The MLP class used for both CPU inference and weight loading.
+- [`MatVecSolver`](../solver/matvec/MatVecSolver.md) — The distributed MVM interface.
+- [`DistributedMatVec.py`](DistributedMatVec.md) — Simpler single-MVM driver script.
+- [`pdhg.py`](pdhg.md) — PDHG optimization driver using the same MELISO+ framework.

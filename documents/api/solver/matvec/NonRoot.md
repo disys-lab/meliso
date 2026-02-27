@@ -15,14 +15,15 @@
 
 ```python
 class NonRoot:
-    def __init__(self, comm): ...
+    def __init__(self, comm, verbose=False): ...
 ```
 
 ### Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `comm` | `mpi4py.MPI.Comm` | MPI communicator |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `comm` | `mpi4py.MPI.Comm` | — | MPI communicator |
+| `verbose` | `bool` | `False` | If `True`, prints diagnostic messages for each broadcast received, tile assignment, and MVM step |
 
 ---
 
@@ -33,6 +34,7 @@ class NonRoot:
 | `comm` | `MPI.Comm` | MPI communicator |
 | `mca` | `NonRootMCA` | Lower-level worker instance (created with `set_mat=False`) |
 | `virtualizationOn` | `bool` | `True` by default — enables the tile-wait loop |
+| `verbose` | `bool` | Enables verbose diagnostic output when `True` |
 | `y` | `np.ndarray` | Local output vector from the most recent MVM |
 
 ---
